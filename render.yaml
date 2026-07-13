@@ -1,0 +1,28 @@
+# Render blueprint — one free web service that serves both the API and the SPA.
+# Deploy: Render dashboard → New → Blueprint → pick this repo → set GROQ_API_KEY.
+#
+# NOTE: the free plan has an EPHEMERAL disk and sleeps after ~15 min idle, so the
+# SQLite DB and uploaded files reset on redeploy/restart. Fine for a demo — just
+# re-upload a dataset. For persistence, add a Render Disk (paid) mounted at /app/data.
+
+services:
+  - type: web
+    name: datapilot-ai
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true          # Render generates a strong secret
+      - key: GROQ_API_KEY
+        sync: false                   # set this yourself in the dashboard (secret)
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      # Same-origin (SPA is served by the API), so CORS isn't needed, but harmless:
+      - key: CORS_ORIGINS
+        value: "*"

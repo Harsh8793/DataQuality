@@ -1,0 +1,37 @@
+[
+  {
+    "product":"Laptop",
+    "price":1200,
+    "in_stock":true
+  },
+  {
+    "product":"Monitor",
+    "price":300,
+    "in_stock":true
+  },
+  {
+    "product":"Keyboard",
+    "price":80,
+    "in_stock":false
+  },
+  {
+    "product":"Mouse",
+    "price":40,
+    "in_stock":true
+  },
+  {
+    "product":"Webcam",
+    "price":90,
+    "in_stock":false
+  },
+  {
+    "product":"Headset",
+    "price":150,
+    "in_stock":true
+  },
+  {
+    "product":"Docking Station",
+    "price":220,
+    "in_stock":true
+  }
+]

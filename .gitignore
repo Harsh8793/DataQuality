@@ -1,0 +1,38 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Environment / secrets ----------
+.env
+*.env
+!.env.example
+
+# ---------- Runtime data (never commit) ----------
+backend/data/uploads/
+backend/data/parquet/
+backend/data/reports/
+backend/data/chroma/
+backend/data/*.db
+backend/app/logs/*.log
+
+# ---------- Node / Frontend ----------
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# ---------- Combined build (frontend bundled into backend at build time) ----------
+backend/static/
+
+# ---------- Editor / OS ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

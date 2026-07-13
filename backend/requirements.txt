@@ -1,0 +1,40 @@
+# ---- Web framework ----
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+pydantic==2.10.4
+pydantic-settings==2.7.1
+email-validator==2.2.0
+
+# ---- Database ----
+SQLAlchemy==2.0.36
+
+# ---- Auth / security ----
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# ---- Analytics engines ----
+pandas==2.2.3
+numpy==2.2.1
+duckdb==1.1.3
+pyarrow==18.1.0
+openpyxl==3.1.5
+chardet==5.2.0
+python-dateutil==2.9.0.post0
+
+# ---- AI layer ----
+groq==0.15.0
+langchain==0.3.14
+langchain-groq==0.2.3
+jinja2==3.1.5
+
+# ---- Reports ----
+reportlab==4.2.5
+
+# ---- Vector store (stretch; requires C++ build tools on Windows) ----
+# chromadb==0.6.1
+
+# ---- Dev / test ----
+pytest==8.3.4
+httpx==0.28.1

@@ -1,0 +1,233 @@
+customer_id,  Full Name ,email,phone,state,country,gender,product,revenue,quantity,order_date,notes,region
+1000,  Liam Smith  ,liam.smith@@invalid,+1 (555) 012-3456,California,u.s.a.,m,Laptop,,2,15/02/2024,,North America
+1001,Amelia Smith,amelia.smith@example.com,call me,Illinois,United States,M,Docking Station,2828.16,3,not a date,VIP,North America
+1002,  Olivia Williams  ,olivia.williams@example.com,555.010.9999,New York,u.s.a.,Female,Docking Station,,4,2024-04-10,,North America
+1003,Jackson Johnson,jackson.johnson@example.com,+1 (555) 012-3456,Texas,United States of America,Male,Laptop,2782.6,two,2024/03/20,,North America
+1004,Emma Johnson,emma.johnson(at)example.com,555.010.9999,Texas,United States of America,Female,Headset,1931.62,3,2024-01-15,,North America
+1005,Noah Brown,noah.brown@example.com,+1 (555) 012-3456,Texas,United States of America,female,Docking Station,858.84,1,15/02/2024,,North America
+1006,Sophia Miller,sophia.miller@example.com,555.010.9999,Texas,United States of America,f,Mouse,1375.32,3,not a date,  ,North America
+1007,  Olivia Williams  ,olivia.williams@example.com,+1 (555) 012-3456,Florida,United States,F,Monitor,1270.81,1,2024-01-15,,North America
+1008,  Noah Williams  ,noah.williams@example.com,call me,Illinois,United States,M,Headset,3970.79,3,2024-04-10,VIP,North America
+1009,  Sophia Johnson  ,sophia.johnson@example.com,555.010.9999,Illinois,usa,Male,Docking Station,1502.83,two,2024-04-10,,North America
+1010,Emma Williams,emma.williams@example.com,+1-555-0100,Illinois,United States,f,Laptop,1900.87,3,2024/03/20,  ,North America
+1011,  Ava Brown  ,ava.brown@example.com,+1-555-0100,Illinois,usa,male,Headset,4396.15,5,15/02/2024,VIP,North America
+1012,Lucas Miller,lucas.miller@example.com,555.010.9999,Florida,United States of America,female,Mouse,4823.6,4,2024-01-15,  ,North America
+1013,  Emma Johnson  ,emma.johnson@example.com,+1-555-0100,Washington,United States of America,M,Monitor,,1,2024/03/20,,North America
+1014,Lucas Brown,lucas.brown@example.com,+1 (555) 012-3456,Illinois,US,F,Docking Station,1428.46,4,15/02/2024,,North America
+1015,Liam Miller,liam.miller@@invalid,+1-555-0100,California,US,female,Docking Station,1803.77,2,15/02/2024,  ,North America
+1016,Lucas Davis,lucas.davis@example.com,+1-555-0100,Florida,u.s.a.,Male,Laptop,743.9,5,2024-01-15,,North America
+1017,Emma Williams,emma.williams@example.com,5550100,Florida,USA,m,Keyboard,2061.75,two,not a date,VIP,North America
+1018,Jackson Davis,jackson.davis@example.com,+1 (555) 012-3456,California,United States of America,female,Laptop,,4,2024-04-10,,North America
+1019,  Noah Smith  ,noah.smith@example.com,5550100,Florida,USA,F,Webcam,4805.86,5,2024-01-15,follow up,North America
+1020,Amelia Garcia,amelia.garcia@example.com,call me,Texas,United States of America,Female,Mouse,4676.8,two,2024-01-15,,North America
+1021,  Mia Johnson  ,mia.johnson@example.com,+1-555-0100,Texas,United States,Female,Monitor,412.64,5,2024/03/20,,North America
+1022,Lucas Smith,lucas.smith@@invalid,5550100,New York,USA,Male,Headset,3355.92,3,2024/03/20,,North America
+1023,  Emma Garcia  ,emma.garcia@example.com,+1-555-0100,California,United States of America,m,Docking Station,1057.81,1,2024/03/20,  ,North America
+1024,Olivia Williams,olivia.williams@@invalid,+1-555-0100,Washington,usa,M,Docking Station,3719.09,5,15/02/2024,follow up,North America
+1025,Noah Smith,noah.smith@example.com,555.010.9999,Texas,United States of America,F,Headset,1575.88,two,2024-04-10,follow up,North America
+1026,  Amelia Williams  ,amelia.williams@example.com,5550100,Florida,USA,male,Headset,4632.53,two,not a date,  ,North America
+1027,Olivia Williams,olivia.williams@example.com,5550100,Texas,US,female,Keyboard,3947.5,two,15/02/2024,  ,North America
+1028,  Ava Brown  ,ava.brown@example.com,555.010.9999,Washington,u.s.a.,m,Headset,2022.41,5,2024/03/20,,North America
+1029,  Liam Jones  ,liam.jones@@invalid,call me,New York,United States of America,female,Mouse,933.91,5,2024-01-15,follow up,North America
+1030,  Amelia Brown  ,amelia.brown@example.com,+1 (555) 012-3456,Washington,United States of America,F,Keyboard,1310.88,3,2024/03/20,,North America
+1031,Sophia Johnson,sophia.johnson@example.com,call me,Washington,United States,male,Monitor,3612.78,4,15/02/2024,,North America
+1032,Amelia Jones,amelia.jones@example.com,+1 (555) 012-3456,Illinois,United States of America,female,Mouse,2060.07,3,15/02/2024,,North America
+1033,Mia Williams,mia.williams@example.com,+1-555-0100,Texas,United States of America,Female,Monitor,3311.31,2,2024-01-15,,North America
+1034,Emma Davis,emma.davis@example.com,+1 (555) 012-3456,Texas,United States of America,m,Mouse,3075.81,2,2024-01-15,,North America
+1035,Jackson Brown,jackson.brown@@invalid,5550100,California,US,male,Docking Station,920.64,5,2024-04-10,,North America
+1036,Sophia Davis,sophia.davis@example.com,+1 (555) 012-3456,Florida,usa,f,Mouse,3082.63,2,2024/03/20,,North America
+1037,  Mia Brown  ,mia.brown@example.com,555.010.9999,Illinois,USA,male,Monitor,1409.26,3,15/02/2024,  ,North America
+1038,Liam Miller,liam.miller@example.com,call me,Florida,u.s.a.,M,Docking Station,2067.62,5,not a date,follow up,North America
+1039,Ava Garcia,ava.garcia@example.com,+1 (555) 012-3456,Washington,United States of America,F,Mouse,1528.13,4,not a date,,North America
+1040,Jackson Garcia,jackson.garcia@example.com,5550100,Illinois,u.s.a.,M,Mouse,3360.92,3,2024-01-15,,North America
+1041,  Jackson Williams  ,jackson.williams@example.com,call me,New York,United States,m,Keyboard,4340.91,two,not a date,VIP,North America
+1042,Liam Davis,liam.davis@example.com,+1-555-0100,Washington,USA,M,Monitor,145.95,1,2024-04-10,  ,North America
+1043,Emma Williams,emma.williams@example.com,555.010.9999,New York,usa,Male,Docking Station,2394.13,3,2024-01-15,,North America
+1044,Ava Jones,ava.jones@example.com,5550100,California,u.s.a.,F,Laptop,2900.19,3,2024-04-10,,North America
+1045,Amelia Smith,amelia.smith@example.com,555.010.9999,California,US,f,Laptop,1768.66,3,not a date,  ,North America
+1046,  Jackson Williams  ,jackson.williams@example.com,+1 (555) 012-3456,Florida,US,m,Docking Station,3682.29,3,2024/03/20,  ,North America
+1047,Liam Jones,liam.jones@example.com,call me,New York,USA,f,Docking Station,4414.07,4,15/02/2024,VIP,North America
+1048,Olivia Garcia,olivia.garcia@example.com,+1 (555) 012-3456,Texas,USA,F,Headset,1434.31,5,15/02/2024,follow up,North America
+1049,  Mia Davis  ,mia.davis@example.com,555.010.9999,Washington,u.s.a.,female,Mouse,3975.02,3,not a date,,North America
+1050,  Sophia Garcia  ,sophia.garcia(at)example.com,5550100,New York,USA,male,Monitor,3529.13,4,2024/03/20,,North America
+1051,  Lucas Jones  ,lucas.jones@example.com,555.010.9999,California,United States of America,male,Keyboard,,1,2024-04-10,VIP,North America
+1052,Noah Davis,noah.davis@example.com,+1-555-0100,New York,US,Male,Docking Station,,4,2024-01-15,,North America
+1053,Ava Williams,ava.williams@example.com,+1-555-0100,Illinois,US,F,Docking Station,788.53,4,not a date,VIP,North America
+1054,Amelia Miller,amelia.miller@example.com,5550100,Washington,usa,Female,Headset,1561.63,2,15/02/2024,,North America
+1055,Liam Williams,liam.williams@example.com,5550100,New York,United States of America,Female,Headset,63.24,1,15/02/2024,VIP,North America
+1056,Amelia Brown,amelia.brown@example.com,5550100,California,USA,male,Docking Station,2154.44,3,2024-04-10,VIP,North America
+1057,Mia Johnson,mia.johnson@example.com,+1 (555) 012-3456,Florida,US,Male,Webcam,,4,2024/03/20,,North America
+1058,Olivia Smith,olivia.smith@example.com,+1-555-0100,Washington,United States,M,Docking Station,502.07,4,2024-04-10,follow up,North America
+1059,Olivia Williams,olivia.williams@example.com,call me,New York,US,female,Keyboard,4984.88,two,15/02/2024,VIP,North America
+1060,Jackson Davis,jackson.davis@example.com,call me,California,United States,Female,Keyboard,1476.68,two,not a date,,North America
+1061,Ava Davis,ava.davis@example.com,call me,California,usa,Female,Webcam,2095.58,3,not a date,follow up,North America
+1062,  Liam Smith  ,liam.smith(at)example.com,+1 (555) 012-3456,California,u.s.a.,m,Laptop,4867.08,two,2024-01-15,follow up,North America
+1063,Liam Williams,liam.williams@example.com,call me,Florida,usa,f,Webcam,2516.96,2,2024-04-10,,North America
+1064,Noah Johnson,noah.johnson@example.com,+1 (555) 012-3456,New York,USA,Female,Headset,1417.42,5,2024-04-10,follow up,North America
+1065,Noah Davis,noah.davis@example.com,call me,New York,usa,F,Webcam,2715.97,two,not a date,,North America
+1066,Sophia Davis,sophia.davis@example.com,5550100,Florida,USA,male,Webcam,3540.88,3,2024-01-15,follow up,North America
+1067,Liam Davis,liam.davis@example.com,+1-555-0100,Florida,United States,female,Webcam,125.97,3,2024-01-15,VIP,North America
+1068,Lucas Miller,lucas.miller@example.com,+1 (555) 012-3456,California,u.s.a.,Male,Monitor,4772.99,3,15/02/2024,,North America
+1069,  Jackson Johnson  ,jackson.johnson(at)example.com,555.010.9999,California,USA,female,Docking Station,,3,2024/03/20,follow up,North America
+1070,Noah Brown,noah.brown(at)example.com,+1-555-0100,Illinois,US,F,Mouse,2679.27,2,15/02/2024,follow up,North America
+1071,Olivia Davis,olivia.davis@example.com,5550100,California,US,female,Webcam,170694.96,4,2024/03/20,follow up,North America
+1072,  Olivia Brown  ,olivia.brown@example.com,555.010.9999,Illinois,United States,Female,Laptop,4996.9,3,not a date,VIP,North America
+1073,Ava Smith,ava.smith@example.com,5550100,Illinois,United States,F,Headset,4557.55,3,15/02/2024,,North America
+1074,Ava Jones,ava.jones(at)example.com,555.010.9999,New York,United States of America,m,Monitor,3953.62,two,2024-04-10,VIP,North America
+1075,Lucas Jones,lucas.jones@example.com,555.010.9999,Washington,United States,Male,Mouse,4160.84,2,15/02/2024,follow up,North America
+1076,  Lucas Garcia  ,lucas.garcia(at)example.com,555.010.9999,Washington,United States of America,Female,Webcam,497.0,3,2024/03/20,,North America
+1077,Emma Davis,emma.davis@example.com,5550100,Washington,USA,f,Headset,173.87,4,2024-01-15,  ,North America
+1078,  Ava Smith  ,ava.smith@example.com,5550100,Florida,US,female,Headset,1556.6,3,2024-04-10,follow up,North America
+1079,Amelia Williams,amelia.williams@example.com,555.010.9999,California,United States of America,female,Monitor,4432.8,2,2024/03/20,,North America
+1080,Sophia Garcia,sophia.garcia@example.com,call me,California,United States of America,F,Headset,349.72,1,2024-01-15,VIP,North America
+1081,Emma Williams,emma.williams@example.com,+1 (555) 012-3456,Texas,usa,female,Docking Station,3945.54,5,2024-01-15,VIP,North America
+1082,  Noah Williams  ,noah.williams@example.com,5550100,California,United States,F,Webcam,2724.07,2,2024/03/20,,North America
+1083,Noah Miller,noah.miller@example.com,+1 (555) 012-3456,Illinois,USA,f,Webcam,2654.12,5,2024-01-15,,North America
+1084,Olivia Davis,olivia.davis@example.com,call me,Washington,USA,f,Headset,3234.54,1,2024-01-15,VIP,North America
+1085,Amelia Williams,amelia.williams@example.com,555.010.9999,Florida,u.s.a.,Female,Mouse,375.13,4,2024-01-15,,North America
+1086,Lucas Brown,lucas.brown@example.com,call me,Florida,United States of America,Male,Keyboard,2178.85,3,2024/03/20,VIP,North America
+1087,  Noah Davis  ,noah.davis@@invalid,555.010.9999,Texas,u.s.a.,M,Webcam,382.31,5,2024/03/20,,North America
+1088,Jackson Garcia,jackson.garcia@example.com,+1-555-0100,New York,u.s.a.,Female,Keyboard,4374.36,5,15/02/2024,  ,North America
+1089,Mia Brown,mia.brown@@invalid,555.010.9999,Illinois,usa,m,Docking Station,4244.01,two,2024-04-10,,North America
+1090,Lucas Smith,lucas.smith@@invalid,555.010.9999,Washington,United States,female,Keyboard,,two,15/02/2024,,North America
+1091,  Jackson Johnson  ,jackson.johnson@example.com,5550100,Florida,US,f,Keyboard,752.28,3,2024/03/20,,North America
+1092,Amelia Johnson,amelia.johnson@@invalid,+1-555-0100,New York,US,m,Mouse,4422.54,4,2024/03/20,  ,North America
+1093,Lucas Johnson,lucas.johnson@example.com,+1 (555) 012-3456,Washington,United States,M,Monitor,1758.61,5,2024-01-15,,North America
+1094,Emma Jones,emma.jones@example.com,+1-555-0100,California,US,m,Monitor,4729.35,5,15/02/2024,,North America
+1095,  Lucas Garcia  ,lucas.garcia@@invalid,+1-555-0100,New York,u.s.a.,m,Webcam,406.77,3,not a date,VIP,North America
+1096,Liam Miller,liam.miller@example.com,555.010.9999,California,US,Male,Monitor,153.24,4,2024-04-10,,North America
+1097,Jackson Jones,jackson.jones@@invalid,+1-555-0100,Illinois,u.s.a.,F,Docking Station,3741.73,3,15/02/2024,  ,North America
+1098,  Liam Williams  ,liam.williams@example.com,+1-555-0100,Texas,United States of America,f,Mouse,1317.04,two,2024-04-10,follow up,North America
+1099,  Amelia Garcia  ,amelia.garcia@@invalid,call me,Washington,United States,Female,Webcam,,5,2024-01-15,VIP,North America
+1100,  Mia Davis  ,mia.davis@example.com,+1-555-0100,Illinois,u.s.a.,m,Mouse,236.16,two,2024-01-15,follow up,North America
+1101,  Amelia Brown  ,amelia.brown@@invalid,+1-555-0100,New York,United States of America,Male,Webcam,1641.56,1,15/02/2024,follow up,North America
+1102,Mia Williams,mia.williams@example.com,+1 (555) 012-3456,California,United States of America,female,Laptop,1851.29,5,not a date,VIP,North America
+1103,  Olivia Williams  ,olivia.williams@example.com,call me,Texas,u.s.a.,Male,Keyboard,1700.14,3,2024/03/20,  ,North America
+1104,Lucas Johnson,lucas.johnson@example.com,5550100,Texas,United States,f,Monitor,3247.82,2,15/02/2024,,North America
+1105,Olivia Johnson,olivia.johnson@example.com,555.010.9999,Illinois,usa,m,Monitor,2563.06,two,2024-04-10,  ,North America
+1106,  Mia Smith  ,mia.smith@example.com,555.010.9999,Washington,US,F,Webcam,2083.75,two,not a date,  ,North America
+1107,Sophia Davis,sophia.davis@example.com,5550100,Texas,u.s.a.,male,Docking Station,2335.32,3,not a date,VIP,North America
+1108,  Lucas Johnson  ,lucas.johnson@@invalid,5550100,New York,US,male,Docking Station,3571.43,2,not a date,VIP,North America
+1109,  Ava Miller  ,ava.miller@example.com,555.010.9999,Texas,USA,female,Laptop,313.62,3,2024/03/20,  ,North America
+1110,Noah Smith,noah.smith(at)example.com,call me,Florida,u.s.a.,M,Laptop,,2,15/02/2024,,North America
+1111,Amelia Miller,amelia.miller@@invalid,call me,Washington,u.s.a.,f,Laptop,600.37,4,2024-04-10,,North America
+1112,  Ava Brown  ,ava.brown@example.com,+1 (555) 012-3456,Florida,usa,Male,Webcam,3606.79,1,2024-04-10,,North America
+1113,Lucas Smith,lucas.smith@example.com,555.010.9999,Washington,USA,female,Docking Station,,2,2024-01-15,,North America
+1114,Sophia Williams,sophia.williams(at)example.com,call me,Washington,US,male,Docking Station,269.46,3,not a date,,North America
+1115,  Olivia Brown  ,olivia.brown@example.com,+1 (555) 012-3456,Florida,u.s.a.,f,Keyboard,,3,15/02/2024,VIP,North America
+1116,  Sophia Smith  ,sophia.smith@example.com,call me,Washington,US,m,Keyboard,4335.7,4,not a date,VIP,North America
+1117,  Lucas Jones  ,lucas.jones@example.com,5550100,Illinois,United States,female,Laptop,4015.68,3,2024/03/20,VIP,North America
+1118,Mia Miller,mia.miller@example.com,555.010.9999,Illinois,US,Female,Headset,874.89,1,2024-01-15,follow up,North America
+1119,Sophia Williams,sophia.williams@example.com,+1-555-0100,Texas,USA,F,Docking Station,4766.31,3,not a date,,North America
+1120,Ava Williams,ava.williams@example.com,+1 (555) 012-3456,Texas,u.s.a.,female,Mouse,3411.36,3,15/02/2024,,North America
+1121,Ava Williams,ava.williams@example.com,555.010.9999,Washington,US,F,Webcam,2520.27,4,15/02/2024,,North America
+1122,Noah Johnson,noah.johnson@@invalid,555.010.9999,Washington,United States,Male,Webcam,2287.61,3,15/02/2024,  ,North America
+1123,  Sophia Brown  ,sophia.brown@example.com,+1-555-0100,New York,u.s.a.,female,Mouse,650.74,5,15/02/2024,,North America
+1124,Liam Johnson,liam.johnson@example.com,call me,Illinois,USA,male,Keyboard,1580.99,4,not a date,,North America
+1125,Sophia Williams,sophia.williams@example.com,5550100,Florida,u.s.a.,M,Docking Station,4395.9,2,2024/03/20,  ,North America
+1126,Noah Garcia,noah.garcia@example.com,555.010.9999,California,United States,F,Headset,4676.95,3,15/02/2024,VIP,North America
+1127,Amelia Johnson,amelia.johnson(at)example.com,+1 (555) 012-3456,Washington,u.s.a.,female,Docking Station,2537.74,1,2024-01-15,,North America
+1128,Ava Jones,ava.jones@example.com,call me,Washington,u.s.a.,Female,Headset,3273.09,4,15/02/2024,follow up,North America
+1129,Olivia Davis,olivia.davis@example.com,5550100,New York,u.s.a.,male,Keyboard,411.22,3,2024/03/20,follow up,North America
+1130,  Noah Garcia  ,noah.garcia(at)example.com,call me,Texas,usa,Male,Laptop,2599.15,4,2024-04-10,follow up,North America
+1131,Emma Williams,emma.williams@example.com,5550100,Florida,u.s.a.,f,Mouse,4076.72,4,2024-01-15,,North America
+1132,Jackson Davis,jackson.davis@@invalid,call me,Illinois,United States of America,f,Keyboard,4835.1,two,2024-01-15,follow up,North America
+1133,Noah Jones,noah.jones@example.com,+1 (555) 012-3456,Illinois,usa,female,Webcam,3651.16,4,2024-04-10,follow up,North America
+1134,Lucas Jones,lucas.jones(at)example.com,+1-555-0100,Florida,United States,female,Webcam,4135.29,two,15/02/2024,  ,North America
+1135,  Amelia Miller  ,amelia.miller@example.com,call me,Illinois,US,male,Webcam,2525.39,2,2024/03/20,,North America
+1136,Sophia Williams,sophia.williams@example.com,+1 (555) 012-3456,Illinois,u.s.a.,f,Headset,1995.13,4,2024-01-15,VIP,North America
+1137,Sophia Johnson,sophia.johnson@example.com,+1-555-0100,Illinois,US,Female,Headset,4900.5,two,2024-04-10,,North America
+1138,Emma Smith,emma.smith@example.com,call me,Texas,United States of America,F,Laptop,2938.44,3,2024-01-15,  ,North America
+1139,Ava Davis,ava.davis@example.com,+1 (555) 012-3456,Florida,United States of America,M,Headset,1602.78,2,2024-04-10,VIP,North America
+1140,Mia Miller,mia.miller@example.com,555.010.9999,Washington,United States of America,Female,Webcam,1603.08,2,2024/03/20,,North America
+1141,Olivia Brown,olivia.brown@example.com,call me,New York,US,female,Webcam,4710.35,two,2024/03/20,VIP,North America
+1142,Liam Miller,liam.miller@example.com,5550100,New York,USA,Female,Headset,,4,2024/03/20,follow up,North America
+1143,Emma Brown,emma.brown@example.com,+1-555-0100,Illinois,United States of America,F,Monitor,,5,15/02/2024,  ,North America
+1144,  Ava Johnson  ,ava.johnson@example.com,+1-555-0100,Illinois,usa,m,Headset,2095.84,4,not a date,  ,North America
+1145,Olivia Garcia,olivia.garcia@example.com,5550100,Illinois,United States of America,M,Monitor,1462.81,two,15/02/2024,,North America
+1146,Jackson Davis,jackson.davis@example.com,+1-555-0100,California,United States,Male,Keyboard,972.24,3,2024-04-10,,North America
+1147,  Mia Williams  ,mia.williams@@invalid,5550100,Washington,US,Female,Headset,4262.75,3,2024/03/20,VIP,North America
+1148,Amelia Brown,amelia.brown@example.com,+1 (555) 012-3456,New York,USA,m,Headset,918.7,2,not a date,VIP,North America
+1149,Emma Smith,emma.smith@example.com,555.010.9999,Illinois,United States of America,M,Keyboard,1340.89,3,15/02/2024,,North America
+1150,Liam Davis,liam.davis@example.com,555.010.9999,Washington,USA,Female,Keyboard,1568.69,2,15/02/2024,follow up,North America
+1151,Noah Davis,noah.davis@example.com,call me,Illinois,United States of America,F,Docking Station,3751.29,two,2024-04-10,,North America
+1152,Lucas Davis,lucas.davis@@invalid,+1 (555) 012-3456,Illinois,usa,male,Monitor,2664.46,5,not a date,,North America
+1153,Emma Davis,emma.davis@example.com,+1 (555) 012-3456,Florida,US,M,Webcam,500.16,two,2024/03/20,,North America
+1154,Jackson Jones,jackson.jones@@invalid,555.010.9999,Washington,USA,M,Laptop,4091.44,4,2024-01-15,VIP,North America
+1155,Jackson Williams,jackson.williams@example.com,call me,New York,US,f,Docking Station,3856.41,4,not a date,,North America
+1156,  Lucas Williams  ,lucas.williams@example.com,+1 (555) 012-3456,Texas,United States of America,F,Docking Station,,1,2024/03/20,follow up,North America
+1157,  Lucas Miller  ,lucas.miller@example.com,555.010.9999,Texas,United States of America,Male,Laptop,2683.07,4,2024-04-10,,North America
+1158,Emma Brown,emma.brown@example.com,+1-555-0100,Texas,United States of America,M,Mouse,383.09,5,15/02/2024,,North America
+1159,Noah Jones,noah.jones@example.com,555.010.9999,Texas,United States,male,Headset,1209.1,4,2024/03/20,VIP,North America
+1160,Ava Williams,ava.williams@example.com,call me,Illinois,United States,m,Mouse,3148.67,4,15/02/2024,,North America
+1161,Mia Brown,mia.brown@example.com,+1-555-0100,Illinois,US,m,Webcam,4254.24,4,15/02/2024,VIP,North America
+1162,Emma Garcia,emma.garcia@@invalid,5550100,California,United States,m,Headset,3251.19,1,2024-01-15,  ,North America
+1163,Amelia Brown,amelia.brown@example.com,+1-555-0100,Texas,usa,Male,Headset,2423.0,4,15/02/2024,,North America
+1164,Emma Miller,emma.miller@example.com,+1 (555) 012-3456,Washington,United States,Female,Keyboard,4579.88,4,not a date,,North America
+1165,Mia Garcia,mia.garcia@example.com,5550100,Washington,usa,M,Keyboard,4575.94,5,2024-04-10,follow up,North America
+1166,Olivia Williams,olivia.williams@example.com,+1 (555) 012-3456,Washington,United States of America,female,Keyboard,1021.15,4,not a date,follow up,North America
+1167,Noah Garcia,noah.garcia@example.com,+1 (555) 012-3456,Washington,USA,M,Docking Station,887.87,two,2024-01-15,,North America
+1168,Jackson Williams,jackson.williams@@invalid,+1 (555) 012-3456,Florida,United States,M,Webcam,4220.6,5,not a date,follow up,North America
+1169,  Ava Smith  ,ava.smith@example.com,+1 (555) 012-3456,New York,USA,m,Docking Station,2684.45,2,2024-01-15,,North America
+1170,  Lucas Williams  ,lucas.williams@example.com,call me,California,United States,m,Mouse,1242.8,3,15/02/2024,VIP,North America
+1171,Liam Smith,liam.smith@@invalid,+1-555-0100,Washington,usa,Male,Mouse,512.83,3,2024/03/20,,North America
+1172,Liam Smith,liam.smith@example.com,555.010.9999,California,USA,Female,Webcam,1187.34,1,15/02/2024,VIP,North America
+1173,Ava Brown,ava.brown@example.com,+1-555-0100,New York,usa,F,Webcam,2955.83,4,2024-04-10,VIP,North America
+1174,  Jackson Williams  ,jackson.williams@example.com,555.010.9999,California,USA,m,Monitor,3962.97,3,2024-04-10,,North America
+1175,Amelia Miller,amelia.miller@example.com,call me,Florida,usa,female,Webcam,4846.16,4,15/02/2024,,North America
+1176,  Jackson Johnson  ,jackson.johnson@@invalid,555.010.9999,Texas,US,male,Headset,3872.23,3,2024-01-15,,North America
+1177,  Ava Jones  ,ava.jones@@invalid,call me,Florida,u.s.a.,m,Laptop,,3,2024-04-10,,North America
+1178,Amelia Garcia,amelia.garcia@example.com,+1 (555) 012-3456,Texas,u.s.a.,male,Headset,112071.51,2,2024/03/20,VIP,North America
+1179,  Olivia Davis  ,olivia.davis@example.com,+1-555-0100,New York,United States,F,Headset,772.38,5,2024-04-10,  ,North America
+1180,Mia Johnson,mia.johnson@example.com,555.010.9999,Florida,United States,m,Docking Station,109353.8,3,2024-04-10,  ,North America
+1181,Olivia Garcia,olivia.garcia(at)example.com,call me,New York,United States,f,Webcam,3035.9,3,not a date,VIP,North America
+1182,Jackson Garcia,jackson.garcia@example.com,+1 (555) 012-3456,California,United States of America,f,Headset,613.74,two,2024/03/20,,North America
+1183,  Jackson Davis  ,jackson.davis(at)example.com,call me,Florida,USA,f,Webcam,738.94,4,2024-04-10,,North America
+1184,Jackson Smith,jackson.smith@example.com,+1-555-0100,California,usa,female,Monitor,3964.07,1,2024-04-10,follow up,North America
+1185,  Sophia Miller  ,sophia.miller@example.com,+1 (555) 012-3456,Illinois,United States of America,F,Mouse,574.43,4,2024-04-10,,North America
+1186,  Noah Garcia  ,noah.garcia@example.com,+1-555-0100,California,United States of America,male,Keyboard,4988.63,4,15/02/2024,,North America
+1187,Mia Garcia,mia.garcia@example.com,555.010.9999,California,United States of America,Male,Laptop,2407.0,3,2024-01-15,  ,North America
+1188,Emma Williams,emma.williams@example.com,call me,Washington,usa,male,Headset,2781.96,4,2024-01-15,,North America
+1189,Emma Davis,emma.davis@example.com,+1-555-0100,Illinois,USA,male,Keyboard,2981.41,4,2024-01-15,VIP,North America
+1190,Mia Garcia,mia.garcia@example.com,call me,Illinois,usa,Female,Webcam,3005.01,3,15/02/2024,VIP,North America
+1191,Liam Brown,liam.brown@example.com,call me,Illinois,usa,m,Mouse,1561.63,3,2024-04-10,  ,North America
+1192,Lucas Williams,lucas.williams@example.com,+1-555-0100,New York,USA,f,Monitor,2473.73,4,2024-04-10,,North America
+1193,Mia Miller,mia.miller@example.com,+1-555-0100,Illinois,USA,F,Keyboard,,2,2024-04-10,VIP,North America
+1194,Noah Davis,noah.davis@example.com,+1 (555) 012-3456,California,United States,female,Webcam,2849.97,1,not a date,,North America
+1195,Emma Miller,emma.miller@example.com,+1-555-0100,Florida,United States,female,Docking Station,556.96,4,2024-01-15,  ,North America
+1196,Emma Garcia,emma.garcia@example.com,5550100,Texas,USA,female,Webcam,4312.19,5,15/02/2024,VIP,North America
+1197,Olivia Jones,olivia.jones@example.com,+1-555-0100,Texas,US,M,Keyboard,2885.04,2,15/02/2024,  ,North America
+1198,Noah Garcia,noah.garcia@example.com,+1 (555) 012-3456,Washington,United States,m,Mouse,4150.98,3,2024-01-15,follow up,North America
+1199,Lucas Jones,lucas.jones@example.com,+1 (555) 012-3456,California,United States of America,Male,Headset,3488.78,3,2024/03/20,,North America
+1200,  Lucas Miller  ,lucas.miller@example.com,555.010.9999,New York,u.s.a.,male,Webcam,1128.26,two,2024/03/20,,North America
+1201,  Ava Johnson  ,ava.johnson@example.com,5550100,Florida,US,M,Mouse,3149.59,3,15/02/2024,VIP,North America
+1202,  Noah Jones  ,noah.jones@example.com,5550100,California,US,Female,Headset,512.03,2,not a date,,North America
+1203,Liam Smith,liam.smith@example.com,call me,California,USA,female,Docking Station,1106.43,two,not a date,  ,North America
+1204,Mia Johnson,mia.johnson@@invalid,555.010.9999,New York,usa,m,Docking Station,1183.29,two,15/02/2024,  ,North America
+1205,Liam Smith,liam.smith@example.com,5550100,Florida,u.s.a.,f,Docking Station,3071.08,1,15/02/2024,,North America
+1206,Amelia Miller,amelia.miller@example.com,+1-555-0100,Texas,u.s.a.,Female,Docking Station,1790.1,1,2024/03/20,  ,North America
+1207,  Lucas Brown  ,lucas.brown@example.com,5550100,Florida,US,Male,Monitor,3751.83,5,2024-01-15,,North America
+1208,Ava Garcia,ava.garcia@example.com,555.010.9999,Illinois,United States of America,male,Docking Station,4672.93,two,2024-01-15,,North America
+1209,Amelia Johnson,amelia.johnson@example.com,call me,Illinois,United States,m,Mouse,118.28,1,2024-04-10,,North America
+1210,Amelia Williams,amelia.williams@example.com,5550100,Illinois,United States,m,Webcam,1423.47,two,2024-01-15,VIP,North America
+1211,Jackson Brown,jackson.brown@example.com,+1 (555) 012-3456,California,United States,male,Laptop,,2,2024-01-15,  ,North America
+1212,Mia Garcia,mia.garcia(at)example.com,5550100,Washington,United States,Male,Docking Station,2638.88,3,not a date,VIP,North America
+1213,Lucas Johnson,lucas.johnson@example.com,+1 (555) 012-3456,New York,USA,f,Docking Station,1351.6,3,15/02/2024,VIP,North America
+1214,  Liam Johnson  ,liam.johnson@example.com,5550100,California,US,female,Mouse,1180.6,2,2024-01-15,,North America
+1215,Jackson Brown,jackson.brown@example.com,+1-555-0100,Illinois,United States,Male,Webcam,1642.92,1,15/02/2024,  ,North America
+1216,Lucas Smith,lucas.smith@example.com,555.010.9999,New York,USA,f,Laptop,4772.69,3,2024-04-10,VIP,North America
+1217,Amelia Brown,amelia.brown@example.com,5550100,Washington,u.s.a.,F,Monitor,,4,2024-01-15,  ,North America
+1218,  Lucas Garcia  ,lucas.garcia@example.com,call me,Washington,United States of America,Female,Laptop,3197.91,2,not a date,follow up,North America
+1219,Ava Williams,ava.williams@example.com,+1 (555) 012-3456,Florida,United States of America,female,Mouse,3572.68,1,2024-04-10,,North America
+1000,  Liam Smith  ,liam.smith@@invalid,+1 (555) 012-3456,California,u.s.a.,m,Laptop,,2,15/02/2024,,North America
+1001,Amelia Smith,amelia.smith@example.com,call me,Illinois,United States,M,Docking Station,2828.16,3,not a date,VIP,North America
+1002,  Olivia Williams  ,olivia.williams@example.com,555.010.9999,New York,u.s.a.,Female,Docking Station,,4,2024-04-10,,North America
+1003,Jackson Johnson,jackson.johnson@example.com,+1 (555) 012-3456,Texas,United States of America,Male,Laptop,2782.6,two,2024/03/20,,North America
+1004,Emma Johnson,emma.johnson(at)example.com,555.010.9999,Texas,United States of America,Female,Headset,1931.62,3,2024-01-15,,North America
+1005,Noah Brown,noah.brown@example.com,+1 (555) 012-3456,Texas,United States of America,female,Docking Station,858.84,1,15/02/2024,,North America
+1006,Sophia Miller,sophia.miller@example.com,555.010.9999,Texas,United States of America,f,Mouse,1375.32,3,not a date,  ,North America
+1007,  Olivia Williams  ,olivia.williams@example.com,+1 (555) 012-3456,Florida,United States,F,Monitor,1270.81,1,2024-01-15,,North America
+1008,  Noah Williams  ,noah.williams@example.com,call me,Illinois,United States,M,Headset,3970.79,3,2024-04-10,VIP,North America
+1009,  Sophia Johnson  ,sophia.johnson@example.com,555.010.9999,Illinois,usa,Male,Docking Station,1502.83,two,2024-04-10,,North America
+1010,Emma Williams,emma.williams@example.com,+1-555-0100,Illinois,United States,f,Laptop,1900.87,3,2024/03/20,  ,North America
+1011,  Ava Brown  ,ava.brown@example.com,+1-555-0100,Illinois,usa,male,Headset,4396.15,5,15/02/2024,VIP,North America
