@@ -17,8 +17,10 @@ from app.agents.governance_agent import GovernanceResult
 from app.agents.orchestrator import get_coordinator
 from app.constants.enums import APPROVAL_THRESHOLD, ApprovalStatus
 from app.core.engines.affected import affected_mask
+from app.core.engines.duckdb_engine import DuckDBEngine
 from app.core.engines.explanations import explain_issue
 from app.core.engines.fixer import FIXABLE_CHECKS, UnfixableIssueError, apply_fix
+from app.core.engines.quality_checks import QualityFinding
 from app.core.engines.scorer import Scorer
 from app.core.engines.profiler import DatasetProfile
 from app.core.engines.scorer import QualityScore
@@ -31,6 +33,7 @@ from app.repositories.analysis_repository import (
     QualityIssueRepository,
     QualityReportRepository,
 )
+from app.repositories.custom_validation_repository import CustomValidationRepository
 from app.repositories.dataset_repository import DatasetColumnRepository, DatasetRepository
 from app.repositories.exclusion_repository import ExclusionRepository
 from app.repositories.fix_repository import FixBatchRepository, IssueFixRepository
@@ -58,6 +61,8 @@ class AnalysisService(BaseService, DatasetContextMixin):
         self.fix_batches = FixBatchRepository(db)
         self.fixes = IssueFixRepository(db)
         self.exclusions = ExclusionRepository(db)
+        self.custom_validations = CustomValidationRepository(db)
+        self.duck = DuckDBEngine()
         self.coordinator = get_coordinator()
 
     def analyze(
@@ -76,8 +81,9 @@ class AnalysisService(BaseService, DatasetContextMixin):
         self.coordinator.run_analysis(ctx)
         duration_ms = int((time.perf_counter() - started) * 1000)
 
-        # Drop any user-excluded validations before scoring/persisting so they
-        # neither appear as issues nor lower the quality score.
+        # Run user-defined custom validations, then drop excluded ones — both
+        # before scoring so the score reflects the final set of findings.
+        self._apply_custom_validations(dataset.id, ctx)
         self._apply_exclusions(dataset.id, ctx)
 
         governance: GovernanceResult | None = ctx.meta.get("governance")
@@ -144,7 +150,20 @@ class AnalysisService(BaseService, DatasetContextMixin):
         # and count are ALWAYS correct. AI explainers are keyed by check type
         # only, so they'd repeat one column/number across every issue.
         total = ctx.profile.row_count if ctx.profile else 0
+        custom_meta = ctx.meta.get("custom_meta", {})
         for f in ctx.findings:
+            if f.check_key in custom_meta:
+                # User-defined rule: use its name/description directly.
+                cm = custom_meta[f.check_key]
+                self.issues.create(
+                    report_id=report_id, column_name=None, check_key=f.check_key,
+                    dimension=f.dimension, severity=f.severity, count=f.count, sample=f.sample,
+                    problem=cm["problem"], why=cm["why"],
+                    business_impact="Custom rule you defined for this dataset.",
+                    recommended_fix=f"Review the {f.count} matching rows (condition: {cm['condition']}).",
+                    confidence=None, created_by=user_id,
+                )
+                continue
             # For duplicate columns, sample[0] holds the column it duplicates.
             ref = f.sample[0] if f.check_key == "duplicate_columns" and f.sample else None
             ex = explain_issue(f.check_key, f.column_name, f.count, total, ref_column=ref)
@@ -255,6 +274,11 @@ class AnalysisService(BaseService, DatasetContextMixin):
             raise NotFoundException("Issue does not belong to this dataset.")
 
         df = self._read_frame(dataset)
+
+        # Custom validations: matching rows come from the stored SQL condition.
+        if issue.check_key.startswith("custom_"):
+            return self._custom_affected(dataset.id, issue, df, limit)
+
         mask = affected_mask(df, issue.check_key, issue.column_name)
         total = int(mask.sum())
         subset = df[mask].head(limit)
@@ -442,6 +466,35 @@ class AnalysisService(BaseService, DatasetContextMixin):
         }
 
     # ---- exclusions (ignore a validation) ------------------------------ #
+    def _apply_custom_validations(self, dataset_id: int, ctx: AgentContext) -> None:
+        """Evaluate active custom validations and append them as findings."""
+        vals = self.custom_validations.list_for_dataset(dataset_id, active_only=True)
+        if not vals or ctx.df is None or ctx.profile is None:
+            return
+        meta = ctx.meta.setdefault("custom_meta", {})
+        added = False
+        for v in vals:
+            try:
+                count, _idx, _cols, _rows = self.duck.evaluate_condition(ctx.df, v.condition, sample_limit=1)
+            except Exception as exc:  # noqa: BLE001 - a broken rule must not break analysis
+                self.logger.warning("Custom validation %s failed: %s", v.id, exc)
+                continue
+            if count <= 0:
+                continue
+            key = f"custom_{v.id}"
+            ctx.findings.append(QualityFinding(
+                check_key=key, dimension=v.dimension, severity=v.severity,
+                count=count, column_name=None, sample=[v.condition],
+            ))
+            meta[key] = {
+                "problem": v.name,
+                "why": v.description or f"Rows matching: {v.condition}",
+                "condition": v.condition,
+            }
+            added = True
+        if added:
+            ctx.score = Scorer().score(ctx.findings, ctx.profile)
+
     def _apply_exclusions(self, dataset_id: int, ctx: AgentContext) -> None:
         """Re-score WITHOUT the excluded findings, but keep them in the list.
 
@@ -588,6 +641,18 @@ class AnalysisService(BaseService, DatasetContextMixin):
         except OSError:
             self.logger.warning("Could not delete snapshot %s", path)
 
+    def _custom_affected(self, dataset_id: int, issue, df, limit: int) -> DatasetPreview:
+        """Return rows matching a custom validation's stored condition."""
+        vid = int(issue.check_key.split("_", 1)[1])
+        validation = self.custom_validations.get(vid)
+        condition = validation.condition if validation else (issue.sample[0] if issue.sample else None)
+        if not condition:
+            raise NotFoundException("Custom validation no longer exists.")
+        count, indices, cols, rows = self.duck.evaluate_condition(df, condition, sample_limit=limit)
+        for n, row in zip(indices, rows):
+            row["#"] = n
+        return DatasetPreview(columns=["#", *cols], rows=rows, total_rows=count)
+
     def _to_response(self, report, dataset_id: str) -> QualityReportResponse:
         issues = self.issues.list_for_report(report.id)
         dataset = self.db.get(Dataset, dataset_id)
@@ -600,6 +665,7 @@ class AnalysisService(BaseService, DatasetContextMixin):
         issue_responses = []
         for i in issues:
             r = QualityIssueResponse.model_validate(i)
+            r.custom = i.check_key.startswith("custom_")
             r.column_level = i.check_key in COLUMN_LEVEL_CHECKS
             r.excluded = (i.check_key, i.column_name) in excluded_keys
             # An excluded validation can't also be "fixed" — hide the fix action.

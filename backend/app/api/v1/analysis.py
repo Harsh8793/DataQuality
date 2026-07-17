@@ -23,8 +23,14 @@ from app.schemas.ai import (
     FixListResponse,
     IssueFixResponse,
     UndoFixResponse,
+    ValidationActionResponse,
+    ValidationCreateRequest,
+    ValidationListResponse,
+    ValidationProposal,
+    ValidationProposeRequest,
 )
 from app.schemas.common import ApiResponse
+from app.services.custom_validation_service import CustomValidationService
 from app.schemas.dataset import ColumnProfileResponse, DatasetPreview
 from app.schemas.quality import CleaningResultResponse, QualityReportResponse
 from app.services.analysis_service import AnalysisService
@@ -174,6 +180,60 @@ def undo_fixes(dataset_id: int, current_user: CurrentUser, db: Annotated[Session
     """Undo the most recent fix batch (restores the pre-fix snapshot)."""
     result = AnalysisService(db).undo_fixes(dataset_id, current_user.id)
     return ApiResponse.ok(UndoFixResponse(**result), message="Fixes undone.")
+
+
+@router.post("/{dataset_id}/quality/validations/propose", response_model=ApiResponse[ValidationProposal])
+def propose_validation(
+    dataset_id: int,
+    payload: ValidationProposeRequest,
+    current_user: CurrentUser,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """AI interprets a natural-language rule into a validation preview for approval."""
+    proposal = CustomValidationService(db).propose(dataset_id, current_user.id, payload.prompt)
+    return ApiResponse.ok(proposal)
+
+
+@router.post("/{dataset_id}/quality/validations", response_model=ApiResponse[ValidationActionResponse])
+def add_validation(
+    dataset_id: int,
+    payload: ValidationCreateRequest,
+    current_user: CurrentUser,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Approve and persist a custom validation, then re-analyze."""
+    CustomValidationService(db).create(dataset_id, current_user.id, payload)
+    report = AnalysisService(db).analyze(dataset_id, current_user.id)
+    validations = CustomValidationService(db).list(dataset_id, current_user.id)
+    return ApiResponse.ok(
+        ValidationActionResponse(validations=validations, report=report),
+        message="Validation added.",
+    )
+
+
+@router.get("/{dataset_id}/quality/validations", response_model=ApiResponse[ValidationListResponse])
+def list_validations(dataset_id: int, current_user: CurrentUser, db: Annotated[Session, Depends(get_db)]):
+    """Return the custom validations defined for a dataset."""
+    return ApiResponse.ok(
+        ValidationListResponse(validations=CustomValidationService(db).list(dataset_id, current_user.id))
+    )
+
+
+@router.delete("/{dataset_id}/quality/validations/{validation_id}", response_model=ApiResponse[ValidationActionResponse])
+def delete_validation(
+    dataset_id: int,
+    validation_id: int,
+    current_user: CurrentUser,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Delete a custom validation, then re-analyze."""
+    CustomValidationService(db).delete(dataset_id, validation_id, current_user.id)
+    report = AnalysisService(db).analyze(dataset_id, current_user.id)
+    validations = CustomValidationService(db).list(dataset_id, current_user.id)
+    return ApiResponse.ok(
+        ValidationActionResponse(validations=validations, report=report),
+        message="Validation deleted.",
+    )
 
 
 @router.get("/{dataset_id}/quality/exclusions", response_model=ApiResponse[ExclusionListResponse])

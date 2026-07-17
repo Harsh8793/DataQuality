@@ -5,9 +5,12 @@ import type {
   ChartSpec,
   CompareResult,
   DataStory,
+  CustomValidationItem,
   ExclusionActionResult,
   ExclusionListResult,
   ExplainResult,
+  ValidationActionResult,
+  ValidationProposal,
   FixAllResult,
   FixListResult,
   IssueFixResult,
@@ -90,5 +93,31 @@ export const aiService = {
         check_key: checkKey,
         column_name: columnName,
       })
+    ),
+
+  proposeValidation: (datasetId: number, prompt: string) =>
+    unwrap<ValidationProposal>(
+      apiClient.post<ApiResponse<ValidationProposal>>(`/datasets/${datasetId}/quality/validations/propose`, { prompt })
+    ),
+
+  addValidation: (datasetId: number, proposal: ValidationProposal) =>
+    unwrap<ValidationActionResult>(
+      apiClient.post<ApiResponse<ValidationActionResult>>(`/datasets/${datasetId}/quality/validations`, {
+        name: proposal.name,
+        description: proposal.description,
+        dimension: proposal.dimension,
+        severity: proposal.severity,
+        condition: proposal.condition,
+      })
+    ),
+
+  listValidations: (datasetId: number) =>
+    unwrap<{ validations: CustomValidationItem[] }>(
+      apiClient.get<ApiResponse<{ validations: CustomValidationItem[] }>>(`/datasets/${datasetId}/quality/validations`)
+    ),
+
+  deleteValidation: (datasetId: number, validationId: number) =>
+    unwrap<ValidationActionResult>(
+      apiClient.delete<ApiResponse<ValidationActionResult>>(`/datasets/${datasetId}/quality/validations/${validationId}`)
     ),
 };

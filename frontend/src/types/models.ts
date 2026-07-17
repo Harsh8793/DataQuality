@@ -76,6 +76,35 @@ export interface QualityIssue {
   column_level: boolean;
   suggest_drop: boolean;
   excluded: boolean;
+  custom: boolean;
+}
+
+export interface ValidationProposal {
+  name: string;
+  description: string;
+  dimension: string;
+  severity: string;
+  condition: string;
+  matched_rows: number;
+  total_rows: number;
+  sample_columns: string[];
+  sample_rows: Record<string, unknown>[];
+  generated_by: string;
+}
+
+export interface CustomValidationItem {
+  id: number;
+  name: string;
+  description: string | null;
+  dimension: string;
+  severity: string;
+  condition: string;
+  is_active: boolean;
+}
+
+export interface ValidationActionResult {
+  validations: CustomValidationItem[];
+  report: QualityReport;
 }
 
 export interface QualityReport {

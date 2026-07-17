@@ -230,6 +230,65 @@ class ExclusionListResponse(BaseModel):
     exclusions: list[ExclusionItem]
 
 
+# ---- Custom (AI-assisted) validations --------------------------------------- #
+class ValidationProposeRequest(BaseModel):
+    """A natural-language description of a validation the user wants to add."""
+
+    prompt: str = Field(min_length=1, max_length=500)
+
+
+class ValidationProposal(BaseModel):
+    """The AI's proposed validation, with a live preview, for user approval."""
+
+    name: str
+    description: str
+    dimension: str
+    severity: str
+    condition: str  # DuckDB WHERE expression selecting the problem rows
+    matched_rows: int
+    total_rows: int
+    sample_columns: list[str]
+    sample_rows: list[dict]
+    generated_by: str  # "ai" | "fallback"
+
+
+class ValidationCreateRequest(BaseModel):
+    """An approved validation to persist and start enforcing."""
+
+    name: str = Field(min_length=1, max_length=255)
+    description: str | None = None
+    dimension: str
+    severity: str
+    condition: str = Field(min_length=1)
+
+
+class CustomValidationItem(BaseModel):
+    """A saved custom validation."""
+
+    id: int
+    name: str
+    description: str | None = None
+    dimension: str
+    severity: str
+    condition: str
+    is_active: bool
+
+    model_config = {"from_attributes": True}
+
+
+class ValidationActionResponse(BaseModel):
+    """Result of adding/deleting a validation: the fresh report + the list."""
+
+    validations: list[CustomValidationItem]
+    report: QualityReportResponse
+
+
+class ValidationListResponse(BaseModel):
+    """All custom validations for a dataset."""
+
+    validations: list[CustomValidationItem]
+
+
 # ---- Starter questions ------------------------------------------------------ #
 class SuggestionsResponse(BaseModel):
     """Clickable starter questions generated from the dataset's own columns."""

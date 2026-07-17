@@ -9,8 +9,7 @@ import {
   RotateCcw,
   ShieldAlert,
   Sparkles,
-  TrendingDown,
-  TrendingUp,
+  Trash2,
   Undo2,
   Wand2,
   Wrench,
@@ -22,6 +21,7 @@ import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { DataTable } from "@/components/common/DataTable";
 import { InfoTip } from "@/components/common/InfoTip";
 import { Modal } from "@/components/common/Modal";
+import { AddValidationCard } from "@/components/quality/AddValidationCard";
 import { ScoreGauge } from "@/components/quality/ScoreGauge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -102,6 +102,15 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const deleteValidation = useMutation({
+    mutationFn: (checkKey: string) => aiService.deleteValidation(datasetId, Number(checkKey.split("_")[1])),
+    onSuccess: (res) => {
+      refreshAll(res.report);
+      toast.success("Custom validation deleted.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const fixAll = useMutation({
     mutationFn: () => aiService.fixAll(datasetId),
     onSuccess: (res) => {
@@ -139,7 +148,6 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
   if (!report) return null;
 
   const fixableCount = report.issues.filter((i) => i.fixable).length;
-  const delta = report.previous_score != null ? report.overall_score - report.previous_score : null;
   const fixList = fixes.data?.fixes ?? [];
 
   // Merge open/ignored issues and solved fixes into ONE stably-ordered list.
@@ -179,42 +187,26 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
       {/* ---- Top summary strip ---- */}
       <Card>
         <CardContent className="flex flex-col gap-5 pt-6 lg:flex-row lg:items-center">
-          <div className="flex items-center gap-4">
+          <div className="flex shrink-0 items-center gap-4">
             <ScoreGauge score={report.overall_score} size={130} />
-            <div>
-              <p className="text-sm text-muted-foreground">Overall quality</p>
-              {delta != null && Math.abs(delta) >= 0.05 ? (
-                <p
-                  className={`flex items-center gap-1 text-sm font-medium ${
-                    delta > 0 ? "text-success" : "text-destructive"
-                  }`}
-                >
-                  {delta > 0 ? <TrendingUp className="size-4" /> : <TrendingDown className="size-4" />}
-                  {delta > 0 ? "+" : ""}
-                  {delta.toFixed(1)} vs previous ({report.previous_score?.toFixed(1)})
-                </p>
-              ) : (
-                <p className="text-sm text-muted-foreground">No prior run to compare</p>
-              )}
-              <p className="mt-1 text-xs text-muted-foreground">
-                {report.total_issues} issues · {report.duplicate_rows} duplicate rows
-              </p>
-            </div>
           </div>
 
-          {/* Severity summary (read-only counts; filtering is in the issues list) */}
-          <div className="flex flex-wrap gap-2 lg:ml-2">
-            {SEVERITIES.map((s) =>
-              counts[s] ? (
-                <span key={s} className="flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs capitalize text-muted-foreground">
-                  <span className={`size-2 rounded-full ${SEV_DOT[s]}`} /> {s} {counts[s]}
-                </span>
-              ) : null
-            )}
+          {/* What the Data Quality score is and how it's computed */}
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">What is the Data Quality score?</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              A 0–100 rating of how trustworthy this dataset is, averaged across six
+              dimensions — completeness, accuracy, consistency, uniqueness, validity and
+              integrity. Each dimension starts at 100 and loses points for every issue
+              found, weighted by its <span className="font-medium text-foreground">severity</span>{" "}
+              (critical &gt; high &gt; medium &gt; low) and the{" "}
+              <span className="font-medium text-foreground">share of rows affected</span>. The
+              overall score is a weighted blend of the six (completeness and validity count most).
+            </p>
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-2 lg:ml-auto">
+          <div className="flex shrink-0 flex-wrap gap-2 lg:ml-auto">
             {fixes.data?.undoable && (
               <Button variant="outline" size="sm" onClick={() => setConfirmUndo(true)} disabled={undoFixes.isPending}>
                 <RotateCcw className={`size-4 ${undoFixes.isPending ? "animate-spin" : ""}`} /> Undo fixes
@@ -257,6 +249,9 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
           })}
         </CardContent>
       </Card>
+
+      {/* ---- AI validation builder ---- */}
+      <AddValidationCard datasetId={datasetId} onAdded={refreshAll} />
 
       {/* ---- Detected issues (open + solved, one stable list) ---- */}
       <Card>
@@ -323,7 +318,8 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
                     onInclude={() =>
                       include.mutate({ checkKey: r.issue.check_key, column: r.issue.column_name })
                     }
-                    busy={exclude.isPending || include.isPending}
+                    onDeleteValidation={() => deleteValidation.mutate(r.issue.check_key)}
+                    busy={exclude.isPending || include.isPending || deleteValidation.isPending}
                   />
                 )
               )
@@ -358,14 +354,6 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
   );
 }
 
-const SEV_DOT: Record<string, string> = {
-  critical: "bg-destructive",
-  high: "bg-orange-400",
-  medium: "bg-amber-400",
-  low: "bg-blue-400",
-  info: "bg-slate-400",
-};
-
 function FilterSelect({
   value,
   onChange,
@@ -394,6 +382,7 @@ function IssueCard({
   onFixed,
   onExclude,
   onInclude,
+  onDeleteValidation,
   busy,
 }: {
   issue: QualityIssue;
@@ -401,6 +390,7 @@ function IssueCard({
   onFixed: (report: { overall_score: number }) => void;
   onExclude: () => void;
   onInclude: () => void;
+  onDeleteValidation: () => void;
   busy: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -436,6 +426,11 @@ function IssueCard({
         {ignored && (
           <Badge variant="secondary" className="gap-1">
             <EyeOff className="size-3" /> Ignored
+          </Badge>
+        )}
+        {issue.custom && (
+          <Badge variant="default" className="gap-1">
+            <Wand2 className="size-3" /> Custom
           </Badge>
         )}
         <span className={`font-medium ${ignored ? "text-muted-foreground line-through decoration-muted-foreground/40" : ""}`}>
@@ -496,6 +491,16 @@ function IssueCard({
               title="Ignore this validation — keeps it here but removes it from the score (reversible)"
             >
               <EyeOff className="size-3" /> Ignore
+            </button>
+          )}
+          {issue.custom && (
+            <button
+              onClick={onDeleteValidation}
+              disabled={busy}
+              className="flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive disabled:opacity-50"
+              title="Delete this custom validation permanently"
+            >
+              <Trash2 className="size-3" /> Delete rule
             </button>
           )}
           {hasDetails && (

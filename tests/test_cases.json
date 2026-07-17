@@ -1,0 +1,124 @@
+{
+  "description": "Validation test cases for the DataPilot AI agent. Each case lists the input given to the agent, the expected output, and the reference context that makes the expected output correct. Row counts are verified against backend/samples/messy_sales.csv (232 rows, 13 columns).",
+  "dataset_under_test": "backend/samples/messy_sales.csv",
+  "cases": [
+    {
+      "id": "TC-01-quality-scoring",
+      "name": "Quality analysis detects the seeded data problems",
+      "category": "quality-engine",
+      "input": {
+        "action": "analyze",
+        "endpoint": "POST /api/v1/datasets/{id}/analyze",
+        "dataset": "messy_sales.csv"
+      },
+      "expected_output": {
+        "overall_score_range": [60, 80],
+        "detected_check_keys_include": [
+          "missing_values",
+          "invalid_email",
+          "mixed_types",
+          "invalid_date",
+          "case_inconsistency",
+          "whitespace"
+        ],
+        "dimensions_present": ["completeness", "accuracy", "consistency", "uniqueness", "validity", "integrity"]
+      },
+      "reference_context": "messy_sales.csv is deliberately dirty: blank revenue cells, invalid emails (a@@invalid, name(at)example.com), 'two' in the numeric quantity column, 'not a date' in order_date, mixed country/gender casing, and untrimmed names. The deterministic QualityEngine (20+ checks) + Scorer must surface these and produce a Fair-band score."
+    },
+    {
+      "id": "TC-02-chat-count-with-null",
+      "name": "Chat: 'how many rows have missing revenue' → COUNT with IS NULL",
+      "category": "chat-nl-to-sql",
+      "input": {
+        "action": "chat",
+        "endpoint": "POST /api/v1/datasets/{id}/chat",
+        "question": "how many rows have missing revenue"
+      },
+      "expected_output": {
+        "sql_contains": "revenue IS NULL",
+        "row_count_answer": 22
+      },
+      "reference_context": "Missing values load as NULL, not the string 'nan' or 0. The chat planner must generate `SELECT COUNT(*) FROM dataset WHERE revenue IS NULL`. 22 of 232 revenue cells are blank."
+    },
+    {
+      "id": "TC-03-chat-cross-column-cast",
+      "name": "Chat: cross-column rule needing a cast on a text column",
+      "category": "chat-nl-to-sql",
+      "input": {
+        "action": "chat",
+        "endpoint": "POST /api/v1/datasets/{id}/chat",
+        "question": "how many rows have missing revenue but non-zero quantity"
+      },
+      "expected_output": {
+        "sql_contains": ["revenue IS NULL", "TRY_CAST", "quantity"],
+        "row_count_answer": 21
+      },
+      "reference_context": "quantity is stored as text (contains 'two'), so numeric comparison needs TRY_CAST(quantity AS DOUBLE). Correct answer is 21 rows: revenue IS NULL AND TRY_CAST(quantity AS DOUBLE) > 0."
+    },
+    {
+      "id": "TC-04-custom-validation-propose",
+      "name": "AI custom validation: natural language → enforceable rule",
+      "category": "custom-validation",
+      "input": {
+        "action": "propose validation",
+        "endpoint": "POST /api/v1/datasets/{id}/quality/validations/propose",
+        "prompt": "flag rows where revenue is over 2500"
+      },
+      "expected_output": {
+        "condition_semantics": "TRY_CAST(\"revenue\" AS DOUBLE) > 2500",
+        "matched_rows": 108,
+        "dimension_in": ["accuracy", "validity", "integrity", "consistency", "completeness", "uniqueness"],
+        "severity_in": ["critical", "high", "medium", "low", "info"]
+      },
+      "reference_context": "The agent turns the English rule into a validated DuckDB boolean condition, previews the matched rows for approval, and (on approval) persists it as a live check that scores like any built-in check. 108 of 232 rows have revenue > 2500."
+    },
+    {
+      "id": "TC-05-governance-pii",
+      "name": "Governance: rule-based PII detection and classification",
+      "category": "governance-agent",
+      "input": {
+        "action": "governance",
+        "endpoint": "GET /api/v1/datasets/{id}/governance",
+        "dataset": "messy_sales.csv"
+      },
+      "expected_output": {
+        "classification": "pii",
+        "pii_columns": ["Full Name", "email", "phone"],
+        "column_metadata_count": 13
+      },
+      "reference_context": "PII is detected deterministically (email/phone semantic types + name hints), so it must be exactly Full Name, email, phone — never every column and never wiped by the LLM. The LLM only adds business names/descriptions; metadata must cover all 13 columns."
+    },
+    {
+      "id": "TC-06-hitl-approval-gate",
+      "name": "Human-in-the-loop gate on low-quality data",
+      "category": "hitl",
+      "input": {
+        "action": "analyze then read summary",
+        "endpoint": "POST /api/v1/datasets/{id}/analyze",
+        "condition": "overall_score < 75 (APPROVAL_THRESHOLD)"
+      },
+      "expected_output": {
+        "approval_status": "pending",
+        "ui_behavior": "'Needs review' banner with Approve / Reject actions; dataset not cleared for downstream use until a human approves"
+      },
+      "reference_context": "Datasets scoring below APPROVAL_THRESHOLD (75) are auto-set to approval_status='pending' and require explicit human approval — the HITL gate. Scores >= 75 are auto-approved ('not_required')."
+    },
+    {
+      "id": "TC-07-one-click-fix-undo",
+      "name": "Targeted fix improves score and is reversible",
+      "category": "fix-engine",
+      "input": {
+        "action": "fix a missing-values issue, then undo",
+        "endpoints": [
+          "POST /api/v1/datasets/{id}/quality/issues/{issue_id}/fix",
+          "POST /api/v1/datasets/{id}/quality/fixes/undo"
+        ]
+      },
+      "expected_output": {
+        "after_fix": "overall_score increases; issue moves to 'Solved' with a before→after change log",
+        "after_undo": "dataset restored from the pre-fix snapshot; score returns to its previous value"
+      },
+      "reference_context": "Each fix snapshots the parquet before applying, records the concrete cell changes, and re-analyzes. Undo restores the snapshot exactly. Verified on property-style data: fixing/undoing round-trips the score with no data loss."
+    }
+  ]
+}

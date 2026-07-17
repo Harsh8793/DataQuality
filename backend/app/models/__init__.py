@@ -4,6 +4,7 @@ from app.models.analysis import AnalysisHistory, QualityIssue, QualityReport
 from app.models.chat import ChatMessage, ChatSession
 from app.models.cleaning import CleaningReport
 from app.models.dataset import Dataset, DatasetColumn, UploadedFile
+from app.models.custom_validation import CustomValidation
 from app.models.edit import DatasetEdit
 from app.models.exclusion import IssueExclusion
 from app.models.fixes import FixBatch, IssueFix
@@ -21,6 +22,7 @@ __all__ = [
     "IssueExclusion",
     "FixBatch",
     "IssueFix",
+    "CustomValidation",
     "QualityReport",
     "QualityIssue",
     "AnalysisHistory",

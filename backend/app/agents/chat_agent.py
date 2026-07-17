@@ -61,10 +61,22 @@ class ChatAgent(Agent):
         if self._wants_insights(ctx, question):
             return self._answer_with_insights(ctx, question)
 
+        # Dataset-level "how many rows/records" → answer deterministically so the
+        # LLM can't deflect with "please run a SQL query".
+        if self._is_rowcount_question(question):
+            return self._answer_with_data(
+                ctx, question, f"SELECT COUNT(*) AS row_count FROM {self._duck.TABLE}"
+            )
+
         plan = self._plan(ctx, question, history or [])
         # A plan with neither runnable SQL nor an actual reply is useless —
         # e.g. {"mode":"answer","answer":null} for "now show it as a pie chart".
         usable = (plan.get("mode") == "sql" and plan.get("sql")) or plan.get("answer")
+        # The LLM sometimes returns a lazy non-answer for a data question
+        # ("please run a SQL query…", "I don't have access…"). Treat that as
+        # unusable and fall back to the deterministic planner.
+        if plan.get("mode") == "answer" and self._is_deflection(plan.get("answer")):
+            usable = False
         if not usable:
             plan = self._heuristic_plan(ctx, question, history or [])
 
@@ -235,6 +247,44 @@ class ChatAgent(Agent):
                 found.append((pos, name))
         found.sort()
         return numeric, [name for _, name in found]
+
+    # Structural/filler words that don't add a condition to a count question.
+    _COUNT_FILLER = {
+        "how", "many", "number", "count", "of", "total", "the", "a", "an", "is", "are", "there",
+        "in", "dataset", "data", "table", "does", "do", "did", "have", "has", "had", "contain",
+        "contains", "hold", "holds", "got", "it", "this", "that", "present", "currently", "overall",
+        "altogether", "approximately", "tell", "me", "whats", "what", "s", "size", "rows", "row",
+        "records", "record", "entries", "entry", "observations", "observation", "datapoints",
+    }
+
+    @classmethod
+    def _is_rowcount_question(cls, question: str) -> bool:
+        """True ONLY for whole-dataset row counts, not 'how many rows have <X>'.
+
+        We require a count intent + a rows/records noun, and that nothing
+        meaningful remains after removing filler words (so a condition like
+        'have missing revenue' disqualifies it → the LLM handles that).
+        """
+        q = question.lower().strip().rstrip("?.!")
+        if not re.search(r"\b(how many|number of|count of|total|count|size)\b", q):
+            return False
+        if not re.search(r"\b(rows?|records?|entries|entry|observations?|data ?points?)\b", q):
+            return False
+        leftover = [t for t in re.findall(r"[a-z]+", q) if t not in cls._COUNT_FILLER]
+        return not leftover
+
+    @staticmethod
+    def _is_deflection(answer: str | None) -> bool:
+        """Detect an LLM non-answer that should have queried the data instead."""
+        if not answer:
+            return True
+        a = answer.lower()
+        tells = (
+            "run a sql", "run the sql", "execute a sql", "write a sql", "use a sql",
+            "i don't have access", "i cannot access", "i can't access", "unable to access",
+            "please provide the data", "no access to the data",
+        )
+        return any(t in a for t in tells)
 
     # ---- insights path -------------------------------------------------- #
     _INSIGHT_HINTS = (

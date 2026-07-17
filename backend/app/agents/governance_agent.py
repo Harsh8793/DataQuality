@@ -16,8 +16,11 @@ from app.core.llm.prompts import GOVERNANCE_SYSTEM, GOVERNANCE_USER
 
 # Semantic types that are inherently PII.
 _PII_TYPES = {SemanticType.EMAIL, SemanticType.PHONE}
-_PII_NAME_HINTS = ("name", "ssn", "dob", "birth", "address", "passport", "aadhaar", "national")
-_FINANCIAL_HINTS = ("salary", "revenue", "price", "amount", "account", "iban", "card", "payment")
+_PII_NAME_HINTS = (
+    "name", "fname", "lname", "surname", "contact", "ssn", "dob", "birth", "address",
+    "passport", "aadhaar", "national", "email", "phone", "mobile",
+)
+_FINANCIAL_HINTS = ("salary", "revenue", "price", "amount", "account", "iban", "card", "payment", "cost", "income")
 _HEALTH_HINTS = ("diagnosis", "patient", "medical", "disease", "treatment", "blood")
 
 
@@ -125,17 +128,51 @@ class GovernanceAgent(Agent):
 
     # ---- optional LLM enrichment ------------------------------------- #
     def _enrich_with_llm(self, ctx: AgentContext, result: GovernanceResult) -> GovernanceResult:
+        """Enrich the deterministic result with the LLM WITHOUT losing it.
+
+        Rules stay authoritative for classification, PII and sensitivity; the LLM
+        only adds friendlier business names + descriptions and an overall
+        rationale. It can never drop/rename columns or change PII flags.
+        """
         if not self._llm.available:
             return result
+
         columns = [
-            {"name": c.name, "type": c.semantic_type, "samples": c.sample_values[:2]}
-            for c in ctx.profile.columns
+            {"name": c.name, "type": c.semantic_type, "samples": [str(s) for s in c.sample_values[:2]]}
+            for c in ctx.profile.columns[:60]  # cap payload for wide datasets
         ]
-        raw = self._llm.complete_json(GOVERNANCE_SYSTEM, GOVERNANCE_USER.format(columns=json.dumps(columns)))
-        if isinstance(raw, dict):
-            result.rationale = raw.get("rationale") or result.rationale
-            if raw.get("classification"):
-                result.classification = str(raw["classification"])
-            if isinstance(raw.get("columns"), list) and raw["columns"]:
-                result.column_metadata = raw["columns"]
+        raw = self._llm.complete_json(
+            GOVERNANCE_SYSTEM, GOVERNANCE_USER.format(columns=json.dumps(columns, default=str))
+        )
+        if not isinstance(raw, dict):
+            return result
+
+        # Index the LLM's per-column output by the REAL column name only.
+        by_lname = {c.name.lower(): c.name for c in ctx.profile.columns}
+        llm_cols: dict[str, dict] = {}
+        for entry in raw.get("columns") or []:
+            if isinstance(entry, dict):
+                real = by_lname.get(str(entry.get("name", "")).strip().lower())
+                if real:
+                    llm_cols[real] = entry
+
+        # PII, sensitivity and classification stay RULE-BASED (reliable). The LLM
+        # only contributes friendlier business names + descriptions — small models
+        # are unreliable at PII (they flag everything or nothing).
+        merged: list[dict] = []
+        for m in result.column_metadata:
+            e = llm_cols.get(m["name"], {})
+            bn = str(e.get("business_name") or "").strip()
+            desc = str(e.get("description") or "").strip()
+            merged.append({
+                **m,
+                "business_name": bn or m["business_name"],
+                "description": desc or m["description"],
+            })
+
+        result.column_metadata = merged
+        # Use the LLM rationale only if it doesn't contradict the rule PII finding.
+        llm_rationale = str(raw.get("rationale") or "").strip()
+        if llm_rationale:
+            result.rationale = llm_rationale
         return result

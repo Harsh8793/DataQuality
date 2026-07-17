@@ -32,6 +32,7 @@ class QualityIssueResponse(BaseModel):
     column_level: bool = False
     suggest_drop: bool = False  # column is 100% empty — dropping is recommended
     excluded: bool = False  # user ignored this validation (kept in list, not scored)
+    custom: bool = False  # a user-defined (AI-assisted) validation
 
     model_config = {"from_attributes": True}
 

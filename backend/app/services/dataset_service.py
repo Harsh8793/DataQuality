@@ -16,6 +16,7 @@ from app.exceptions.base import BadRequestException, UnsupportedFormatException
 from app.models.analysis import AnalysisHistory, QualityIssue, QualityReport
 from app.models.chat import ChatMessage, ChatSession
 from app.models.dataset import Dataset, DatasetColumn, UploadedFile
+from app.models.custom_validation import CustomValidation
 from app.models.edit import DatasetEdit
 from app.models.exclusion import IssueExclusion
 from app.models.fixes import FixBatch, IssueFix
@@ -161,6 +162,7 @@ class DatasetService(BaseService, DatasetContextMixin):
         self.db.execute(sa_delete(IssueFix).where(IssueFix.dataset_id == did))
         self.db.execute(sa_delete(FixBatch).where(FixBatch.dataset_id == did))
         self.db.execute(sa_delete(IssueExclusion).where(IssueExclusion.dataset_id == did))
+        self.db.execute(sa_delete(CustomValidation).where(CustomValidation.dataset_id == did))
         for snap in snapshots:
             self._safe_unlink(snap)
         self.db.execute(sa_delete(GovernanceReport).where(GovernanceReport.dataset_id == did))

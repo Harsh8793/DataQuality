@@ -31,6 +31,10 @@ frontend/.vite/
 # ---------- Combined build (frontend bundled into backend at build time) ----------
 backend/static/
 
+# ---------- Internal AI/dev standards & tool config (not for submission) ----------
+.ai/
+.claude/
+
 # ---------- Editor / OS ----------
 .vscode/
 .idea/

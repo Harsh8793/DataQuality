@@ -48,7 +48,17 @@ CHAT_PLANNER_SYSTEM = (
     "- Needs the actual data → \"mode\":\"sql\" with ONE read-only DuckDB SELECT. Use ONLY "
     "the columns listed. Filter to any specific entity the user names. Add ORDER BY / "
     "LIMIT when sensible. ALWAYS run SQL for questions about data values — even if a "
-    "similar answer already appears in the conversation history.\n"
+    "similar answer already appears in the conversation history. Counting is a SQL job: "
+    "'how many rows' -> SELECT COUNT(*) FROM dataset.\n"
+    "- YOU write the SQL. NEVER reply telling the user to run a query, and never say you "
+    "lack access to the data — you can query it via \"mode\":\"sql\".\n"
+    "- Missing / empty / blank values load as NULL: test them with \"col\" IS NULL "
+    "(NOT = 'nan', NOT = '', NOT = 0). Examples: 'missing revenue' -> \"revenue\" IS NULL; "
+    "'rows with no email' -> \"email\" IS NULL; 'has a value' -> \"col\" IS NOT NULL.\n"
+    "- Columns may be stored as TEXT even when they hold numbers/dates. For ANY numeric "
+    "comparison or arithmetic wrap the column as TRY_CAST(\"col\" AS DOUBLE); for dates "
+    "use TRY_CAST(\"col\" AS DATE). e.g. non-zero quantity -> "
+    "TRY_CAST(\"quantity\" AS DOUBLE) <> 0.\n"
     "- If the user wants a chart/graph/plot (now or as a follow-up), ALSO set \"chart\" to "
     "bar|pie|line|scatter AND write an AGGREGATED two-column query: dimension first, "
     "aggregated measure second, e.g. SELECT PROP_CLASS, AVG(SALE_PRICE) AS avg_sale_price "
@@ -147,13 +157,42 @@ COMPARE_USER = (
     "Computed differences (JSON): {diff}\nWrite the narrative now."
 )
 
+# ---- Custom validation builder (NL -> rule) --------------------------- #
+CUSTOM_VALIDATION_SYSTEM = (
+    "You are a data quality engineer. The user describes a validation rule for a "
+    "table named `dataset`. Produce a rule that FLAGS the rows that VIOLATE it "
+    "(the problematic rows).\n"
+    "Return STRICT JSON with keys: name, description, dimension, severity, condition.\n"
+    "- condition: ONE DuckDB boolean SQL expression (a WHERE clause WITHOUT the word "
+    "WHERE) that selects the PROBLEM rows, using ONLY the listed columns. Quote column "
+    'names with double quotes. Example: for "sale price should not be zero" -> '
+    '"\\"SALE_PRICE\\" = 0". Read-only; never modify data.\n'
+    "- IMPORTANT: columns may be stored as TEXT even when they hold numbers or dates. "
+    "For ANY numeric comparison or arithmetic, wrap the column as "
+    'TRY_CAST("col" AS DOUBLE). For date comparisons, wrap as TRY_CAST("col" AS DATE). '
+    'e.g. "quantity is more than 0" -> "TRY_CAST(\\"quantity\\" AS DOUBLE) > 0". '
+    "Never compare a raw column directly to a number or date without TRY_CAST.\n"
+    "- dimension: one of completeness, accuracy, consistency, uniqueness, validity, integrity.\n"
+    "- severity: one of critical, high, medium, low, info.\n"
+    "- name: a short title (e.g. 'Sale price is zero').\n"
+    "- description: one sentence on why these rows are a problem.\n"
+    "If the request can't map to the columns, still return your best guess with a "
+    "condition that is valid SQL."
+)
+CUSTOM_VALIDATION_USER = (
+    "Columns (name: type): {schema}\nUser request: {prompt}\nReturn the JSON now."
+)
+
 # ---- Governance classification (GovernanceAgent) ---------------------- #
 GOVERNANCE_SYSTEM = (
-    "You are a data governance officer. Given column names, semantic types and "
-    "sample values, classify the dataset and identify PII. Return JSON with keys: "
-    "classification (public|internal|confidential|sensitive|pii|financial|"
-    "healthcare), pii_columns (array of column names), rationale (one sentence), "
-    "ingestion_tier (bronze|silver|gold), tier_rationale (one sentence), "
-    "columns (array of {name, business_name, description, sensitivity, is_pii})."
+    "You are a data governance officer writing a data dictionary. For each column you "
+    "are given (name, semantic type, sample values), write a short business-friendly "
+    "name and a one-line description of what it holds.\n"
+    "Return STRICT JSON: {rationale (one sentence describing what this dataset is about), "
+    "columns (array of one object PER input column with keys: name, business_name, "
+    "description)}.\n"
+    "- Use the EXACT column names given — do not rename, invent, reorder or omit columns.\n"
+    "- Return an entry for EVERY column provided.\n"
+    "- Keep descriptions factual and concise."
 )
 GOVERNANCE_USER = "Columns (JSON): {columns}\nReturn the JSON object now."

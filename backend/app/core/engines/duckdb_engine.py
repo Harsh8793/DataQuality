@@ -54,6 +54,40 @@ class DuckDBEngine:
             cleaned = f"{cleaned} LIMIT {self.MAX_ROWS}"
         return cleaned
 
+    def evaluate_condition(
+        self, df: pd.DataFrame, condition: str, sample_limit: int = 200
+    ) -> tuple[int, list[int], list[str], list[dict]]:
+        """Evaluate a boolean WHERE condition and return matching rows.
+
+        Returns ``(count, row_indices, columns, sample_rows)`` where the rows are
+        those for which ``condition`` is true. Used by custom validations.
+        """
+        cond = (condition or "").strip().rstrip(";").strip()
+        if not cond:
+            raise BadRequestException("Empty validation condition.")
+        if ";" in cond or _FORBIDDEN.search(cond):
+            raise BadRequestException("Condition contains forbidden SQL.")
+
+        con = duckdb.connect(database=":memory:")
+        try:
+            tmp = df.reset_index(drop=True).copy()
+            tmp.insert(0, "__row_index", range(len(tmp)))
+            con.register(self.TABLE, tmp)
+            try:
+                count = int(con.execute(f"SELECT COUNT(*) FROM {self.TABLE} WHERE {cond}").fetchone()[0])
+                sample_df = con.execute(
+                    f"SELECT * FROM {self.TABLE} WHERE {cond} LIMIT {sample_limit}"
+                ).fetch_df()
+            except duckdb.Error as exc:
+                raise BadRequestException(f"Invalid condition: {exc}") from exc
+        finally:
+            con.close()
+
+        indices = [int(i) for i in sample_df["__row_index"].tolist()]
+        sample_df = sample_df.drop(columns=["__row_index"])
+        sample_df = sample_df.astype(object).where(pd.notna(sample_df), None)
+        return count, indices, [str(c) for c in sample_df.columns], sample_df.to_dict(orient="records")
+
     def execute(self, df: pd.DataFrame, sql: str) -> QueryResult:
         """Validate and run SQL against the DataFrame, returning rows."""
         safe_sql = self.validate(sql)
