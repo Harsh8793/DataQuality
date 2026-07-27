@@ -98,7 +98,9 @@ class FixChange(BaseModel):
     """One concrete value change made by a fix."""
 
     row_index: int
-    identifier: str | None = None
+    # Identity column values may be numeric (e.g. an integer customer_id), so
+    # accept int/float as well as string — the diff carries the raw value.
+    identifier: str | int | float | None = None
     old_value: Any = None
     new_value: Any = None
 
