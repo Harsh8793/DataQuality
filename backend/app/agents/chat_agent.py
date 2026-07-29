@@ -82,9 +82,13 @@ class ChatAgent(Agent):
 
         if plan.get("mode") == "sql" and plan.get("sql"):
             chart = plan.get("chart")
+            # Deterministic backup query: if the planned SQL fails to execute
+            # (bad column, uncast compare, Groq hiccup), retry with this.
+            fallback_sql = self._pattern_sql(ctx, question.lower().strip().rstrip("!.?"))
             return self._answer_with_data(
                 ctx, question, str(plan["sql"]),
                 forced_chart=chart if chart in {"bar", "pie", "line", "scatter"} else None,
+                fallback_sql=fallback_sql,
             )
 
         # Conversational / meta / unanswerable → direct reply, no SQL, no table.
@@ -165,15 +169,22 @@ class ChatAgent(Agent):
 
         Handles the shapes our own starter questions use: "average X by Y",
         "total/sum X by Y", "top N Y by X", "count/rows per Y",
-        "trend of X over T", and "min/max/average of X".
+        "trend of X over T", "min/max/average of X", and value filters like
+        "average X in <category value>" (e.g. "average revenue in Texas").
         """
         table = self._duck.TABLE
         numeric, mentioned = self._mentioned_columns(ctx, q)
-        if not mentioned:
-            return None
 
         def col(name: str) -> str:
             return '"' + name.replace('"', '""') + '"'
+
+        # Detect an "in/for <category value>" filter (e.g. state = 'Texas').
+        where = ""
+        filt = self._filter_clause(ctx, q)
+        if filt:
+            fcol, fval = filt
+            esc = fval.lower().replace("'", "''")
+            where = f" WHERE LOWER(CAST({col(fcol)} AS VARCHAR)) = '{esc}'"
 
         agg = None
         for word, fn in (("average", "AVG"), ("avg", "AVG"), ("mean", "AVG"), ("total", "SUM"),
@@ -192,7 +203,7 @@ class ChatAgent(Agent):
             n = min(int(top.group(1)), 100)
             fn = agg or "SUM"
             return (f"SELECT {col(cat_cols[0])}, {fn}({col(num_cols[0])}) AS {fn.lower()}_value "
-                    f"FROM {table} GROUP BY 1 ORDER BY 2 DESC LIMIT {n}")
+                    f"FROM {table}{where} GROUP BY 1 ORDER BY 2 DESC LIMIT {n}")
 
         # "average/total X by/per Y" — classic group-by aggregate. Chart asks
         # like "bar graph of price by class" default to AVG when no agg word.
@@ -200,12 +211,12 @@ class ChatAgent(Agent):
         if effective_agg and num_cols and cat_cols and (" by " in q or " per " in q):
             return (f"SELECT {col(cat_cols[0])}, {effective_agg}({col(num_cols[0])}) "
                     f"AS {effective_agg.lower()}_value "
-                    f"FROM {table} GROUP BY 1 ORDER BY 2 DESC LIMIT 25")
+                    f"FROM {table}{where} GROUP BY 1 ORDER BY 2 DESC LIMIT 25")
 
         # "how many rows per Y" / "count by Y" — frequency table.
         if ("count" in q or "how many" in q or "rows per" in q) and cat_cols:
             return (f"SELECT {col(cat_cols[0])}, COUNT(*) AS count "
-                    f"FROM {table} GROUP BY 1 ORDER BY 2 DESC LIMIT 25")
+                    f"FROM {table}{where} GROUP BY 1 ORDER BY 2 DESC LIMIT 25")
 
         # "trend of X over T" — measure over a (date) column.
         if ("trend" in q or "over time" in q or " over " in q) and num_cols and len(mentioned) >= 2:
@@ -213,18 +224,60 @@ class ChatAgent(Agent):
                 mentioned[1] if len(mentioned) > 1 else None)
             if time_col and time_col != num_cols[0]:
                 return (f"SELECT {col(time_col)}, SUM({col(num_cols[0])}) AS total "
-                        f"FROM {table} GROUP BY 1 ORDER BY 1 LIMIT 500")
+                        f"FROM {table}{where} GROUP BY 1 ORDER BY 1 LIMIT 500")
 
         # "relationship between X and Y" — raw pairs for eyeballing.
         if ("relationship" in q or "correlation" in q) and len(num_cols) >= 2:
-            return f"SELECT {col(num_cols[0])}, {col(num_cols[1])} FROM {table} LIMIT 200"
+            return f"SELECT {col(num_cols[0])}, {col(num_cols[1])} FROM {table}{where} LIMIT 200"
 
-        # "min, max and average of X" — one-row summary stats.
+        # "average revenue in Texas" — a single aggregated measure, optionally
+        # filtered to one category value.
         if agg and num_cols and not cat_cols:
             c = col(num_cols[0])
+            if where:
+                return f"SELECT {agg}(TRY_CAST({c} AS DOUBLE)) AS {agg.lower()}_value FROM {table}{where}"
             return (f"SELECT MIN({c}) AS min, MAX({c}) AS max, ROUND(AVG({c}), 2) AS avg "
                     f"FROM {table}")
+
+        # "how many rows in Texas" — filtered row count with no measure named.
+        if where and ("count" in q or "how many" in q or "number of" in q):
+            return f"SELECT COUNT(*) AS count FROM {table}{where}"
+
+        # Any other question that named a category value → show those rows.
+        if where:
+            return f"SELECT * FROM {table}{where} LIMIT 50"
+
         return None
+
+    def _filter_clause(self, ctx: AgentContext, q: str) -> tuple[str, str] | None:
+        """Find a category value named in the question (e.g. "Texas" -> state).
+
+        Returns ``(column_name, value)`` for the longest matching value, or
+        ``None``. Only low-cardinality categorical/text columns are scanned so a
+        common English word can't accidentally match a free-text field. ``q`` is
+        expected lower-cased; matching is word-boundary aware.
+        """
+        if ctx.profile is None:
+            return None
+        best: tuple[int, str, str] | None = None
+        for c in ctx.profile.columns:
+            if c.semantic_type not in {"categorical", "text", "boolean"}:
+                continue
+            if c.distinct_count and c.distinct_count > 60:
+                continue
+            try:
+                values = ctx.df[c.name].dropna().astype(str).unique()
+            except Exception:  # noqa: BLE001
+                continue
+            for v in values:
+                vs = str(v).strip()
+                if len(vs) < 2:
+                    continue
+                if re.search(r"\b" + re.escape(vs.lower()) + r"\b", q) and (
+                    best is None or len(vs) > best[0]
+                ):
+                    best = (len(vs), c.name, vs)
+        return (best[1], best[2]) if best else None
 
     def _mentioned_columns(self, ctx: AgentContext, q: str) -> tuple[set[str], list[str]]:
         """Return (numeric column names, columns mentioned in the question in order)."""
@@ -326,21 +379,33 @@ class ChatAgent(Agent):
 
     # ---- data path ---------------------------------------------------- #
     def _answer_with_data(
-        self, ctx: AgentContext, question: str, sql: str, forced_chart: str | None = None
+        self, ctx: AgentContext, question: str, sql: str,
+        forced_chart: str | None = None, fallback_sql: str | None = None,
     ) -> ChatAnswer:
         try:
             result = self._duck.execute(ctx.df, sql)
         except AppException:
-            # Bad/invalid SQL — respond like an analyst instead of dumping data.
-            return ChatAnswer(
-                answer="I couldn't turn that into a valid query on this dataset. "
-                "Try naming a column or metric, e.g. 'average revenue by state'."
-            )
+            # Planned SQL failed — retry once with a deterministic query before
+            # giving up, so filtered asks still work when the LLM slips.
+            if fallback_sql and fallback_sql != sql:
+                try:
+                    result = self._duck.execute(ctx.df, fallback_sql)
+                except AppException:
+                    return self._invalid_query_answer()
+            else:
+                return self._invalid_query_answer()
         answer = self._narrate(question, result)
         return ChatAnswer(
             answer=answer, sql=result.sql, columns=result.columns,
             rows=result.rows, row_count=result.row_count,
             chart_spec=self._maybe_chart(result, forced_chart),
+        )
+
+    @staticmethod
+    def _invalid_query_answer() -> ChatAnswer:
+        return ChatAnswer(
+            answer="I couldn't turn that into a valid query on this dataset. "
+            "Try naming a column or metric, e.g. 'average revenue by state'."
         )
 
     def _narrate(self, question: str, result: QueryResult) -> str:
@@ -350,7 +415,70 @@ class ChatAgent(Agent):
         text = self._llm.complete(
             CHAT_NARRATE_SYSTEM, CHAT_NARRATE_USER.format(question=question, result=preview)
         )
-        return text.strip() if text else self._fallback_narrate(result)
+        text = text.strip() if text else ""
+        # Single-value answers (avg/count/sum/min/max): the LLM must NOT invent
+        # the figure. Trust its phrasing only if its numbers match the real
+        # computed values; otherwise state the exact value deterministically.
+        if result.row_count == 1:
+            truth = [float(v) for v in result.rows[0].values() if self._is_number(v)]
+            if text and self._numbers_agree(text, truth):
+                return text
+            return self._narrate_exact(result)
+        return text or self._fallback_narrate(result)
+
+    @staticmethod
+    def _is_number(v) -> bool:
+        try:
+            float(v)
+            return True
+        except (TypeError, ValueError):
+            return False
+
+    @classmethod
+    def _numbers_agree(cls, text: str, truth: list[float]) -> bool:
+        """True if every computed value has a matching number (±2%) in ``text``.
+
+        Guards against hallucinated figures: a rounded "$3,954" for 3953.85
+        passes; a fabricated "$1,791" for the same value does not.
+        """
+        if not truth:
+            return True
+        found = [float(m.replace(",", "")) for m in re.findall(r"-?\d[\d,]*\.?\d*", text)]
+        if not found:
+            return False
+        for t in truth:
+            if abs(t) < 1e-9:
+                if not any(abs(n) < 1e-6 for n in found):
+                    return False
+            elif not any(abs(n - t) <= abs(t) * 0.02 for n in found):
+                return False
+        return True
+
+    @classmethod
+    def _narrate_exact(cls, result: QueryResult) -> str:
+        """Deterministic sentence with the EXACT computed value(s)."""
+        row = result.rows[0]
+        _labels = {"avg": "average", "sum": "total", "min": "minimum", "max": "maximum",
+                   "count": "count", "row_count": "row count", "total": "total"}
+
+        def fmt(v) -> str:
+            if not cls._is_number(v):
+                return "no value" if v is None else str(v)
+            n = float(v)
+            return f"{n:,.0f}" if n.is_integer() else f"{n:,.2f}"
+
+        def humanize(k: str) -> str:
+            kl = k.lower()
+            for pre, word in _labels.items():
+                if kl == pre or kl.startswith(pre + "_"):
+                    rest = kl[len(pre):].strip("_").replace("_", " ")
+                    return f"{word} {rest}".strip()
+            return k.replace("_", " ")
+
+        parts = [(humanize(k), fmt(v)) for k, v in row.items()]
+        if len(parts) == 1:
+            return f"The {parts[0][0]} is {parts[0][1]}."
+        return "Here's the result — " + ", ".join(f"{lbl}: {val}" for lbl, val in parts) + "."
 
     @staticmethod
     def _fallback_narrate(result: QueryResult) -> str:
