@@ -66,6 +66,25 @@ class IngestionTier(StrEnum):
     GOLD = "gold"
 
 
+class CompareVerdict(StrEnum):
+    """Overall outcome when comparing two versions of a dataset."""
+
+    IMPROVED = "improved"        # quality rose materially
+    REGRESSED = "regressed"      # quality fell materially
+    MIXED = "mixed"              # gains in one area, losses in another
+    EQUIVALENT = "equivalent"    # no material change
+    UNKNOWN = "unknown"          # one side has not been quality-scored
+
+
+class LlmStatus(StrEnum):
+    """Live health of the LLM layer, surfaced on the dashboard."""
+
+    ACTIVE = "active"              # configured and the last call succeeded
+    DEGRADED = "degraded"          # configured, but the last call failed
+    UNCONFIGURED = "unconfigured"  # enabled with no usable API key
+    DISABLED = "disabled"          # switched off via settings
+
+
 class ApprovalStatus(StrEnum):
     """Human approval gate states for a dataset."""
 

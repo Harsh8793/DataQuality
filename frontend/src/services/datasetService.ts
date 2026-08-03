@@ -41,4 +41,19 @@ export const datasetService = {
     unwrap<DatasetSummary>(
       apiClient.post<ApiResponse<DatasetSummary>>(`/datasets/${id}/approval`, { approved, note: note ?? null })
     ),
+
+  /** Download the dataset's current data (edits + fixes included) as CSV. */
+  exportCsv: async (id: number) => {
+    const res = await apiClient.get(`/datasets/${id}/export`, { responseType: "blob" });
+    // Prefer the server's filename so cleaned datasets are labelled as such.
+    const disposition = String(res.headers["content-disposition"] ?? "");
+    const filename = /filename="?([^"]+)"?/.exec(disposition)?.[1] ?? `dataset_${id}.csv`;
+
+    const url = URL.createObjectURL(res.data as Blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+  },
 };

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -113,6 +114,21 @@ class DatasetService(BaseService, DatasetContextMixin):
             rows=page.to_dict(orient="records"),
             total_rows=int(len(df)),
         )
+
+    def export_csv(self, dataset_id: int, user_id: int) -> tuple[str, str]:
+        """Return ``(csv_text, filename)`` for the dataset's current data.
+
+        Reads the live working copy, so the export always reflects whatever the
+        user has done to this dataset — cell edits, one-click issue fixes and
+        undos all write back to the same parquet. Cleaning produces a separate
+        child dataset, so exporting that one yields the cleaned data.
+        """
+        dataset = self._load_owned_dataset(dataset_id, user_id)
+        df = self._read_frame(dataset)
+
+        safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", dataset.name).strip("_") or f"dataset_{dataset.id}"
+        suffix = "_cleaned" if dataset.is_cleaned else ""
+        return df.to_csv(index=False), f"{safe_name}{suffix}.csv"
 
     def delete(self, dataset_id: int, user_id: int) -> None:
         """Hard-delete a dataset: remove all related rows and files from disk.

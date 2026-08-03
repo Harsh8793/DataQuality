@@ -124,17 +124,30 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
     },
   });
 
-  const undoFixes = useMutation({
-    mutationFn: () => aiService.undoFixes(datasetId),
+  const undoAllFixes = useMutation({
+    mutationFn: () => aiService.undoAllFixes(datasetId),
     onSuccess: (res) => {
       refreshAll(res.report);
       setConfirmUndo(false);
-      toast.success(`Undid ${res.undone_fixes} fix(es) — score now ${res.report.overall_score}/100`);
+      toast.success(`Undid all ${res.undone_fixes} fix(es) — score now ${res.report.overall_score}/100`);
     },
     onError: (e: Error) => {
       toast.error(e.message);
       setConfirmUndo(false);
     },
+  });
+
+  // Undoing one fix rebuilds the dataset from the pre-fix snapshot and replays
+  // the fixes being kept, so any fix can be removed — not just the newest.
+  const undoOneFix = useMutation({
+    mutationFn: (fixId: number) => aiService.undoFix(datasetId, fixId),
+    onSuccess: (res) => {
+      refreshAll(res.report);
+      toast.success(
+        `Fix undone — ${res.remaining_fixes} still applied, score now ${res.report.overall_score}/100`
+      );
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   const counts = useMemo(() => {
@@ -207,9 +220,17 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
 
           {/* Actions */}
           <div className="flex shrink-0 flex-wrap gap-2 lg:ml-auto">
-            {fixes.data?.undoable && (
-              <Button variant="outline" size="sm" onClick={() => setConfirmUndo(true)} disabled={undoFixes.isPending}>
-                <RotateCcw className={`size-4 ${undoFixes.isPending ? "animate-spin" : ""}`} /> Undo fixes
+            {/* Bulk escape hatch — individual fixes each have their own Undo. */}
+            {fixList.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setConfirmUndo(true)}
+                disabled={undoAllFixes.isPending}
+                title="Remove every applied fix in one step"
+              >
+                <RotateCcw className={`size-4 ${undoAllFixes.isPending ? "animate-spin" : ""}`} />
+                Undo all ({fixList.length})
               </Button>
             )}
             <Button
@@ -305,7 +326,13 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
             ) : (
               visibleRows.map((r) =>
                 r.kind === "solved" ? (
-                  <SolvedCard key={`fix-${r.fix.id}`} fix={r.fix} onView={() => setDiff(r.fix)} />
+                  <SolvedCard
+                    key={`fix-${r.fix.id}`}
+                    fix={r.fix}
+                    onView={() => setDiff(r.fix)}
+                    onUndo={() => undoOneFix.mutate(r.fix.id)}
+                    undoing={undoOneFix.isPending && undoOneFix.variables === r.fix.id}
+                  />
                 ) : (
                   <IssueCard
                     key={`issue-${r.issue.id}`}
@@ -343,11 +370,11 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
       <ConfirmDialog
         open={confirmUndo}
         destructive
-        title="Undo the last batch of fixes?"
-        description="This restores the data to exactly how it was before the most recent fix (or fix-all) and re-runs the analysis."
-        confirmLabel="Undo fixes"
-        loading={undoFixes.isPending}
-        onConfirm={() => undoFixes.mutate()}
+        title={`Undo all ${fixList.length} fix(es)?`}
+        description="This restores the data to exactly how it was before any fix was applied and re-runs the analysis. To remove just one fix, use its own Undo button in the issue list."
+        confirmLabel="Undo all fixes"
+        loading={undoAllFixes.isPending}
+        onConfirm={() => undoAllFixes.mutate()}
         onCancel={() => setConfirmUndo(false)}
       />
     </div>
@@ -576,7 +603,17 @@ function IssueCard({
   );
 }
 
-function SolvedCard({ fix, onView }: { fix: FixRecord; onView: () => void }) {
+function SolvedCard({
+  fix,
+  onView,
+  onUndo,
+  undoing,
+}: {
+  fix: FixRecord;
+  onView: () => void;
+  onUndo: () => void;
+  undoing: boolean;
+}) {
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-success/25 bg-success/5 p-3">
       <Badge variant="success" className="gap-1">
@@ -587,14 +624,26 @@ function SolvedCard({ fix, onView }: { fix: FixRecord; onView: () => void }) {
       </span>
       {fix.column_name && <Badge variant="outline">{fix.column_name}</Badge>}
       <span className="text-xs text-success">{fix.detail}</span>
-      {fix.changes.length > 0 && (
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        {fix.changes.length > 0 && (
+          <button
+            onClick={onView}
+            className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+          >
+            View changes →
+          </button>
+        )}
+        {/* Undo this fix alone — the others stay applied. */}
         <button
-          onClick={onView}
-          className="ml-auto rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+          onClick={onUndo}
+          disabled={undoing}
+          title="Undo just this fix"
+          className="flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive disabled:opacity-50"
         >
-          View changes →
+          <Undo2 className={`size-3 ${undoing ? "animate-spin" : ""}`} />
+          {undoing ? "Undoing…" : "Undo"}
         </button>
-      )}
+      </div>
     </div>
   );
 }

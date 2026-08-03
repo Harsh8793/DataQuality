@@ -7,6 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from app.constants.enums import CompareVerdict
 from app.schemas.chat import ChartSpec, KpiCard
 from app.schemas.quality import QualityReportResponse
 
@@ -48,13 +49,36 @@ class ChartCommandRequest(BaseModel):
     command: str = Field(min_length=1, max_length=300)
 
 
-class ChartCommandResponse(BaseModel):
-    """The widget built from an NL command (exactly one of kpi/chart set)."""
+class WidgetOption(BaseModel):
+    """One way to answer an ambiguous request, offered to the user to pick."""
 
     kind: str  # "kpi" | "chart"
+    label: str
+    description: str
+    kpi: KpiCard | None = None
+    chart: ChartSpec | None = None
+    confidence: float = Field(ge=0, le=1)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class ChartCommandResponse(BaseModel):
+    """The widget built from an NL command.
+
+    ``kind`` is ``kpi``/``chart`` for a confident single answer, ``choice`` when
+    the request could reasonably be either and the user must pick, and
+    ``review`` when the widget was built but too little data survived to show it
+    without explicit confirmation.
+    """
+
+    kind: str  # "kpi" | "chart" | "choice" | "review"
     kpi: KpiCard | None = None
     chart: ChartSpec | None = None
     message: str
+    # How much of the data backs this widget (1.0 = every row used).
+    confidence: float = Field(default=1.0, ge=0, le=1)
+    warnings: list[str] = Field(default_factory=list)
+    # Populated when kind == "choice".
+    options: list[WidgetOption] = Field(default_factory=list)
 
 
 # ---- Dataset comparison ---------------------------------------------------- #
@@ -89,6 +113,15 @@ class CompareResponse(BaseModel):
     removed_columns: list[str]
     common_columns: int
     column_shifts: list[ColumnShift]
+    # Quality context: the headline number users actually compare on.
+    left_score: float | None = None
+    right_score: float | None = None
+    score_delta: float | None = None
+    left_issues: int | None = None
+    right_issues: int | None = None
+    # Deterministic call, computed from the numbers above — never the LLM's opinion.
+    verdict: CompareVerdict = CompareVerdict.UNKNOWN
+    verdict_reason: str = ""
     narrative: str
     generated_by: str
 
@@ -150,9 +183,11 @@ class FixListResponse(BaseModel):
 
 
 class UndoFixResponse(BaseModel):
-    """Result of undoing the most recent fix batch."""
+    """Result of undoing one fix, or all of them."""
 
     undone_fixes: int
+    # How many applied fixes survive — 0 after an undo-all.
+    remaining_fixes: int = 0
     report: QualityReportResponse
 
 

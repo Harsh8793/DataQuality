@@ -1,0 +1,731 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="7345" viewBox="0 0 2600 7345" font-family="Segoe UI, Arial, sans-serif">
+<defs>
+<marker id="a0F6CBD" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#0F6CBD"/></marker>
+<marker id="a7A4FBF" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#7A4FBF"/></marker>
+<marker id="a0F7B8A" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#0F7B8A"/></marker>
+<marker id="aB4690E" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#B4690E"/></marker>
+<marker id="a3C6E71" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#3C6E71"/></marker>
+<marker id="a7A7875" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#7A7875"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="60" y="46" width="7" height="62" rx="3.5" fill="#0F6CBD"/>
+<text x="86" y="80" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">DataPilot AI — how it works, tab by tab</text>
+<text x="86" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Upload, automatic analysis, then what you do by hand versus what the AI does — for every tab up to Governance.</text>
+<text x="2540" y="80" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#4A4845" text-anchor="end" letter-spacing="0.0">Walkthrough diagram</text>
+<text x="2540" y="106" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#7A7875" text-anchor="end" letter-spacing="0.0">Read from the backend source</text>
+<rect x="60" y="132" width="2480" height="62" rx="10" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.5"/>
+<text x="84" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0F6CBD" text-anchor="start" letter-spacing="0.0">How to read this</text>
+<rect x="250" y="152" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="266.59" y="166.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="293.18" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">the AI model is called for this step</text>
+<rect x="593.1800000000001" y="152" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="617.36" y="166.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="651.5400000000001" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">fixed code decides — same answer every time, no tokens</text>
+<rect x="1091.54" y="151" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="1126.165" y="167.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="1170.79" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">you do it</text>
+<rect x="1300.79" y="151" width="124.375" height="24" rx="12.0" fill="#B4690E"/>
+<text x="1362.9775" y="167.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">YOUR DECISION</text>
+<text x="1435.165" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">nothing proceeds until you approve</text>
+<rect x="60" y="232" width="2480" height="785.5" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="232" width="9" height="785.5" rx="4.5" fill="#0F6CBD"/><circle cx="126" cy="288" r="30" fill="#0F6CBD"/><text x="126" y="299" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text><text x="174" y="282" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">You upload a file</text><text x="174" y="310" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">Drag and drop, any of the formats below</text><rect x="2296.8" y="266" width="223.2" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2408.4" y="288" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">POST /api/v1/datasets</text>
+<rect x="80" y="342" width="2440" height="88" rx="11" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.6"/>
+<text x="104" y="376" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0F6CBD" text-anchor="start" letter-spacing="0.0">Accepted input</text>
+<rect x="270" y="360" width="74" height="34" rx="8" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.2"/>
+<text x="307.0" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">.csv</text>
+<rect x="358" y="360" width="85" height="34" rx="8" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.2"/>
+<text x="400.5" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">.xlsx</text>
+<rect x="457" y="360" width="74" height="34" rx="8" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.2"/>
+<text x="494.0" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">.xls</text>
+<rect x="545" y="360" width="85" height="34" rx="8" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.2"/>
+<text x="587.5" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">.json</text>
+<rect x="644" y="360" width="118" height="34" rx="8" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.2"/>
+<text x="703.0" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">.parquet</text>
+<text x="792" y="383" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· max 50 MB · rejected if empty or the extension isn&#x27;t allowed</text>
+<rect x="80" y="464" width="2440" height="293.5" rx="12" fill="#F9FCFE" stroke="#0F6CBD" stroke-width="2.0"/>
+<rect x="100" y="482" width="77.125" height="24" rx="12.0" fill="#0F6CBD"/>
+<text x="138.5625" y="498.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">BACKEND</text>
+<text x="191.125" y="501" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Reading the upload</text>
+<text x="100" y="540" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#0F6CBD" text-anchor="start" letter-spacing="0.0">No AI here — this is all fixed code</text>
+<path d="M100 548 H2500" stroke="#0F6CBD" stroke-width="1" opacity="0.35"/>
+<circle cx="100" cy="569" r="14" fill="#0F6CBD"/>
+<text x="100" y="574.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="128" y="575" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Check the file</text>
+<rect x="262.79999999999995" y="559" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="286.97999999999996" y="573.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128" y="600.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The extension must be allowed, the size must be under 50 MB and the file must not be empty. Anything else is refused before a single row is read.</text>
+<circle cx="100" cy="631.5" r="14" fill="#0F6CBD"/>
+<text x="100" y="637.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="128" y="637.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Work out the format, then read it</text>
+<rect x="437.59999999999997" y="621.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="461.78" y="636.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128" y="662.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The encoding is detected from the first 100 KB. For a CSV the real separator is found by testing comma, semicolon, pipe, tab and tilde. Excel, JSON and Parquet use their own reader.</text>
+<circle cx="100" cy="694.0" r="14" fill="#0F6CBD"/>
+<text x="100" y="699.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="128" y="700.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Tidy the column names</text>
+<rect x="327.2" y="684.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="351.38" y="698.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128" y="725.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Spaces are trimmed and repeated names are made unique, so the table can be stored safely.</text>
+<text x="80" y="801.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The same upload is then written to three places, each with a different job:</text>
+<rect x="80" y="825.5" width="797.3333333333334" height="132" rx="11" fill="#F2FAFB" stroke="#0F7B8A" stroke-width="1.8"/>
+<text x="100" y="857.5" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">1 · Your original file</text>
+<rect x="100" y="871.5" width="757.3333333333334" height="30" rx="6" fill="#FFFFFF" stroke="#CFE7EA" stroke-width="1.2"/>
+<text x="112" y="891.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#0F7B8A" text-anchor="start" letter-spacing="0.0">data/uploads/…</text>
+<text x="100" y="925.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">An exact copy, kept only as proof of what you sent. Never changed, never read again.</text>
+<rect x="901.3333333333334" y="825.5" width="797.3333333333334" height="132" rx="11" fill="#F2FAFB" stroke="#0F7B8A" stroke-width="1.8"/>
+<text x="921.3333333333334" y="857.5" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">2 · The working copy</text>
+<rect x="921.3333333333334" y="871.5" width="757.3333333333334" height="30" rx="6" fill="#FFFFFF" stroke="#CFE7EA" stroke-width="1.2"/>
+<text x="933.3333333333334" y="891.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#0F7B8A" text-anchor="start" letter-spacing="0.0">data/parquet/&lt;id&gt;.parquet</text>
+<text x="921.3333333333334" y="925.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A fast columnar version. Everything from here on reads and rewrites this file.</text>
+<rect x="1722.6666666666667" y="825.5" width="797.3333333333334" height="132" rx="11" fill="#F2FAFB" stroke="#0F7B8A" stroke-width="1.8"/>
+<text x="1742.6666666666667" y="857.5" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">3 · The record of it</text>
+<rect x="1742.6666666666667" y="871.5" width="757.3333333333334" height="30" rx="6" fill="#FFFFFF" stroke="#CFE7EA" stroke-width="1.2"/>
+<text x="1754.6666666666667" y="891.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#0F7B8A" text-anchor="start" letter-spacing="0.0">SQLite database</text>
+<text x="1742.6666666666667" y="925.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Format, encoding, separator, row and column counts. Facts about the file — never the rows themselves.</text>
+<text x="80" y="995.5" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#0A4C86" text-anchor="start" letter-spacing="0.0">Analysis then starts on its own — you don&#x27;t have to press anything.</text>
+<path d="M1300.0 1025.5 L1300.0 1079.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="1316.0" y="1040.5" width="339.2" height="24" rx="12" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1"/>
+<text x="1485.6" y="1057.0" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">the working copy is the input from here on</text>
+<rect x="60" y="1087.5" width="2480" height="1145.5" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="1087.5" width="9" height="1145.5" rx="4.5" fill="#0F6CBD"/><circle cx="126" cy="1143.5" r="30" fill="#0F6CBD"/><text x="126" y="1154.5" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text><text x="174" y="1137.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">The app analyses it automatically</text><text x="174" y="1165.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">No clicks needed. This also re-runs after every fix, edit or new rule</text><rect x="2241.6" y="1121.5" width="278.4" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2380.8" y="1143.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">POST /datasets/{id}/analyze</text>
+<rect x="80" y="1197.5" width="2440" height="118" rx="11" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.6"/>
+<text x="104" y="1233.5" font-family="Segoe UI, Arial, sans-serif" font-size="18.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Three AI agents run in order, one after another</text>
+<text x="104" y="1259.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">They share a single working memory: each agent reads what the one before it worked out and adds its own findings. If an agent fails, only that agent&#x27;s part is missing — the rest still completes. This is where the score, the issue list and the sensitivity classification come from.</text>
+<rect x="80" y="1347.5" width="793.3333333333334" height="490.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="100" y="1365.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="142.5" y="1382.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="199.0" y="1384.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Agent 1 · Profiling</text>
+<text x="100" y="1423.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Understands the shape of your data</text>
+<path d="M100 1431.5 H853.3333333333334" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="100.0" cy="1452.5" r="14" fill="#7A4FBF"/>
+<text x="100.0" y="1458.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="128.0" y="1458.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Open the working copy</text>
+<rect x="327.2" y="1442.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="351.38" y="1457.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128.0" y="1483.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Load the stored table into memory.</text>
+<circle cx="100.0" cy="1515.0" r="14" fill="#7A4FBF"/>
+<text x="100.0" y="1520.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="128.0" y="1521.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Work out each column&#x27;s basic type</text>
+<rect x="437.59999999999997" y="1505.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="461.78" y="1519.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128.0" y="1546.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Number, text, date, true/false.</text>
+<circle cx="100.0" cy="1577.5" r="14" fill="#7A4FBF"/>
+<text x="100.0" y="1583.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="128.0" y="1583.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Work out what each column means</text>
+<rect x="419.2" y="1567.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="443.38" y="1582.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128.0" y="1608.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">14 business types are recognised — email, phone, postcode, web address,</text>
+<text x="128.0" y="1629.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">latitude/longitude, money, date, ID, category — from the shape of the values plus the</text>
+<text x="128.0" y="1649.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">column&#x27;s name.</text>
+<circle cx="100.0" cy="1681.0" r="14" fill="#7A4FBF"/>
+<text x="100.0" y="1686.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="128.0" y="1687.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Measure every column</text>
+<rect x="318.0" y="1671.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="342.18" y="1685.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="128.0" y="1712.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">How much is missing, how many different values, smallest, largest, average, and a few real</text>
+<text x="128.0" y="1732.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">examples.</text>
+<path d="M100 1790.0 H853.3333333333334" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="100" y="1812.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">result → what every column is and contains</text>
+<rect x="903.3333333333334" y="1347.5" width="793.3333333333334" height="490.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="923.3333333333334" y="1365.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="965.8333333333334" y="1382.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="1022.3333333333334" y="1384.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Agent 2 · Quality</text>
+<text x="923.3333333333334" y="1423.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Finds the problems and scores them</text>
+<path d="M923.3333333333334 1431.5 H1676.6666666666667" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="923.3333333333334" cy="1452.5" r="14" fill="#7A4FBF"/>
+<text x="923.3333333333334" y="1458.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="951.3333333333334" y="1458.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Run every check</text>
+<rect x="1095.3333333333335" y="1442.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1119.5133333333335" y="1457.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="951.3333333333334" y="1483.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Over 20 independent checks look for missing values, blanks, duplicate rows and columns,</text>
+<text x="951.3333333333334" y="1504.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">columns that never change, too many or too few distinct values, badly formed emails,</text>
+<text x="951.3333333333334" y="1524.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">phones, web addresses and dates, unexpected negatives, stray spaces, inconsistent</text>
+<text x="951.3333333333334" y="1545.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">capitalisation and outliers.</text>
+<circle cx="923.3333333333334" cy="1576.5" r="14" fill="#7A4FBF"/>
+<text x="923.3333333333334" y="1582.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="951.3333333333334" y="1582.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Record what each check found</text>
+<rect x="1214.9333333333334" y="1566.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1239.1133333333335" y="1581.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="951.3333333333334" y="1607.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Which column, how serious, how many rows, and which of the six quality areas it damages.</text>
+<circle cx="923.3333333333334" cy="1639.0" r="14" fill="#7A4FBF"/>
+<text x="923.3333333333334" y="1644.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="951.3333333333334" y="1645.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Score each of the six areas</text>
+<rect x="1205.7333333333333" y="1629.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1229.9133333333334" y="1643.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="951.3333333333334" y="1670.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Every area starts at 100 and loses points based on how serious the problem is and how much</text>
+<text x="951.3333333333334" y="1690.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">of the table it affects.</text>
+<circle cx="923.3333333333334" cy="1722.0" r="14" fill="#7A4FBF"/>
+<text x="923.3333333333334" y="1727.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="951.3333333333334" y="1728.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Combine into one score</text>
+<rect x="1159.7333333333333" y="1712.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1183.9133333333334" y="1726.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="951.3333333333334" y="1753.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Completeness 25% · Validity 20% · Uniqueness 15% · Consistency 15% · Accuracy 15% ·</text>
+<text x="951.3333333333334" y="1773.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Integrity 10% — giving the headline number out of 100.</text>
+<path d="M923.3333333333334 1790.0 H1676.6666666666667" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="923.3333333333334" y="1812.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">result → the issue list and the 0-100 score</text>
+<rect x="1726.6666666666667" y="1347.5" width="793.3333333333334" height="490.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="1746.6666666666667" y="1365.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="1789.1666666666667" y="1382.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="1845.6666666666667" y="1384.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Agent 3 · Governance</text>
+<text x="1746.6666666666667" y="1423.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Judges sensitivity — the only AI call here</text>
+<path d="M1746.6666666666667 1431.5 H2500.0" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="1746.6666666666667" cy="1452.5" r="14" fill="#7A4FBF"/>
+<text x="1746.6666666666667" y="1458.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="1774.6666666666667" y="1458.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Look for sensitive columns</text>
+<rect x="2019.8666666666668" y="1442.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2044.0466666666669" y="1457.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1774.6666666666667" y="1483.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Column names and detected meanings are matched against personal, financial and health</text>
+<text x="1774.6666666666667" y="1504.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">patterns.</text>
+<circle cx="1746.6666666666667" cy="1535.5" r="14" fill="#7A4FBF"/>
+<text x="1746.6666666666667" y="1541.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="1774.6666666666667" y="1541.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Decide the classification and tier</text>
+<rect x="2093.4666666666667" y="1525.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2117.6466666666665" y="1540.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1774.6666666666667" y="1566.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Fixed rules make this call, so it is identical on every run and can be defended in an</text>
+<text x="1774.6666666666667" y="1587.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">audit. The AI is not allowed to change it.</text>
+<circle cx="1746.6666666666667" cy="1618.5" r="14" fill="#7A4FBF"/>
+<text x="1746.6666666666667" y="1624.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="1774.6666666666667" y="1624.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Ask the AI to write the human layer</text>
+<rect x="2102.666666666667" y="1608.5" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="2119.256666666667" y="1623.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="1774.6666666666667" y="1649.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The AI supplies business-friendly column names, one-line descriptions and the wording that</text>
+<text x="1774.6666666666667" y="1670.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">explains the classification. Columns go in batches of 20 to keep the cost down.</text>
+<circle cx="1746.6666666666667" cy="1701.5" r="14" fill="#7A4FBF"/>
+<text x="1746.6666666666667" y="1707.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="1774.6666666666667" y="1707.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Carry on without it if needed</text>
+<rect x="2047.4666666666667" y="1691.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2071.6466666666665" y="1706.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1774.6666666666667" y="1732.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If the AI is unavailable or returns something unusable, the rule-based result is kept</text>
+<text x="1774.6666666666667" y="1753.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">exactly as it is.</text>
+<path d="M1746.6666666666667 1790.0 H2500.0" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="1746.6666666666667" y="1812.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">result → classification, personal-data list, tier</text>
+<path d="M879.3333333333334 1592.75 L897.3333333333334 1592.75" fill="none" stroke="#7A4FBF" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a7A4FBF)"/>
+<path d="M1702.6666666666667 1592.75 L1720.6666666666667 1592.75" fill="none" stroke="#7A4FBF" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a7A4FBF)"/>
+<rect x="80" y="1872.0" width="2440" height="96" rx="11" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.8"/>
+<rect x="104" y="1892.0" width="179.5" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="193.75" y="1908.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">WHERE THE AI IS USED</text>
+<text x="299.5" y="1910.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Only one step in this whole stage calls the model</text>
+<text x="104" y="1934.0" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Agent 3 asks the AI to write the descriptions and the explanation text. Everything else — the types, the checks and the score — is fixed code, on purpose: the same file must always produce the same score, it has to stand up to an audit, and re-analysis runs after every fix and edit so it needs to</text>
+<text x="104" y="1954.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">be free and instant.</text>
+<rect x="80.0" y="1998.0" width="595.0" height="74" rx="8" fill="#FFFFFF" stroke="#DCDAD8" stroke-width="1.4"/>
+<rect x="80.0" y="1998.0" width="4" height="74" rx="2" fill="#0F6CBD"/>
+<text x="98.0" y="2040.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Your own saved rules are run and added to the issue list</text>
+<rect x="695.0" y="1998.0" width="595.0" height="74" rx="8" fill="#FFFFFF" stroke="#DCDAD8" stroke-width="1.4"/>
+<rect x="695.0" y="1998.0" width="4" height="74" rx="2" fill="#0F6CBD"/>
+<text x="713.0" y="2040.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Issues you chose to ignore are removed</text>
+<rect x="1310.0" y="1998.0" width="595.0" height="74" rx="8" fill="#FFFFFF" stroke="#DCDAD8" stroke-width="1.4"/>
+<rect x="1310.0" y="1998.0" width="4" height="74" rx="2" fill="#0F6CBD"/>
+<text x="1328.0" y="2040.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The score is recalculated</text>
+<rect x="1925.0" y="1998.0" width="595.0" height="74" rx="8" fill="#FFFFFF" stroke="#DCDAD8" stroke-width="1.4"/>
+<rect x="1925.0" y="1998.0" width="4" height="74" rx="2" fill="#0F6CBD"/>
+<text x="1943.0" y="2040.5" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Everything is saved so the tabs can just read it</text>
+<rect x="80" y="2102.0" width="2440" height="101" rx="11" fill="#FFF9F0" stroke="#B4690E" stroke-width="2.0"/>
+<path d="M80 2102.0 h12 v101 h-12 z" fill="#B4690E" opacity="0.9"/>
+<rect x="112" y="2120.0" width="124.375" height="24" rx="12.0" fill="#B4690E"/>
+<text x="174.1875" y="2136.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">YOUR DECISION</text>
+<text x="252.375" y="2139.0" font-family="Segoe UI, Arial, sans-serif" font-size="18.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Approve the dataset</text>
+<text x="112" y="2178.0" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Score 75 or above and it is cleared automatically. Below 75 and it is marked as needing review — the app shows a banner with Approve and Reject, and until someone chooses, the dataset is not treated as fit to use.</text>
+<path d="M1300.0 2241.0 L1300.0 2295.0" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="1316.0" y="2256.0" width="400.0" height="24" rx="12" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1"/>
+<text x="1516.0" y="2272.5" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#0A4C86" text-anchor="middle" letter-spacing="0.0">now you open the dataset and work through the tabs</text>
+<rect x="60" y="2309.0" width="2480" height="590.5" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="2309.0" width="9" height="590.5" rx="4.5" fill="#2B579A"/><rect x="94" y="2343.0" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="2371.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 1</text><text x="246" y="2359.0" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Overview</text><text x="246" y="2387.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You read what the dataset actually contains before touching anything</text><rect x="2039.2" y="2343.0" width="480.79999999999995" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2279.6" y="2365.0" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">GET /datasets/{id} · /profile · /preview · /story</text>
+<rect x="80" y="2419.0" width="660" height="450.5" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="2437.0" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="2453.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="2456.0" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 2481.0 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="2498.0" r="3.6" fill="#3C6E71"/>
+<text x="126" y="2503.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the row and column counts, the format, encoding and separator that</text>
+<text x="126" y="2525.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">were detected.</text>
+<circle cx="110" cy="2556.0" r="3.6" fill="#3C6E71"/>
+<text x="126" y="2561.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Scan the column list with each column&#x27;s detected meaning and how much</text>
+<text x="126" y="2583.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">of it is missing.</text>
+<circle cx="110" cy="2614.0" r="3.6" fill="#3C6E71"/>
+<text x="126" y="2619.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Page through the real rows, 50 at a time.</text>
+<circle cx="110" cy="2650.0" r="3.6" fill="#3C6E71"/>
+<text x="126" y="2655.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Decide whether this is even the right file before doing any work on it.</text>
+<text x="108" y="2695.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">None of this recalculates anything — it is all read back from Stage 2, so the</text>
+<text x="108" y="2714.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">page opens instantly.</text>
+<rect x="770" y="2419.0" width="1750" height="450.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="2437.0" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="2453.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="2456.0" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Data story</text>
+<text x="790" y="2495.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Writes a plain-English summary of the dataset</text>
+<path d="M790 2503.0 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790" cy="2524.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="2529.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818" y="2530.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You open the tab</text>
+<rect x="971.2" y="2514.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="995.38" y="2528.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="2555.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The story is requested once, in the background.</text>
+<circle cx="790" cy="2586.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="2592.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818" y="2592.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI is given a summary, not your rows</text>
+<rect x="1192.0" y="2576.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1216.18" y="2591.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="2617.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It receives the column names, their detected meanings, the row count and the quality score. The actual data values are not sent, so nothing sensitive leaves the app.</text>
+<circle cx="790" cy="2649.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="2654.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818" y="2655.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI writes the description</text>
+<rect x="1090.8" y="2639.0" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1107.3899999999999" y="2653.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818" y="2680.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A few sentences on what this dataset appears to be about, what the important columns mean, and what stands out as unusual.</text>
+<circle cx="790" cy="2711.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="2717.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818" y="2717.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">It is saved for next time</text>
+<rect x="1054.0" y="2701.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1078.18" y="2716.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="2742.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The story is stored on the dataset, so it is written once. Every later visit is instant and costs nothing. You can force a rewrite if the data has changed a lot.</text>
+<circle cx="790" cy="2774.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="2779.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="818" y="2780.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">If the AI is unavailable</text>
+<rect x="1044.8" y="2764.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1068.98" y="2778.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="2805.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">You still get a summary — assembled from the numbers instead of written as prose.</text>
+<path d="M790 2821.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="2843.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a short readable description of the dataset</text>
+<path d="M1300.0 2907.5 L1300.0 2957.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="60" y="2965.5" width="2480" height="1490.0" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="2965.5" width="9" height="1490.0" rx="4.5" fill="#2B579A"/><rect x="94" y="2999.5" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="3027.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 2</text><text x="246" y="3015.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Quality</text><text x="246" y="3043.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You see the score and the problems, then either write your own rule or let the AI fix an issue</text><rect x="2250.8" y="2999.5" width="269.2" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2385.4" y="3021.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">GET /datasets/{id}/quality</text>
+<rect x="80" y="3075.5" width="660" height="1350.0" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="3093.5" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="3110.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="3112.5" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 3137.5 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="3154.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="3159.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the overall score and the six area bars.</text>
+<circle cx="110" cy="3190.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="3195.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Filter the issue list by status or severity.</text>
+<circle cx="110" cy="3226.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="3231.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Open an issue to see the affected rows.</text>
+<circle cx="110" cy="3262.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="3267.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Mark an issue as ignored if it is acceptable for your use — it stops</text>
+<text x="126" y="3289.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">counting against the score and can be brought back at any time.</text>
+<circle cx="110" cy="3320.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="3325.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Approve or reject the dataset.</text>
+<text x="108" y="3365.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">Every issue already comes with a written explanation produced by fixed code,</text>
+<text x="108" y="3385.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">which is why this page never waits for the AI.</text>
+<rect x="770" y="3075.5" width="1750" height="356.0" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="3093.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="3110.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="3112.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Explaining an issue</text>
+<text x="790" y="3151.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Turns a finding into something you can act on</text>
+<path d="M790 3159.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790" cy="3180.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="3186.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818" y="3186.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You ask for more detail on an issue</text>
+<rect x="1146.0" y="3170.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1170.18" y="3185.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3211.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The built-in explanation is shown immediately; the AI version is only fetched if you want it.</text>
+<circle cx="790" cy="3243.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="3248.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818" y="3249.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI is given the finding, not the data</text>
+<rect x="1201.2" y="3233.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1225.38" y="3247.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3274.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It sees the check name, the column, the severity and how many rows are affected — never the row values.</text>
+<circle cx="790" cy="3305.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="3311.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818" y="3311.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI writes four things</text>
+<rect x="1054.0" y="3295.5" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1070.59" y="3310.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818" y="3336.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">What is wrong, why it usually happens, what it costs you in practice, and what to do about it.</text>
+<circle cx="790" cy="3368.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="3373.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818" y="3374.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Anything it cannot explain</text>
+<rect x="1063.2" y="3358.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1087.38" y="3372.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3399.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Falls back to the standard wording for that check, so there is never a blank explanation.</text>
+<rect x="770" y="3457.5" width="1750" height="513.0" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="3475.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="3492.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="3494.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Your own rule, written in English</text>
+<text x="790" y="3533.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">You describe the rule — the AI only translates it</text>
+<path d="M790 3541.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790" cy="3562.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="3568.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818" y="3568.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You type the rule normally</text>
+<rect x="1063.2" y="3552.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1087.38" y="3567.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3593.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">For example &quot;salary should never be negative&quot; or &quot;order date cannot be in the future&quot;.</text>
+<circle cx="790" cy="3625.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="3630.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818" y="3631.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI turns it into a real condition</text>
+<rect x="1164.4" y="3615.0" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1180.99" y="3629.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818" y="3656.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It converts your sentence into something the app can actually run against the data. Nothing has run yet.</text>
+<circle cx="790" cy="3687.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="3693.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818" y="3693.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">It is tested, read-only</text>
+<rect x="1035.6" y="3677.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1059.78" y="3692.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3718.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The condition is run against the working copy and reports how many rows break the rule, with up to 10 real examples.</text>
+<circle cx="790" cy="3750.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="3755.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818" y="3756.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">If it doesn&#x27;t work, it is repaired</text>
+<rect x="1136.8" y="3740.0" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1153.3899999999999" y="3754.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818" y="3781.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Type mismatches are corrected automatically and retried. If it still fails, the AI gets exactly one attempt to fix it.</text>
+<circle cx="790" cy="3812.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="3818.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="818" y="3818.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You see the result before anything is saved</text>
+<rect x="1219.6" y="3802.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1243.78" y="3817.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3843.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It shows &quot;this flags N of M rows&quot; with the examples, so you can judge whether the rule is right.</text>
+<circle cx="790" cy="3875.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="3880.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="818" y="3881.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You approve it — or it is discarded</text>
+<rect x="1146.0" y="3865.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1170.18" y="3879.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="3906.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Only on approval is the rule stored, and from then on it runs inside every future analysis. Reject and nothing is kept.</text>
+<path d="M790 3922.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="3944.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a permanent check of your own, in your words</text>
+<rect x="770" y="3996.5" width="1750" height="429.0" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="4014.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="4031.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="4033.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">One-click fix</text>
+<text x="790" y="4072.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">The AI decides nothing here — the change is a fixed rule</text>
+<path d="M790 4080.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790.0" cy="4101.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="4107.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818.0" y="4107.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You click Fix on an issue</text>
+<rect x="1054.0" y="4091.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1078.18" y="4106.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="4132.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Or Fix all, which does every fixable issue as one batch.</text>
+<circle cx="790.0" cy="4164.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="4169.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818.0" y="4170.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Only known-safe fixes are allowed</text>
+<rect x="1127.6" y="4154.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1151.78" y="4168.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="4195.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If the issue has no proven fix, the request is refused and you are pointed at cleaning instead.</text>
+<text x="818.0" y="4215.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Nothing is improvised.</text>
+<circle cx="790.0" cy="4247.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="4252.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818.0" y="4253.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">An undo point is created first</text>
+<rect x="1100.0" y="4237.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1124.18" y="4251.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="4278.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Before anything changes, so it can always be put back.</text>
+<circle cx="790.0" cy="4309.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="4315.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818.0" y="4315.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The change follows a fixed rule</text>
+<rect x="1109.2" y="4299.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1133.38" y="4314.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="4340.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Missing numbers become the middle value, missing text becomes the most common value, stray spaces</text>
+<text x="818.0" y="4361.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">are trimmed, duplicate rows are dropped. The AI is not asked what to change.</text>
+<path d="M1645.0 4088.5 V4379.5" stroke="#7A4FBF" stroke-width="1" opacity="0.28"/>
+<circle cx="1682.0" cy="4101.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="4107.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="1710.0" y="4107.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Every changed cell is recorded</text>
+<rect x="1992.0" y="4091.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2016.18" y="4106.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="4132.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The before and after value of each one, so the edit is fully traceable.</text>
+<circle cx="1682.0" cy="4164.0" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="4169.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="1710.0" y="4170.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The dataset is re-analysed</text>
+<rect x="1955.2" y="4154.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1979.38" y="4168.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="4195.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The whole of Stage 2 runs again, so you immediately see the new score and what is left.</text>
+<circle cx="1682.0" cy="4226.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="4232.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">7</text>
+<text x="1710.0" y="4232.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You can undo any of it</text>
+<rect x="1918.4" y="4216.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1942.5800000000002" y="4231.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="4257.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">One fix, a whole batch, or everything.</text>
+<path d="M790 4377.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="4399.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a corrected dataset, a new score, and a full audit trail</text>
+<path d="M1300.0 4463.5 L1300.0 4513.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="60" y="4521.5" width="2480" height="439.0" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="4521.5" width="9" height="439.0" rx="4.5" fill="#2B579A"/><rect x="94" y="4555.5" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="4583.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 3</text><text x="246" y="4571.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Edit data</text><text x="246" y="4599.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You correct individual values yourself</text><rect x="2260.0" y="4555.5" width="260.0" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2390.0" y="4577.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">POST /datasets/{id}/edits</text>
+<rect x="80" y="4631.5" width="660" height="299.0" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="4649.5" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="4666.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="4668.5" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 4693.5 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="4710.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="4715.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Filter down to the rows you care about.</text>
+<circle cx="110" cy="4746.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="4751.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Click a cell and type the correct value.</text>
+<circle cx="110" cy="4782.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="4787.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Save the changes.</text>
+<circle cx="110" cy="4818.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="4823.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Undo the last edit if you got it wrong.</text>
+<text x="108" y="4863.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">Edits are treated exactly like a fix: snapshotted first, recorded cell by cell,</text>
+<text x="108" y="4883.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">and followed by a re-analysis.</text>
+<rect x="770" y="4631.5" width="1750" height="293.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="4649.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="4666.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="4668.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">No AI on this tab</text>
+<text x="790" y="4707.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Deliberately — your corrections are yours</text>
+<path d="M790 4715.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790" cy="4736.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="4742.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818" y="4742.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Nothing is suggested or auto-filled</text>
+<rect x="1146.0" y="4726.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1170.18" y="4741.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="4767.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The app does not guess what you meant or propose replacement values. What you type is what is stored.</text>
+<circle cx="790" cy="4799.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="4804.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818" y="4805.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">But it is still protected</text>
+<rect x="1054.0" y="4789.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1078.18" y="4803.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="4830.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">An undo point is taken before the edit, every changed cell is recorded with its old and new value, and the score is recalculated afterwards — the same safety net the fix agent gets.</text>
+<circle cx="790" cy="4861.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="4867.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818" y="4867.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Why it works this way</text>
+<rect x="1017.2" y="4851.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1041.38" y="4866.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="4892.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A manual edit is a statement of fact about your business that only you can make. Letting a model influence it would quietly put guesses into data you believe you verified by hand.</text>
+<path d="M1300.0 4968.5 L1300.0 5018.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="60" y="5026.5" width="2480" height="868.0" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="5026.5" width="9" height="868.0" rx="4.5" fill="#2B579A"/><rect x="94" y="5060.5" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="5088.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 4</text><text x="246" y="5076.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Dashboard</text><text x="246" y="5104.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You get a dashboard without building one, then ask for extra widgets in words</text><rect x="1993.2" y="5060.5" width="526.8" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2256.6" y="5082.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">GET /datasets/{id}/dashboard · POST /dashboard/command</text>
+<rect x="80" y="5136.5" width="660" height="728.0" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="5154.5" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="5171.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="5173.5" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 5198.5 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="5215.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="5220.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the KPIs and charts that were chosen for you.</text>
+<circle cx="110" cy="5251.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="5256.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Tick which ones you want to keep — your selection is saved.</text>
+<circle cx="110" cy="5287.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="5292.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Accept or reject any widget the AI proposes.</text>
+<circle cx="110" cy="5323.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="5328.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Ask a widget to explain itself.</text>
+<text x="108" y="5368.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">The starting dashboard involves no AI at all — it is built from what Stage 2</text>
+<text x="108" y="5388.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">already worked out about your columns.</text>
+<rect x="770" y="5136.5" width="1750" height="293.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="5154.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="5171.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="5173.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Building the default dashboard</text>
+<text x="790" y="5212.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Chosen by rules, from the column types</text>
+<path d="M790 5220.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790" cy="5241.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="5247.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818" y="5247.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Candidate widgets are worked out</text>
+<rect x="1118.4" y="5231.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1142.5800000000002" y="5246.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="5272.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Using each column&#x27;s detected meaning, the app lists every KPI and chart the data could genuinely support.</text>
+<circle cx="790" cy="5304.0" r="14" fill="#7A4FBF"/>
+<text x="790" y="5309.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818" y="5310.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">A sensible default set is picked</text>
+<rect x="1118.4" y="5294.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1142.5800000000002" y="5308.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="5335.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">So the tab is useful the moment you open it, with no prompting and no waiting.</text>
+<circle cx="790" cy="5366.5" r="14" fill="#7A4FBF"/>
+<text x="790" y="5372.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818" y="5372.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Charts only get valid columns</text>
+<rect x="1090.8" y="5356.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1114.98" y="5371.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818" y="5397.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A total needs a number, a trend needs a date, a breakdown needs a category. Impossible combinations are never offered.</text>
+<rect x="770" y="5456.0" width="1750" height="408.5" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="5474.0" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="5490.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="5493.0" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Asking for a widget in words</text>
+<text x="790" y="5532.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">You describe it — the AI plans it, you confirm it</text>
+<path d="M790 5540.0 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790.0" cy="5561.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="5566.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818.0" y="5567.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">You type what you want</text>
+<rect x="1026.4" y="5551.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1050.5800000000002" y="5565.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="5592.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">For example &quot;average revenue by state&quot; or &quot;spend vs units&quot;.</text>
+<circle cx="790.0" cy="5623.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="5629.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818.0" y="5629.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Your column names are checked first</text>
+<rect x="1146.0" y="5613.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1170.18" y="5628.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="5654.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If nothing in your request matches a real column, it stops and says so rather than charting</text>
+<text x="818.0" y="5675.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">something unrelated. This is the guard that stops confident nonsense.</text>
+<circle cx="790.0" cy="5706.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="5712.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818.0" y="5712.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">If you named the chart type, you win</text>
+<rect x="1155.2" y="5696.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1179.38" y="5711.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="5737.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Saying &quot;spend vs units&quot; means a scatter plot, and your wording overrides the AI&#x27;s guess.</text>
+<circle cx="790.0" cy="5769.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="5774.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818.0" y="5775.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Otherwise the AI plans it</text>
+<rect x="1054.0" y="5759.0" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1070.59" y="5773.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818.0" y="5800.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It chooses which columns to use, which chart type and whether to total or average.</text>
+<path d="M1645.0 5548.0 V5818.5" stroke="#7A4FBF" stroke-width="1" opacity="0.28"/>
+<circle cx="1682.0" cy="5561.0" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="5566.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="1710.0" y="5567.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The plan is checked against reality</text>
+<rect x="2038.0" y="5551.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2062.18" y="5565.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="5592.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A chart the columns cannot support is thrown away and a simpler keyword method tries instead. If</text>
+<text x="1710.0" y="5612.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">that also fails you get a clear refusal, not a broken chart.</text>
+<circle cx="1682.0" cy="5644.0" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="5649.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="1710.0" y="5650.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Near-misses are surfaced, not hidden</text>
+<rect x="2047.2" y="5634.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2071.38" y="5648.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="5675.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If it matched a misspelt column to a real one, it tells you which substitution it made.</text>
+<circle cx="1682.0" cy="5706.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="5712.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">7</text>
+<text x="1710.0" y="5712.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">It is proposed, never silently added</text>
+<rect x="2047.2" y="5696.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2071.38" y="5711.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="5737.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">You see the finished widget and choose whether to keep it.</text>
+<path d="M790 5816.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="5838.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a widget you asked for in plain words, with the reasoning shown</text>
+<path d="M1300.0 5902.5 L1300.0 5952.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="60" y="5960.5" width="2480" height="610.0" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="5960.5" width="9" height="610.0" rx="4.5" fill="#2B579A"/><rect x="94" y="5994.5" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="6022.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 5</text><text x="246" y="6010.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Chat</text><text x="246" y="6038.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You ask questions about the data in plain English</text><rect x="2269.2" y="5994.5" width="250.79999999999998" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2394.6" y="6016.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">POST /datasets/{id}/chat</text>
+<rect x="80" y="6070.5" width="660" height="470.0" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="6088.5" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="6105.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="6107.5" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 6132.5 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="6149.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6154.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Type a question the way you would ask a colleague.</text>
+<circle cx="110" cy="6185.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6190.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the answer, the table behind it and the chart.</text>
+<circle cx="110" cy="6221.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6226.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Ask follow-ups — the conversation is remembered.</text>
+<circle cx="110" cy="6257.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6262.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Clear the history when you want a clean start.</text>
+<text x="108" y="6302.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">History is saved per dataset and restored when you come back, so follow-ups</text>
+<text x="108" y="6322.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">still make sense tomorrow.</text>
+<rect x="770" y="6070.5" width="1750" height="470.0" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="6088.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="6105.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="6107.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Answering a question</text>
+<text x="790" y="6146.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Understand, query, then explain — with a fallback at every step</text>
+<path d="M790 6154.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790.0" cy="6175.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6181.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818.0" y="6181.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Obvious questions skip the AI</text>
+<rect x="1090.8" y="6165.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1114.98" y="6180.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="6206.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">&quot;How many rows&quot; is answered by counting them. &quot;Give me insights&quot; goes straight to the summary</text>
+<text x="818.0" y="6227.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">generator. No model needed, no chance of a vague reply.</text>
+<circle cx="790.0" cy="6258.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6264.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818.0" y="6264.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI plans the answer</text>
+<rect x="1035.6" y="6248.5" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1052.1899999999998" y="6263.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="818.0" y="6289.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It reads your question plus the last few turns of the conversation and decides whether this needs</text>
+<text x="818.0" y="6310.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">a query over the data or just a reply — so &quot;now show that as a pie chart&quot; still makes sense.</text>
+<circle cx="790.0" cy="6341.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6347.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818.0" y="6347.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The plan is sanity-checked</text>
+<rect x="1063.2" y="6331.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1087.38" y="6346.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="6372.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If it came back with neither a query nor a real answer, or with a brush-off like &quot;please run a</text>
+<text x="818.0" y="6393.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">query yourself&quot;, it is thrown away here. You never see those.</text>
+<circle cx="790.0" cy="6424.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6430.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="818.0" y="6430.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">A backup method takes over if needed</text>
+<rect x="1155.2" y="6414.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1179.38" y="6429.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="6455.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The app assembles a query itself from the columns your question mentions and any filter it</text>
+<text x="818.0" y="6476.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">implies. This is what keeps Chat working when the AI is completely offline.</text>
+<path d="M1645.0 6162.5 V6494.5" stroke="#7A4FBF" stroke-width="1" opacity="0.28"/>
+<circle cx="1682.0" cy="6175.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6181.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="1710.0" y="6181.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The query runs read-only</text>
+<rect x="1936.8" y="6165.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1960.98" y="6180.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="6206.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It can only read. Anything that would change or delete data is blocked, and a row limit is always</text>
+<text x="1710.0" y="6227.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">applied — even if the model asked for it.</text>
+<circle cx="1682.0" cy="6258.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6264.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="1710.0" y="6264.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">One retry on failure</text>
+<rect x="1900.0" y="6248.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1924.18" y="6263.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="6289.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">If the planned query errors, the backup query runs instead so you still get an answer.</text>
+<circle cx="1682.0" cy="6321.0" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6326.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">7</text>
+<text x="1710.0" y="6327.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">A chart is chosen for the result</text>
+<rect x="2010.4" y="6311.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2034.5800000000002" y="6325.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="6352.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Based on the shape of what came back, unless you asked for a specific type.</text>
+<circle cx="1682.0" cy="6383.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6389.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">8</text>
+<text x="1710.0" y="6389.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI writes the explanation</text>
+<rect x="1982.8" y="6373.5" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1999.3899999999999" y="6388.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="1710.0" y="6414.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">One or two sentences saying what the table actually shows, and the exchange is saved for your next</text>
+<text x="1710.0" y="6435.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">question.</text>
+<path d="M790 6492.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="6514.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a sentence, the table it came from, and a chart</text>
+<path d="M1300.0 6578.5 L1300.0 6628.5" fill="none" stroke="#0F6CBD" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#a0F6CBD)"/>
+<rect x="60" y="6636.5" width="2480" height="527.0" rx="16" fill="#F7FAFD" stroke="#BFDCF2" stroke-width="1.6"/><rect x="60" y="6636.5" width="9" height="527.0" rx="4.5" fill="#2B579A"/><rect x="94" y="6670.5" width="128" height="42" rx="10" fill="#2B579A"/><text x="158" y="6698.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">TAB 6</text><text x="246" y="6686.5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#1B1A19">Governance</text><text x="246" y="6714.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#4A4845">You see how sensitive this dataset is and how it should be handled</text><rect x="2223.2" y="6670.5" width="296.79999999999995" height="34" rx="8" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.3"/><text x="2371.6" y="6692.5" font-family="Consolas, monospace" font-size="15" font-weight="600" fill="#0A4C86" text-anchor="middle">GET /datasets/{id}/governance</text>
+<rect x="80" y="6746.5" width="660" height="387.0" rx="12" fill="#F4F9F9" stroke="#3C6E71" stroke-width="2.0"/>
+<rect x="100" y="6764.5" width="69.25" height="24" rx="12.0" fill="#3C6E71"/>
+<text x="134.625" y="6781.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">MANUAL</text>
+<text x="183.25" y="6783.5" font-family="Segoe UI, Arial, sans-serif" font-size="19" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">What you do by hand</text>
+<path d="M100 6808.5 H720" stroke="#3C6E71" stroke-width="1" opacity="0.35"/>
+<circle cx="110" cy="6825.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6830.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the sensitivity classification and why it was given.</text>
+<circle cx="110" cy="6861.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6866.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Review the list of columns holding personal data.</text>
+<circle cx="110" cy="6897.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6902.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Read the recommended handling tier and the reasoning.</text>
+<circle cx="110" cy="6933.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6938.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Check the business description of each column.</text>
+<circle cx="110" cy="6969.5" r="3.6" fill="#3C6E71"/>
+<text x="126" y="6974.5" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">As a steward, approve or reject the dataset on this basis.</text>
+<text x="108" y="7014.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">This is the tab an auditor would ask to see, which is why the AI has the</text>
+<text x="108" y="7034.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#7A7875" text-anchor="start" letter-spacing="0.0">smallest possible role in it.</text>
+<rect x="770" y="6746.5" width="1750" height="387.0" rx="12" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="2.0"/>
+<rect x="790" y="6764.5" width="85.0" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="832.5" y="6781.1" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">AI AGENT</text>
+<text x="889.0" y="6783.5" font-family="Segoe UI, Arial, sans-serif" font-size="21" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Classifying the dataset</text>
+<text x="790" y="6822.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Rules make the decision — the AI only writes it up</text>
+<path d="M790 6830.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<circle cx="790.0" cy="6851.5" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6857.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="818.0" y="6857.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Sensitive columns are identified</text>
+<rect x="1118.4" y="6841.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1142.5800000000002" y="6856.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="6882.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Column names and detected meanings are matched against known personal, financial and health</text>
+<text x="818.0" y="6903.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">patterns — names, contact details, identifiers, dates of birth, salary, account and card fields,</text>
+<text x="818.0" y="6923.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">medical terms.</text>
+<circle cx="790.0" cy="6955.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="6960.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="818.0" y="6961.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The classification is computed</text>
+<rect x="1100.0" y="6945.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1124.18" y="6959.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="6986.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">From what was found. Fixed rules, so the same dataset always produces the same answer and it can</text>
+<text x="818.0" y="7006.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">be explained line by line.</text>
+<circle cx="790.0" cy="7038.0" r="14" fill="#7A4FBF"/>
+<text x="790.0" y="7043.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="818.0" y="7044.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The handling tier is recommended</text>
+<rect x="1118.4" y="7028.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="1142.5800000000002" y="7042.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="818.0" y="7069.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Based on the sensitivity and the size of the dataset. Also fixed rules.</text>
+<path d="M1645.0 6838.5 V7087.5" stroke="#7A4FBF" stroke-width="1" opacity="0.28"/>
+<circle cx="1682.0" cy="6851.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6857.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="1710.0" y="6857.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Only now is the AI involved</text>
+<rect x="1964.4" y="6841.5" width="33.18" height="21" rx="10.5" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.3"/>
+<text x="1980.99" y="6856.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#7A4FBF" text-anchor="middle" letter-spacing="0.7">AI</text>
+<text x="1710.0" y="6882.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">It is asked to write the business-friendly column names, the one-line descriptions and the</text>
+<text x="1710.0" y="6903.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">readable rationale. It cannot change the classification, the personal-data list or the tier —</text>
+<text x="1710.0" y="6923.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">those are already decided.</text>
+<circle cx="1682.0" cy="6955.0" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="6960.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="1710.0" y="6961.0" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Columns are sent in batches of 20</text>
+<rect x="2019.6" y="6945.0" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2043.78" y="6959.7" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="6986.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">To stay inside the model&#x27;s limits on wide tables, and to keep the cost predictable.</text>
+<circle cx="1682.0" cy="7017.5" r="14" fill="#7A4FBF"/>
+<text x="1682.0" y="7023.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="1710.0" y="7023.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">If the AI fails, nothing is lost</text>
+<rect x="2010.4" y="7007.5" width="48.36" height="21" rx="10.5" fill="#FFFFFF" stroke="#5B6670" stroke-width="1.3"/>
+<text x="2034.5800000000002" y="7022.2" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B6670" text-anchor="middle" letter-spacing="0.7">RULE</text>
+<text x="1710.0" y="7048.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Unavailable, erroring or malformed output all lead to the same place: the rule-based result is</text>
+<text x="1710.0" y="7069.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">kept exactly as computed. The compliance answer never depends on the model being up.</text>
+<path d="M790 7085.5 H2500" stroke="#7A4FBF" stroke-width="1" opacity="0.35"/>
+<text x="790" y="7107.5" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">you get → a defensible classification, plus readable descriptions on top</text>
+<path d="M60 7197.5 H2540" stroke="#E6E4E2" stroke-width="1.6"/>
+<rect x="60.0" y="7233.5" width="4" height="72" rx="2" fill="#7A4FBF"/>
+<text x="78.0" y="7255.5" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI never decides a number</text>
+<text x="78.0" y="7279.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Scores, classifications and fixes are computed by rules, so they are</text>
+<text x="78.0" y="7298.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">repeatable.</text>
+<rect x="686.5" y="7233.5" width="4" height="72" rx="2" fill="#7A4FBF"/>
+<text x="704.5" y="7255.5" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">The AI writes the words</text>
+<text x="704.5" y="7279.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Descriptions, explanations, stories and narration — the parts where language</text>
+<text x="704.5" y="7298.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">is the point.</text>
+<rect x="1313.0" y="7233.5" width="4" height="72" rx="2" fill="#0F6CBD"/>
+<text x="1331.0" y="7255.5" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Your rows are rarely sent</text>
+<text x="1331.0" y="7279.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Most AI calls see only column names, types and counts — not the values.</text>
+<rect x="1939.5" y="7233.5" width="4" height="72" rx="2" fill="#0F6CBD"/>
+<text x="1957.5" y="7255.5" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">It all works with the AI off</text>
+<text x="1957.5" y="7279.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Every AI step has a fixed-code fallback, so nothing becomes unusable.</text>

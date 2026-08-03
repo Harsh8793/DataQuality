@@ -17,6 +17,7 @@ from app.database.init_db import init_db
 from app.exceptions import register_exception_handlers
 from app.middleware import RequestLoggingMiddleware
 from app.schemas.common import ApiResponse
+from app.services.system_service import SystemService
 
 logger = get_logger(__name__)
 settings = get_settings()
@@ -57,7 +58,15 @@ def create_app() -> FastAPI:
     @app.get("/health", tags=["System"])
     def health():
         """Liveness probe."""
-        return ApiResponse.ok({"status": "healthy", "llm": settings.is_llm_ready})
+        llm = SystemService().llm_status()
+        return ApiResponse.ok(
+            {
+                "status": "healthy",
+                "llm": llm.healthy,
+                "llm_status": llm.status,
+                "llm_model": llm.model,
+            }
+        )
 
     _mount_frontend(app)
     return app

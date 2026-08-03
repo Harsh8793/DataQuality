@@ -73,8 +73,15 @@ export const aiService = {
   listFixes: (datasetId: number) =>
     unwrap<FixListResult>(apiClient.get<ApiResponse<FixListResult>>(`/datasets/${datasetId}/quality/fixes`)),
 
-  undoFixes: (datasetId: number) =>
+  /** Undo every applied fix at once. */
+  undoAllFixes: (datasetId: number) =>
     unwrap<UndoFixResult>(apiClient.post<ApiResponse<UndoFixResult>>(`/datasets/${datasetId}/quality/fixes/undo`)),
+
+  /** Undo one fix, leaving the others applied. */
+  undoFix: (datasetId: number, fixId: number) =>
+    unwrap<UndoFixResult>(
+      apiClient.post<ApiResponse<UndoFixResult>>(`/datasets/${datasetId}/quality/fixes/${fixId}/undo`)
+    ),
 
   listExclusions: (datasetId: number) =>
     unwrap<ExclusionListResult>(apiClient.get<ApiResponse<ExclusionListResult>>(`/datasets/${datasetId}/quality/exclusions`)),

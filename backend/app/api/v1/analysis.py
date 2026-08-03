@@ -176,10 +176,24 @@ def list_fixes(dataset_id: int, current_user: CurrentUser, db: Annotated[Session
 
 
 @router.post("/{dataset_id}/quality/fixes/undo", response_model=ApiResponse[UndoFixResponse])
-def undo_fixes(dataset_id: int, current_user: CurrentUser, db: Annotated[Session, Depends(get_db)]):
-    """Undo the most recent fix batch (restores the pre-fix snapshot)."""
-    result = AnalysisService(db).undo_fixes(dataset_id, current_user.id)
-    return ApiResponse.ok(UndoFixResponse(**result), message="Fixes undone.")
+def undo_all_fixes(dataset_id: int, current_user: CurrentUser, db: Annotated[Session, Depends(get_db)]):
+    """Undo every applied fix in one step, back to the pre-fix state."""
+    result = AnalysisService(db).undo_all_fixes(dataset_id, current_user.id)
+    return ApiResponse.ok(
+        UndoFixResponse(**result), message=f"Undid {result['undone_fixes']} fix(es)."
+    )
+
+
+@router.post("/{dataset_id}/quality/fixes/{fix_id}/undo", response_model=ApiResponse[UndoFixResponse])
+def undo_one_fix(
+    dataset_id: int,
+    fix_id: int,
+    current_user: CurrentUser,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """Undo a single fix, keeping the others applied."""
+    result = AnalysisService(db).undo_one_fix(dataset_id, fix_id, current_user.id)
+    return ApiResponse.ok(UndoFixResponse(**result), message="Fix undone.")
 
 
 @router.post("/{dataset_id}/quality/validations/propose", response_model=ApiResponse[ValidationProposal])

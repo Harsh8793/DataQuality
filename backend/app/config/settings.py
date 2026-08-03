@@ -56,7 +56,7 @@ class Settings(BaseSettings):
 
     # ---- Upload limits ----
     max_upload_mb: int = 50
-    allowed_extensions: str = "csv,xlsx,xls,json"
+    allowed_extensions: str = "csv,xlsx,xls,json,parquet"
 
     # ---- LLM ----
     groq_api_key: str = ""

@@ -14,6 +14,7 @@ from app.api.v1 import (
     governance,
     history,
     reports,
+    system,
     upload,
 )
 
@@ -28,3 +29,4 @@ api_router.include_router(chat.router)
 api_router.include_router(governance.router)
 api_router.include_router(reports.router)
 api_router.include_router(history.router)
+api_router.include_router(system.router)

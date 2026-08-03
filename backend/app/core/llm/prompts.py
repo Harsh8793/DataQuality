@@ -74,6 +74,20 @@ CHAT_PLANNER_SYSTEM = (
     "bar|pie|line|scatter AND write an AGGREGATED two-column query: dimension first, "
     "aggregated measure second, e.g. SELECT PROP_CLASS, AVG(SALE_PRICE) AS avg_sale_price "
     "FROM dataset GROUP BY 1 ORDER BY 2 DESC LIMIT 20. NEVER group by the raw measure.\n"
+    "- \"Which X has the highest/most/lowest Y\" asks about Y ACCUMULATED per X, so "
+    "aggregate with SUM (or AVG if the user says average) and ORDER BY that — never "
+    "MAX, which returns the single largest row and is a different question. Use MAX "
+    "only when the user explicitly asks for the largest single record.\n"
+    "- Every entity, product, category or period the user names MUST appear as a "
+    "filter in the SQL. If you cannot filter on it, do not answer the unfiltered "
+    "question instead — return \"mode\":\"answer\" explaining which column is missing.\n"
+    "- \"Which X has the highest/most/lowest Y\" asks about Y ACCUMULATED per X, so "
+    "aggregate with SUM (or AVG if the user says average) and ORDER BY that — never "
+    "MAX, which returns the single largest row and is a different question. Use MAX "
+    "only when the user explicitly asks for the largest single record.\n"
+    "- Every entity, product, category or period the user names MUST appear as a "
+    "filter in the SQL. If you cannot filter on it, do not answer the unfiltered "
+    "question instead — return \"mode\":\"answer\" explaining which column is missing.\n"
     "- If the question references columns/facts not in the schema → \"mode\":\"answer\" "
     "briefly saying what IS available — do not guess.\n"
     'Return STRICT JSON: {"mode":"sql"|"answer","sql":string|null,"answer":string|null,'
@@ -89,7 +103,15 @@ CHAT_PLANNER_USER = (
 CHAT_NARRATE_SYSTEM = (
     "You are a friendly data analyst. Given a user's question and the query "
     "result, write a short, clear 1-2 sentence answer highlighting the key "
-    "finding. Do not restate the SQL."
+    "finding. Do not restate the SQL.\n"
+    "Rules you must not break:\n"
+    "- State ONLY what the result shows. No speculation about causes, trends, "
+    "significance, or what it 'suggests' about the business.\n"
+    "- Every number you write must appear in the result. Never estimate, round "
+    "beyond two decimals, or infer a total from the rows you were shown.\n"
+    "- You are given a row count and only the FIRST few rows. The row count is "
+    "the number of matching records — never report the number of rows shown as "
+    "if it were the total."
 )
 CHAT_NARRATE_USER = (
     "Question: {question}\nResult (JSON, truncated): {result}\nWrite the answer."
@@ -124,14 +146,20 @@ EXPLAIN_WIDGET_USER = (
 # ---- Data story / executive summary ------------------------------------ #
 DATA_STORY_SYSTEM = (
     "You are a principal data analyst writing an executive summary of a newly "
-    "uploaded dataset. In ONE short paragraph (3-5 sentences), say what the data "
-    "appears to be about, its size, the most notable columns, any data quality "
-    "concerns (nulls, duplicates, low score), and anything sensitive (PII). "
-    "Plain business language, specific numbers, no bullet points, no markdown."
+    "uploaded dataset. Write exactly 5 bullets, one per line, in this order:\n"
+    "• What this data is — the business subject, its size, and the grain of a row.\n"
+    "• Key measures — the most useful numeric and date columns to analyse.\n"
+    "• Quality concerns — nulls, duplicates and the score, with the worst columns named.\n"
+    "• Sensitive data — PII or financial columns, or state plainly that none were found.\n"
+    "• Do this next — the single highest-value action to take on this dataset.\n"
+    "Rules: start every line with '• ' followed by the label, an em dash, then "
+    "2-3 sentences. Separate bullets with a newline. Plain business language with "
+    "the specific numbers you are given. Never invent a number. No markdown "
+    "syntax (no *, #, or -), no preamble, no closing line."
 )
 DATA_STORY_USER = (
     "Dataset: {dataset_name}\nProfile summary: {profile}\n"
-    "Quality summary: {quality}\nWrite the paragraph now."
+    "Quality summary: {quality}\nWrite the 5 bullets now."
 )
 
 # ---- Chart-on-command (NL -> widget) ----------------------------------- #
@@ -139,11 +167,15 @@ CHART_COMMAND_SYSTEM = (
     "You translate a natural-language request into ONE dashboard widget spec "
     "for a single table. Use ONLY the columns provided.\n"
     "- For a chart return: {\"kind\":\"chart\",\"type\":\"bar|pie|line|scatter|hist\","
-    "\"x\":column,\"y\":column|\"count\"}. Rules: line needs a date/time column as x "
+    "\"x\":column,\"y\":column|\"count\",\"agg\":\"sum|avg|median|min|max|stddev|"
+    "variance|count_distinct\"}. Rules: line needs a date/time column as x "
     "and a numeric y; scatter needs two numeric columns; hist needs one numeric "
-    "column as x (y must be null); bar/pie group a categorical x by summing a "
-    "numeric y, or use y=\"count\" for row counts.\n"
-    "- For a single number (KPI) return: {\"kind\":\"kpi\",\"agg\":\"avg|sum|max|min|count\","
+    "column as x (y must be null); bar/pie group a categorical x by aggregating a "
+    "numeric y, or use y=\"count\" for row counts. Set \"agg\" to whichever "
+    "statistic the user asked for — it defaults to sum, so \"median revenue by "
+    "state\" MUST send agg=\"median\", not sum.\n"
+    "- For a single number (KPI) return: {\"kind\":\"kpi\",\"agg\":"
+    "\"avg|sum|median|max|min|stddev|variance|count|count_distinct\","
     "\"column\":column}.\n"
     "- If the request cannot be satisfied with these columns return: "
     "{\"kind\":\"error\",\"message\":\"short reason\"}.\n"
@@ -156,11 +188,19 @@ CHART_COMMAND_USER = (
 
 # ---- Dataset comparison narration --------------------------------------- #
 COMPARE_SYSTEM = (
-    "You are a data analyst comparing two versions/files of tabular data. Given "
-    "computed differences (schema changes, row deltas, numeric shifts, null "
-    "changes), write a short 3-5 sentence narrative for a business audience: "
-    "what changed, what improved or degraded, and what deserves attention. Use "
-    "the concrete numbers given. No markdown, no bullet points."
+    "You are a data analyst comparing two versions of a tabular dataset for a "
+    "business audience deciding whether to promote the newer one. You are given "
+    "computed differences: quality scores, schema changes, row deltas, numeric "
+    "shifts and null changes.\n"
+    "Write exactly 4 bullets, one per line, in this order:\n"
+    "• Quality — the score move and what drove it. If scores are missing, say so.\n"
+    "• Structure — columns added or removed and the row count change.\n"
+    "• Movement — the columns that shifted most, with their numbers.\n"
+    "• Watch out — the single thing most worth checking before promoting.\n"
+    "Rules: start every line with '• ' followed by the label, an em dash, then "
+    "1-2 sentences. A 'verdict' field is supplied — your narrative must agree "
+    "with it and never contradict it. Use only the numbers given; never invent "
+    "one. No markdown syntax (no *, #, or -), no preamble, no closing line."
 )
 COMPARE_USER = (
     "Left dataset: {left_name} ({left_rows} rows, {left_cols} columns)\n"

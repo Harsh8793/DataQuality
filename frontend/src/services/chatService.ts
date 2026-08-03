@@ -1,8 +1,8 @@
 import { apiClient, unwrap } from "@/lib/apiClient";
-import type { ApiResponse, Paginated } from "@/types/api";
-import type { ChatHistory, ChatMessage, HistoryItem } from "@/types/models";
+import type { ApiResponse } from "@/types/api";
+import type { ChatHistory, ChatMessage } from "@/types/models";
 
-/** Chat and history API calls. */
+/** Chat API calls (per-dataset conversation history). */
 export const chatService = {
   ask: (datasetId: number, question: string, sessionId?: number) =>
     unwrap<ChatMessage>(
@@ -17,11 +17,4 @@ export const chatService = {
 
   clearHistory: (datasetId: number) =>
     unwrap<null>(apiClient.delete<ApiResponse<null>>(`/datasets/${datasetId}/chat/history`)),
-};
-
-export const historyService = {
-  list: (limit = 30, offset = 0) =>
-    unwrap<Paginated<HistoryItem>>(
-      apiClient.get<ApiResponse<Paginated<HistoryItem>>>("/history", { params: { limit, offset } })
-    ),
 };

@@ -27,6 +27,9 @@ export function ChatPanel({ datasetId }: { datasetId: number }) {
   // How many server messages the current `turns` state was built from. Lets us
   // re-seed when a fresh (larger) history arrives after the stale cached one.
   const seededCount = useRef(-1);
+  // The newest turn, and whether we should scroll to it (set only by submit()).
+  const latestTurnRef = useRef<HTMLDivElement | null>(null);
+  const followLatest = useRef(false);
   const qc = useQueryClient();
 
   // Restore the previous conversation (persisted in the DB) on first load.
@@ -102,10 +105,22 @@ export function ChatPanel({ datasetId }: { datasetId: number }) {
 
   const submit = (q: string) => {
     if (!q.trim()) return;
+    // Only follow the conversation for turns the user just started — restoring
+    // history on mount must not yank the page.
+    followLatest.current = true;
     setTurns((t) => [...t, { question: q }]);
     setInput("");
     ask.mutate(q);
   };
+
+  // Bring the newest turn into view when it's asked and again when its answer
+  // lands, so the response isn't left below the fold.
+  useEffect(() => {
+    if (!followLatest.current || turns.length === 0) return;
+    latestTurnRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Stop following once the answer is rendered; the user is free to scroll.
+    if (turns[turns.length - 1].answer) followLatest.current = false;
+  }, [turns]);
 
   return (
     <div className="space-y-4">
@@ -151,7 +166,14 @@ export function ChatPanel({ datasetId }: { datasetId: number }) {
 
       <div className="space-y-4">
         {turns.map((turn, i) => (
-          <div key={i} className="space-y-3">
+          <div
+            key={i}
+            // Small scroll margin so the turn isn't flush against the top edge
+            // of the scroll area. The app header is a sibling, not an overlay,
+            // so no clearance for it is needed.
+            ref={i === turns.length - 1 ? latestTurnRef : undefined}
+            className="space-y-3 scroll-mt-4"
+          >
             <div className="flex justify-end">
               <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2 text-sm text-primary-foreground">
                 {turn.question}

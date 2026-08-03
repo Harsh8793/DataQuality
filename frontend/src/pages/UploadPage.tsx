@@ -23,7 +23,9 @@ export function UploadPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Upload dataset</h1>
-        <p className="text-muted-foreground">Supported formats: CSV, Excel (.xlsx), JSON. Max 50 MB.</p>
+        <p className="text-muted-foreground">
+          Supported formats: CSV, Excel (.xlsx), JSON, Parquet. Max 50 MB.
+        </p>
       </div>
 
       <Card>
@@ -57,7 +59,7 @@ export function UploadPage() {
             <input
               ref={inputRef}
               type="file"
-              accept=".csv,.xlsx,.xls,.json"
+              accept=".csv,.xlsx,.xls,.json,.parquet"
               className="hidden"
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
             />

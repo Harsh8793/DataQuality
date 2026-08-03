@@ -6,8 +6,11 @@ import json
 import re
 from dataclasses import dataclass, field
 
+import pandas as pd
+
 from app.agents.base import Agent, AgentContext, AgentResult
-from app.core.engines.chart_recommender import ChartRecommender
+from app.constants.enums import SemanticType
+from app.core.engines.chart_recommender import ChartRecommender, parse_dates
 from app.core.engines.duckdb_engine import DuckDBEngine, QueryResult
 from app.core.llm import get_llm
 from app.core.llm.prompts import (
@@ -17,6 +20,12 @@ from app.core.llm.prompts import (
     CHAT_PLANNER_USER,
 )
 from app.exceptions.base import AppException
+
+_TEMPORAL = {SemanticType.DATE, SemanticType.DATETIME}
+_TEXTUAL = {SemanticType.CATEGORICAL, SemanticType.TEXT, SemanticType.BOOLEAN}
+
+_TEMPORAL = {SemanticType.DATE, SemanticType.DATETIME}
+_TEXTUAL = {SemanticType.CATEGORICAL, SemanticType.TEXT, SemanticType.BOOLEAN}
 
 _GREETINGS = {"hi", "hello", "hey", "yo", "hola", "thanks", "thank you", "ok", "okay", "help"}
 # Words that suggest the user actually wants to query the data.
@@ -273,7 +282,9 @@ class ChatAgent(Agent):
                 vs = str(v).strip()
                 if len(vs) < 2:
                     continue
-                if re.search(r"\b" + re.escape(vs.lower()) + r"\b", q) and (
+                # Allow a simple plural: users ask "for laptops" about a
+                # `product` column whose value is "Laptop".
+                if re.search(r"\b" + re.escape(vs.lower()) + r"(?:e?s)?\b", q) and (
                     best is None or len(vs) > best[0]
                 ):
                     best = (len(vs), c.name, vs)
@@ -382,24 +393,188 @@ class ChatAgent(Agent):
         self, ctx: AgentContext, question: str, sql: str,
         forced_chart: str | None = None, fallback_sql: str | None = None,
     ) -> ChatAnswer:
+        frame, caveats = self._query_frame(ctx)
+        text_columns = self._text_columns(ctx)
+        # A query that computes the wrong statistic returns a real number, so
+        # nothing downstream can detect it. Swap the single aggregate for the
+        # one the question actually asked for.
+        wanted = self._aggregate_mismatch(question, sql)
+        if wanted:
+            sql = re.sub(
+                rf"\b({'|'.join(self._AGG_FUNCS)})\s*\(", f"{wanted}(", sql, count=1, flags=re.IGNORECASE
+            )
+        filters = self._equality_filters(sql, text_columns)
+        sql = self._normalize_text_filters(sql, text_columns)
+        if fallback_sql:
+            fallback_sql = self._normalize_text_filters(fallback_sql, text_columns)
         try:
-            result = self._duck.execute(ctx.df, sql)
+            result = self._duck.execute(frame, sql)
         except AppException:
             # Planned SQL failed — retry once with a deterministic query before
             # giving up, so filtered asks still work when the LLM slips.
             if fallback_sql and fallback_sql != sql:
                 try:
-                    result = self._duck.execute(ctx.df, fallback_sql)
+                    result = self._duck.execute(frame, fallback_sql)
                 except AppException:
                     return self._invalid_query_answer()
             else:
                 return self._invalid_query_answer()
+
         answer = self._narrate(question, result)
+        # Only mention data-quality caveats for columns this query actually
+        # touched, so answers don't carry irrelevant noise.
+        notes = [n for n in caveats if self._note_applies(n, result.sql)]
+        dropped = self._dropped_filter_note(ctx, question, result.sql)
+        if dropped:
+            notes.insert(0, dropped)
+        notes += self._variant_caveats(frame, filters)
+        notes += self._result_caveats(result)
+        if notes:
+            answer = answer.rstrip() + "\n\n" + "\n".join(f"Note: {n}" for n in notes)
         return ChatAnswer(
             answer=answer, sql=result.sql, columns=result.columns,
             rows=result.rows, row_count=result.row_count,
             chart_spec=self._maybe_chart(result, forced_chart),
         )
+
+    # Matches `col = 'value'` / `"col" = 'value'`. Unquoted names may not contain
+    # spaces — allowing them made the pattern swallow preceding SQL keywords
+    # ("FROM dataset WHERE gender") and silently skip the rewrite.
+    _EQUALITY = re.compile(r"(?<![\w(])(?:\"([^\"]+)\"|([A-Za-z_]\w*))\s*=\s*'([^']*)'")
+
+    def _normalize_text_filters(self, sql: str, text_columns: set[str]) -> str:
+        """Make equality filters on text columns case- and whitespace-insensitive.
+
+        Uploaded categoricals are rarely clean: ``state`` holds "California" and
+        "california", ``gender`` holds "m" and "M". An exact ``=`` silently
+        matches one spelling and undercounts, which reads as a real answer.
+        """
+        lookup = {c.lower(): c for c in text_columns}
+
+        def rewrite(match: re.Match) -> str:
+            column = match.group(1) or match.group(2)
+            value = match.group(3)
+            real = lookup.get(column.strip().lower())
+            if real is None:
+                return match.group(0)
+            return f"LOWER(TRIM(CAST(\"{real}\" AS VARCHAR))) = '{value.strip().lower()}'"
+
+        return self._EQUALITY.sub(rewrite, sql)
+
+    # Question wording -> the aggregate it asks for.
+    _AGG_INTENT = (
+        (("average", "avg ", "avg(", "mean"), "AVG"),
+        (("total", "sum of", "combined", "altogether"), "SUM"),
+        (("how many", "number of", "count of"), "COUNT"),
+        (("largest", "biggest", "maximum"), "MAX"),
+        (("smallest", "minimum"), "MIN"),
+    )
+    _AGG_FUNCS = ("AVG", "SUM", "COUNT", "MIN", "MAX")
+
+    @classmethod
+    def _aggregate_mismatch(cls, question: str, sql: str) -> str | None:
+        """The aggregate the question asked for, when the SQL uses another one.
+
+        The model sometimes writes ``SUM(...) AS avg_revenue`` and the narrator
+        then calls a total an "average". The value is real, so no number-check
+        can catch it — only comparing intent against the SQL does.
+        """
+        q = question.lower()
+        wanted = next((agg for words, agg in cls._AGG_INTENT if any(w in q for w in words)), None)
+        if wanted is None:
+            return None
+        used = [f for f in cls._AGG_FUNCS if re.search(rf"\b{f}\s*\(", sql, re.IGNORECASE)]
+        # Only act when the query computes exactly one thing; multi-aggregate
+        # summaries (min/max/avg together) are legitimately mixed.
+        if len(used) == 1 and used[0].upper() != wanted:
+            return wanted
+        return None
+
+    def _dropped_filter_note(self, ctx: AgentContext, question: str, sql: str) -> str | None:
+        """Flag a value named in the question that never reached the SQL.
+
+        "average revenue for laptops" answered with the average across every
+        product looks entirely plausible and is simply a different question.
+        Detected from the data itself, so it works on any dataset.
+        """
+        found = self._filter_clause(ctx, question.lower())
+        if not found:
+            return None
+        column, value = found
+        lowered = sql.lower()
+        if value.lower() in lowered or f'"{column.lower()}"' in lowered or column.lower() in lowered:
+            return None
+        return (
+            f"you mentioned '{value}', but this answer covers every row — it was NOT "
+            f"filtered to {value} in '{column}'. Ask again naming the column if you "
+            "wanted just those rows."
+        )
+
+    def _equality_filters(self, sql: str, text_columns: set[str]) -> list[tuple[str, str]]:
+        """``(column, value)`` pairs from equality filters on text columns.
+
+        Read from the SQL *before* normalisation — afterwards the column sits
+        inside ``CAST(...)`` and the pattern no longer matches it.
+        """
+        lookup = {c.lower(): c for c in text_columns}
+        pairs: list[tuple[str, str]] = []
+        for match in self._EQUALITY.finditer(sql):
+            column = (match.group(1) or match.group(2)).strip().lower()
+            real = lookup.get(column)
+            if real:
+                pairs.append((real, match.group(3).strip().lower()))
+        return pairs
+
+    def _variant_caveats(self, frame: pd.DataFrame, filters: list[tuple[str, str]]) -> list[str]:
+        """Warn when a filtered column holds other spellings of the same value.
+
+        Case and whitespace are handled by normalising the comparison, but
+        abbreviations ("m" vs "male") are a judgement call we refuse to make
+        silently: the count is reported, and so is the ambiguity.
+        """
+        notes: list[str] = []
+        for real, value in filters:
+            if real not in frame.columns or not value:
+                continue
+            distinct = {
+                str(v).strip().lower() for v in frame[real].dropna().unique()
+            }
+            related = sorted(
+                v for v in distinct
+                if v != value and (v.startswith(value) or value.startswith(v))
+            )
+            if related:
+                shown = ", ".join(f"'{v}'" for v in related[:4])
+                notes.append(
+                    f"'{real}' also contains {shown}, which may mean the same thing as "
+                    f"'{value}'. Only rows equal to '{value}' were counted — say which "
+                    "spellings to include if you need them combined."
+                )
+        return notes
+
+    @staticmethod
+    def _note_applies(note: str, sql: str) -> bool:
+        """Whether a column caveat is relevant to the SQL that ran."""
+        match = re.search(r"'([^']+)'", note)
+        return bool(match and match.group(1).lower() in sql.lower())
+
+    def _result_caveats(self, result: QueryResult) -> list[str]:
+        """Caveats about the result set itself: truncation, mostly."""
+        if result.row_count >= self._duck.MAX_ROWS:
+            return [
+                f"only the first {self._duck.MAX_ROWS:,} rows are shown, so any total "
+                "you compute from this table would be incomplete."
+            ]
+        # An ORDER BY ... LIMIT n is a deliberate "top n", not truncation.
+        if re.search(r"\border\s+by\b", result.sql, re.IGNORECASE):
+            return []
+        limit = re.search(r"\blimit\s+(\d+)\s*$", result.sql, re.IGNORECASE)
+        if limit and result.row_count >= int(limit.group(1)) and int(limit.group(1)) < self._duck.MAX_ROWS:
+            return [
+                f"this query was limited to {int(limit.group(1)):,} rows, so the list may be "
+                "incomplete — ask for a count if you need the true total."
+            ]
+        return []
 
     @staticmethod
     def _invalid_query_answer() -> ChatAnswer:
@@ -411,11 +586,19 @@ class ChatAgent(Agent):
     def _narrate(self, question: str, result: QueryResult) -> str:
         if result.row_count == 0:
             return "No matching records were found for that question in this dataset."
+        # The model only ever sees a preview, so it must be told the real size —
+        # otherwise it reports the preview length as the answer ("there are 10
+        # customers" for 500 rows).
         preview = json.dumps(result.rows[:10])[:1200]
         text = self._llm.complete(
-            CHAT_NARRATE_SYSTEM, CHAT_NARRATE_USER.format(question=question, result=preview)
+            CHAT_NARRATE_SYSTEM,
+            CHAT_NARRATE_USER.format(
+                question=question,
+                result=f"{result.row_count} row(s) returned. First rows: {preview}",
+            ),
         )
         text = text.strip() if text else ""
+
         # Single-value answers (avg/count/sum/min/max): the LLM must NOT invent
         # the figure. Trust its phrasing only if its numbers match the real
         # computed values; otherwise state the exact value deterministically.
@@ -424,7 +607,39 @@ class ChatAgent(Agent):
             if text and self._numbers_agree(text, truth):
                 return text
             return self._narrate_exact(result)
-        return text or self._fallback_narrate(result)
+
+        # Multi-row answers were previously unguarded: the model saw ten rows and
+        # confidently reported counts drawn from the preview. Any number it
+        # states must be traceable to the actual result.
+        if text and self._numbers_are_grounded(text, result):
+            return text
+        return self._fallback_narrate(result)
+
+    @classmethod
+    def _numbers_are_grounded(cls, text: str, result: QueryResult) -> bool:
+        """True if every number in ``text`` exists in the result or its size.
+
+        Values are checked against the whole result set, not the preview the
+        model was shown, so "there are 4 customers" fails when 87 rows came
+        back. Small integers are allowed through only when they match the row
+        count, so a preview length can never masquerade as a total.
+        """
+        stated = cls._stated_numbers(text)
+        if not stated:
+            return True
+
+        allowed: set[float] = {float(result.row_count), float(len(result.columns))}
+        for row in result.rows:
+            for value in row.values():
+                if cls._is_number(value):
+                    allowed.add(float(value))
+
+        # Every figure must be a faithful rounding of something in the result —
+        # a percentage tolerance would let altered cents through.
+        return all(
+            any(cls._is_faithful(value, decimals, a) for a in allowed)
+            for value, decimals in stated
+        )
 
     @staticmethod
     def _is_number(v) -> bool:
@@ -434,25 +649,58 @@ class ChatAgent(Agent):
         except (TypeError, ValueError):
             return False
 
+    @staticmethod
+    def _stated_numbers(text: str) -> list[tuple[float, int]]:
+        """Numbers written in ``text`` as ``(value, decimals_shown)`` pairs.
+
+        The decimal count matters: it says how precisely the writer claimed to
+        quote the figure, which is what makes a rounding check possible.
+        """
+        out: list[tuple[float, int]] = []
+        for token in re.findall(r"-?\d[\d,]*(?:\.\d+)?", text):
+            cleaned = token.replace(",", "")
+            decimals = len(cleaned.split(".")[1]) if "." in cleaned else 0
+            try:
+                out.append((float(cleaned), decimals))
+            except ValueError:  # pragma: no cover - regex guarantees a number
+                continue
+        return out
+
+    @staticmethod
+    def _is_faithful(stated: float, decimals: int, truth: float) -> bool:
+        """Whether ``stated`` is a legitimate rounding of ``truth``.
+
+        A percentage tolerance is the wrong test: 7,946.16 is within 2% of
+        7,945.76 yet states different cents, which reads as a precise figure the
+        data never produced. Instead the claim must survive rounding to the
+        precision it was written at — 7,946 and 7,945.76 both pass, 7,946.16
+        does not.
+        """
+        if abs(truth) < 1e-9:
+            return abs(stated) < 1e-6
+        # Allow the stated precision, and one digit either side of it, so
+        # "7,945.8" (1dp) and "7,945.762" (3dp) are both accepted.
+        for places in {max(decimals - 1, 0), decimals, decimals + 1}:
+            if round(stated, places) == round(truth, places):
+                return True
+        return False
+
     @classmethod
     def _numbers_agree(cls, text: str, truth: list[float]) -> bool:
-        """True if every computed value has a matching number (±2%) in ``text``.
+        """True if every computed value is faithfully quoted in ``text``.
 
         Guards against hallucinated figures: a rounded "$3,954" for 3953.85
-        passes; a fabricated "$1,791" for the same value does not.
+        passes; "$1,791" or "$3,954.12" for the same value does not.
         """
         if not truth:
             return True
-        found = [float(m.replace(",", "")) for m in re.findall(r"-?\d[\d,]*\.?\d*", text)]
-        if not found:
+        stated = cls._stated_numbers(text)
+        if not stated:
             return False
-        for t in truth:
-            if abs(t) < 1e-9:
-                if not any(abs(n) < 1e-6 for n in found):
-                    return False
-            elif not any(abs(n - t) <= abs(t) * 0.02 for n in found):
-                return False
-        return True
+        return all(
+            any(cls._is_faithful(value, decimals, t) for value, decimals in stated)
+            for t in truth
+        )
 
     @classmethod
     def _narrate_exact(cls, result: QueryResult) -> str:
@@ -468,12 +716,16 @@ class ChatAgent(Agent):
             return f"{n:,.0f}" if n.is_integer() else f"{n:,.2f}"
 
         def humanize(k: str) -> str:
-            kl = k.lower()
+            # DuckDB names bare aggregates like `count_star()`; strip the call
+            # syntax so the sentence doesn't read "The count star() is 42".
+            kl = re.sub(r"\(\s*\**\s*\)", "", k.lower()).strip()
+            if kl in {"count_star", "countstar"}:
+                return "count"
             for pre, word in _labels.items():
                 if kl == pre or kl.startswith(pre + "_"):
                     rest = kl[len(pre):].strip("_").replace("_", " ")
                     return f"{word} {rest}".strip()
-            return k.replace("_", " ")
+            return kl.replace("_", " ")
 
         parts = [(humanize(k), fmt(v)) for k, v in row.items()]
         if len(parts) == 1:
@@ -530,7 +782,12 @@ class ChatAgent(Agent):
         if forced == "scatter" and a_num and b_num:
             data = [{"x": float(r[a]), "y": float(r[b])} for r in result.rows[:300]
                     if r.get(a) is not None and r.get(b) is not None]
-            return {"type": "scatter", "title": f"{a} vs {b}", "x": "x", "y": "y", "data": data} if data else None
+            if not data:
+                return None
+            return {
+                "type": "scatter", "title": f"{a} vs {b}", "x": "x", "y": "y",
+                "x_label": self._axis_label(a), "y_label": self._axis_label(b), "data": data,
+            }
 
         # Category/measure: whichever column is numeric is the measure, so the
         # chart works regardless of the SQL's column order.
@@ -550,7 +807,81 @@ class ChatAgent(Agent):
         if not data:
             return None
         chart_type = forced if forced in {"bar", "pie", "line"} else ("pie" if len(data) <= 6 else "bar")
-        return {"type": chart_type, "title": f"{measure} by {cat}", "x": "name", "y": "value", "data": data}
+        y_label = self._axis_label(measure)
+        return {
+            "type": chart_type, "title": f"{y_label} by {cat}",
+            "x": "name", "y": "value",
+            "x_label": cat, "y_label": y_label, "data": data,
+        }
+
+    # SQL aliases that reveal the aggregation behind a column.
+    _AGG_PREFIXES = (
+        ("sum_", "Total "), ("total_", "Total "), ("avg_", "Average "), ("mean_", "Average "),
+        ("max_", "Maximum "), ("min_", "Minimum "), ("count_", "Count of "),
+    )
+
+    @classmethod
+    def _axis_label(cls, column: str) -> str:
+        """Readable axis caption for a SQL result column.
+
+        Query aliases carry the aggregation (``sum_revenue``, ``avg_price``);
+        spelling it out is what tells the reader whether a bar is a total or an
+        average. Without this the axis just said "sum_revenue" — or worse,
+        "revenue", which reads as a raw value.
+        """
+        name = re.sub(r"\(\s*\**\s*\)", "", str(column)).strip()
+        lowered = name.lower()
+        if lowered in {"count", "count_star", "n", "rows", "row_count", "num_rows"}:
+            return "Number of rows"
+        for prefix, word in cls._AGG_PREFIXES:
+            if lowered.startswith(prefix):
+                rest = name[len(prefix):].replace("_", " ").strip()
+                return f"{word}{rest}" if rest else word.strip()
+        return name.replace("_", " ")
+
+    # ---- query frame -------------------------------------------------- #
+    def _query_frame(self, ctx: AgentContext) -> tuple[pd.DataFrame, list[str]]:
+        """The frame SQL runs against, with date columns made comparable.
+
+        Uploaded date columns routinely mix formats (``15/02/2024`` beside
+        ``2024-04-10``). DuckDB's ``TRY_CAST`` parses only one of them and turns
+        the rest into NULL, so a month filter silently matches nothing. Parsing
+        them the same way the charts do makes date comparisons work on any
+        dataset, whatever format the file used.
+
+        Returns the frame plus notes about values that could not be parsed.
+        """
+        if ctx.profile is None:
+            return ctx.df, []
+
+        date_columns = [
+            c.name for c in ctx.profile.columns
+            if c.semantic_type in _TEMPORAL and c.name in ctx.df.columns
+        ]
+        if not date_columns:
+            return ctx.df, []
+
+        frame = ctx.df.copy()
+        notes: list[str] = []
+        for name in date_columns:
+            if pd.api.types.is_datetime64_any_dtype(frame[name]):
+                continue
+            parsed = parse_dates(frame[name])
+            unparsed = int(parsed.isna().sum() - frame[name].isna().sum())
+            frame[name] = parsed
+            if unparsed > 0:
+                notes.append(
+                    f"{unparsed} of {len(frame)} '{name}' values aren't recognisable dates "
+                    "and are excluded from any date filter."
+                )
+        return frame, notes
+
+    @staticmethod
+    def _text_columns(ctx: AgentContext) -> set[str]:
+        """Columns whose values are free text, from the profile when available."""
+        if ctx.profile is not None:
+            return {c.name for c in ctx.profile.columns if c.semantic_type in _TEXTUAL}
+        return {c for c in ctx.df.columns if ctx.df[c].dtype == object}
 
     # ---- helpers ------------------------------------------------------ #
     def _schema(self, ctx: AgentContext) -> str:

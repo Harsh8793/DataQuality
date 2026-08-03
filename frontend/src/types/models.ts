@@ -154,9 +154,15 @@ export interface ChartSpec {
   id: string;
   type: "bar" | "pie" | "line" | "scatter";
   title: string;
+  /** Keys into each data point — not display text. */
   x: string;
   y: string;
+  /** Axis captions naming the column and its aggregation ("Total revenue"). */
+  x_label?: string | null;
+  y_label?: string | null;
   data: Record<string, unknown>[];
+  /** Provenance: how many rows backed this chart and what was excluded. */
+  meta?: { rows_used: number; rows_total: number; notes: string[] } | null;
 }
 
 export interface DashboardSelection {
@@ -226,11 +232,25 @@ export interface DataStory {
   generated_by: string;
 }
 
-export interface ChartCommandResult {
+export interface WidgetOption {
   kind: "kpi" | "chart";
+  label: string;
+  description: string;
+  kpi: KpiCard | null;
+  chart: ChartSpec | null;
+  confidence: number;
+  warnings: string[];
+}
+
+export interface ChartCommandResult {
+  /** "choice" needs the user to pick; "review" needs approval before adding. */
+  kind: "kpi" | "chart" | "choice" | "review";
   kpi: KpiCard | null;
   chart: ChartSpec | null;
   message: string;
+  confidence: number;
+  warnings: string[];
+  options: WidgetOption[];
 }
 
 export interface ColumnShift {
@@ -300,6 +320,8 @@ export interface FixListResult {
 
 export interface UndoFixResult {
   undone_fixes: number;
+  /** Fixes still applied after the undo — 0 after an undo-all. */
+  remaining_fixes: number;
   report: QualityReport;
 }
 
@@ -349,6 +371,18 @@ export interface UndoEditResult {
   undone: number;
   remaining: number;
   report: QualityReport;
+}
+
+export type LlmStatusKind = "active" | "degraded" | "unconfigured" | "disabled";
+
+export interface LlmStatus {
+  status: LlmStatusKind;
+  label: string;
+  model: string;
+  detail: string;
+  healthy: boolean;
+  last_success_at: string | null;
+  last_error_at: string | null;
 }
 
 export interface HistoryItem {

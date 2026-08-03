@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, Query, UploadFile
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from app.database.session import get_db
@@ -60,6 +61,17 @@ def preview_dataset(
 ):
     """Return a page of rows from a dataset."""
     return ApiResponse.ok(DatasetService(db).preview(dataset_id, current_user.id, rows, offset))
+
+
+@router.get("/{dataset_id}/export")
+def export_dataset(dataset_id: int, current_user: CurrentUser, db: Annotated[Session, Depends(get_db)]):
+    """Download the dataset's current data as CSV, including edits and fixes."""
+    csv_text, filename = DatasetService(db).export_csv(dataset_id, current_user.id)
+    return Response(
+        content=csv_text,
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @router.delete("/{dataset_id}", response_model=ApiResponse[None])

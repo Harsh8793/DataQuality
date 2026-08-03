@@ -30,34 +30,130 @@ FastAPI  ──►  Service layer  ──►  Repository layer  ──►  SQLit
 
 ## 2. Agent node diagram
 
-The analysis pipeline is a sequential graph run by `SimpleCoordinator`
-(`backend/app/agents/orchestrator.py`) over a shared `AgentContext`. Interactive
-agents (Chat, Custom-Validation, Insight, Explain) run on demand from their
-endpoints.
+All agents implement one contract in `agents/base.py` — `run(ctx) -> AgentResult` —
+and communicate only by reading and enriching a single mutable `AgentContext`. They
+never call each other.
 
-### 2a. Analysis pipeline (runs on upload/analyze/fix/edit)
+Agents are reached two ways: `SimpleCoordinator` sequences three of them as the
+analysis pipeline, and services call the rest **directly** via purpose-built methods
+(`.load()`, `.classify()`, `.build()`, `.ask()`, `.explain_issues()`). The direct
+path is the more common one.
 
+> The mermaid sources below render inline on GitHub and in VS Code preview. PNG
+> exports for slides/submission are in [`diagrams/`](diagrams/):
+> [contract](diagrams/agents-1-contract.png) ·
+> [pipeline](diagrams/agents-2-pipeline.png) ·
+> [invocation paths](diagrams/agents-3-paths.png) ·
+> [LLM degradation](diagrams/agents-4-degradation.png)
+
+### 2a. Contract and agent families
+
+```mermaid
+graph TB
+    subgraph CONTRACT["agents/base.py"]
+        CTX["AgentContext — mutable, threaded<br/>dataset_id · dataset_name · df<br/>profile · findings · score · meta · _emit"]
+        ABC["Agent ABC — name · run ctx · _ok · _fail"]
+        RES["AgentResult — agent · ok · data · error"]
+    end
+
+    subgraph DET["Deterministic — engine wrappers, zero tokens"]
+        UP["UploadAgent"] --> L["DataLoader"]
+        PR["ProfilingAgent"] --> P["Profiler"]
+        QA["QualityAgent"] --> QE["QualityEngine + Scorer"]
+        DA["DashboardAgent"] --> CR["ChartRecommender"]
+        CL["CleaningAgent — unwired"] --> C["Cleaner"]
+    end
+
+    subgraph LLMA["LLM-backed — every path has a deterministic fallback"]
+        GA["GovernanceAgent<br/>rules decide, LLM enriches"]
+        IA["InsightAgent<br/>LLM + _FALLBACK table"]
+        CA["ChatAgent<br/>plan then narrate"]
+        SA["SqlAgent — unwired"]
+    end
+
+    GA --> LLM["GroqLLM singleton<br/>get_llm() · .available gate"]
+    IA --> LLM
+    CA --> LLM
+    SA --> LLM
+    CA --> DD["DuckDBEngine read-only"]
+    SA --> DD
+    CA --> CR
+
+    ABC -.-> DET
+    ABC -.-> LLMA
 ```
-             ┌──────────────────────────── AgentContext (shared state) ───────────────────────────┐
-             │  df · profile · findings · score · meta{governance, custom_meta, is_cleaned} · emit │
-             └───────────────────────────────────────────────────────────────────────────────────┘
- upload ──► [UploadAgent] ─► [ProfilingAgent] ─► [QualityAgent] ─► [GovernanceAgent] ─► persist ─► HITL gate
- (loader)      parse         semantic types       20+ checks         PII / class /                  approval_status
-                             + stats              + Scorer           tier (rules+LLM)               = pending if score<75
-                                                       │
-                                       custom validations evaluated  ──►  re-score
-                                       user exclusions removed        ──►  re-score
+
+`ProfilingAgent` is the universal prerequisite: `QualityAgent`, `GovernanceAgent`,
+`DashboardAgent` and `CleaningAgent` all guard on `ctx.profile is not None` and fail
+fast without it, so seven different callers construct it.
+
+### 2b. Analysis pipeline — `SimpleCoordinator`, three agents
+
+```mermaid
+sequenceDiagram
+    participant S as analysis_service
+    participant K as SimpleCoordinator
+    participant P as ProfilingAgent
+    participant Q as QualityAgent
+    participant G as GovernanceAgent
+    participant E as ctx.emit → SSE
+
+    S->>K: run_analysis(ctx)
+    K->>P: run(ctx)
+    P->>E: progress running
+    P-->>K: ctx.profile
+    P->>E: progress done "N columns profiled"
+    K->>Q: run(ctx)
+    Note over Q: guard — needs ctx.profile
+    Q-->>K: ctx.findings + ctx.score
+    Q->>E: progress done "score X/100, N issues"
+    K->>G: run(ctx)
+    G-->>K: classification · PII columns · tier
+    K->>E: done "Analysis complete"
+    K-->>S: PipelineOutput.results
 ```
 
-- **UploadAgent** — detect encoding/delimiter, load CSV/Excel/JSON → DataFrame (deterministic).
-- **ProfilingAgent** — 14 semantic types, null %, cardinality, min/max/mean (deterministic).
-- **QualityAgent** — runs the check registry (20+ checks) and the Scorer (deterministic).
-- **GovernanceAgent** — deterministic PII/classification/tier; LLM only enriches column names/descriptions.
-- **Custom validations** — user-defined DuckDB conditions appended as findings, then re-scored.
-- **InsightAgent** — business insights; run **on demand** by the Insights tab (kept out of the
-  pipeline to save tokens).
+`UploadAgent` is **not** in the pipeline — `DatasetService` runs it at upload time to
+produce the DataFrame the pipeline then consumes. Custom validations and user
+exclusions are applied by the service layer after the pipeline, each triggering a
+re-score.
 
-### 2b. Interactive agents (per user action)
+Each `agent.run()` is individually wrapped in `try/except`: a crash becomes
+`AgentResult(ok=False, error=...)` plus an error progress event, and the run
+continues. One agent cannot kill the pipeline.
+
+`InsightAgent` is **deliberately kept out** of the pipeline
+(`orchestrator.py`): per-issue explanations are deterministic and business insights
+are generated on demand by the Insights tab, so analysis stays fast and token-free —
+it re-runs on every fix and edit.
+
+The `Coordinator` Protocol exists so a CrewAI/LangGraph implementation can be
+swapped in without touching the service layer.
+
+### 2c. Invocation paths
+
+```mermaid
+graph LR
+    API["api/v1/*"] --> SVC["services/*"]
+    SVC -->|coordinator| K["SimpleCoordinator<br/>Profiling → Quality → Governance"]
+    SVC -->|direct method call| AG["individual agents"]
+    DASH["api/v1/dashboard.py<br/>Profiling · Quality · Insight"] -.->|bypasses service layer| AG
+```
+
+| Caller | Agents constructed |
+|--------|--------------------|
+| `dataset_service` | Upload |
+| `analysis_service` | **coordinator** + Profiling, Governance |
+| `governance_service` | Profiling, Quality, Governance |
+| `dashboard_service` | Profiling, Dashboard |
+| `chat_service` | Profiling, Chat |
+| `custom_validation_service` | Profiling |
+| `ai_service` | Profiling + `get_llm()` directly |
+| `api/v1/dashboard.py` | Profiling, Quality, Insight — skips the service layer |
+
+`analysis_service` is the only caller that uses the coordinator.
+
+### 2d. Interactive agents (per user action)
 
 ```
 Chat message ─► [ChatAgent] ── plan ──► converse ─► narrated answer
@@ -70,6 +166,30 @@ Chat message ─► [ChatAgent] ── plan ──► converse ─► narrated a
 
 widget "Explain this" ─► [AiService.explain] ─► LLM (or deterministic summary)
 ```
+
+### 2e. LLM degradation
+
+```mermaid
+graph TB
+    A["LLM-backed agent"] --> CHK{"self._llm.available?"}
+    CHK -->|no| FB["deterministic result<br/>Governance: rule-based PII, class, tier<br/>Insight: _FALLBACK per check type<br/>Chat: _heuristic_plan + _pattern_sql"]
+    CHK -->|yes| CJ["complete_json(system, user)"]
+    CJ --> PJ{"_parse_json succeeded?"}
+    PJ -->|no| FB
+    PJ -->|yes| MERGE["merge onto the rule baseline"]
+    CJ -.->|exception| RF["_record_failure → health()"]
+```
+
+Governance computes classification, PII columns and tier from rules **first** and
+lets the LLM add only column descriptions and rationale, so an LLM outage never
+changes a compliance decision.
+
+### 2f. Unwired agents
+
+`SqlAgent` and `CleaningAgent` are fully implemented but have **no references outside
+`app/agents/`**. `CleaningService` uses the `Cleaner` engine directly, and NL→SQL is
+handled by `ChatAgent`'s own planner rather than by `SqlAgent`. Both should be wired
+in or removed.
 
 ---
 

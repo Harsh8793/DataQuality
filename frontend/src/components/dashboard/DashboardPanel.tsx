@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { BarChart3, Plus, Sparkles, Wand2, X } from "lucide-react";
+import { AlertTriangle, BarChart3, Plus, Sparkles, Wand2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { ChartRenderer } from "@/components/charts/ChartRenderer";
 import { Modal } from "@/components/common/Modal";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,35 @@ import { EmptyState, Spinner } from "@/components/ui/misc";
 import { formatValue } from "@/lib/utils";
 import { useDashboard, useSaveDashboard } from "@/hooks/useDatasets";
 import { aiService } from "@/services/aiService";
-import type { ChartSpec, KpiCard as KpiCardType } from "@/types/models";
+import type {
+  ChartCommandResult,
+  ChartSpec,
+  KpiCard,
+  KpiCard as KpiCardType,
+  WidgetOption,
+} from "@/types/models";
+
+/** Confidence shown as a badge — colour tracks how much data backs the widget. */
+function ConfidenceBadge({ value }: { value: number }) {
+  const pct = Math.round(value * 100);
+  const variant = value >= 0.9 ? "success" : value >= 0.6 ? "medium" : "critical";
+  return <Badge variant={variant}>{pct}% of rows</Badge>;
+}
+
+/** The warnings that explain what was excluded and why. */
+function WidgetWarnings({ warnings }: { warnings: string[] }) {
+  if (!warnings.length) return null;
+  return (
+    <ul className="mt-2 space-y-1">
+      {warnings.map((w) => (
+        <li key={w} className="flex gap-2 text-xs text-muted-foreground">
+          <AlertTriangle className="mt-0.5 size-3 shrink-0 text-amber-400" />
+          <span>{w}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 interface ExplainState {
   title: string;
@@ -33,6 +62,8 @@ export function DashboardPanel({ datasetId }: { datasetId: number }) {
   const [extraKpis, setExtraKpis] = useState<KpiCardType[]>([]);
   const [extraCharts, setExtraCharts] = useState<ChartSpec[]>([]);
   const [explain, setExplain] = useState<ExplainState | null>(null);
+  // A command awaiting a human decision: ambiguous, or low-confidence.
+  const [pending, setPending] = useState<ChartCommandResult | null>(null);
 
   // Seed local selection from the server once it arrives.
   useEffect(() => {
@@ -67,18 +98,37 @@ export function DashboardPanel({ datasetId }: { datasetId: number }) {
   const commandMutation = useMutation({
     mutationFn: (cmd: string) => aiService.chartCommand(datasetId, cmd),
     onSuccess: (res) => {
-      if (res.kind === "kpi" && res.kpi) {
-        setExtraKpis((k) => [...k.filter((x) => x.id !== res.kpi!.id), res.kpi!]);
-        persist([...kpiIds.filter((i) => i !== res.kpi!.id), res.kpi.id], chartIds);
-      } else if (res.kind === "chart" && res.chart) {
-        setExtraCharts((c) => [...c.filter((x) => x.id !== res.chart!.id), res.chart!]);
-        persist(kpiIds, [...chartIds.filter((i) => i !== res.chart!.id), res.chart.id]);
+      // "choice" and "review" stop here and wait for the user to decide.
+      if (res.kind === "choice" || res.kind === "review") {
+        setPending(res);
+        return;
       }
+      // Every other kind is a direct add (kept for backward compatibility —
+      // the service proposes rather than creates).
+      if (res.kind === "kpi" && res.kpi) addKpiWidget(res.kpi);
+      else if (res.kind === "chart" && res.chart) addChartWidget(res.chart);
       setCommand("");
       toast.success(res.message);
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  /** Commit a widget the user has accepted (directly or after review). */
+  const addKpiWidget = (kpi: KpiCardType) => {
+    setExtraKpis((k) => [...k.filter((x) => x.id !== kpi.id), kpi]);
+    persist([...kpiIds.filter((i) => i !== kpi.id), kpi.id], chartIds);
+  };
+  const addChartWidget = (chart: ChartSpec) => {
+    setExtraCharts((c) => [...c.filter((x) => x.id !== chart.id), chart]);
+    persist(kpiIds, [...chartIds.filter((i) => i !== chart.id), chart.id]);
+  };
+
+  const acceptPending = (option: { kind: string; kpi: KpiCard | null; chart: ChartSpec | null }) => {
+    if (option.kind === "kpi" && option.kpi) addKpiWidget(option.kpi);
+    if (option.kind === "chart" && option.chart) addChartWidget(option.chart);
+    setPending(null);
+    setCommand("");
+  };
 
   if (isLoading) return <Spinner label="Building dashboard…" />;
   if (!data) return null;
@@ -131,6 +181,92 @@ export function DashboardPanel({ datasetId }: { datasetId: number }) {
           <Sparkles className="size-4" /> {commandMutation.isPending ? "Creating…" : "Create with AI"}
         </Button>
       </form>
+
+      {/* Human-in-the-loop: nothing is added to the dashboard until approved. */}
+      {pending && (
+        <Card className="border-amber-500/40 bg-amber-500/5 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="size-4 shrink-0 text-amber-400" />
+              <p className="text-sm font-semibold">{pending.message}</p>
+            </div>
+            <button
+              onClick={() => setPending(null)}
+              className="text-muted-foreground hover:text-foreground"
+              title="Dismiss"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          {pending.kind === "review" && (
+            <div className="mt-3">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">
+                  {pending.chart?.title ?? pending.kpi?.label}
+                </span>
+                <ConfidenceBadge value={pending.confidence} />
+              </div>
+              <WidgetWarnings warnings={pending.warnings} />
+              <div className="mt-3 rounded-lg border border-border bg-background p-3">
+                {pending.chart ? (
+                  <ChartRenderer spec={pending.chart} height={200} />
+                ) : pending.kpi ? (
+                  <p className="text-2xl font-bold tracking-tight">
+                    {formatValue(pending.kpi.value, pending.kpi.format)}
+                  </p>
+                ) : null}
+              </div>
+              <div className="mt-3 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="gradient"
+                  onClick={() =>
+                    acceptPending({
+                      kind: pending.chart ? "chart" : "kpi",
+                      kpi: pending.kpi,
+                      chart: pending.chart,
+                    })
+                  }
+                >
+                  Add to dashboard
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setPending(null)}>
+                  Discard
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {pending.kind === "choice" && (
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {pending.options.map((opt: WidgetOption) => (
+                <div key={`${opt.kind}:${opt.label}`} className="rounded-lg border border-border bg-background p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-medium">{opt.label}</span>
+                    <ConfidenceBadge value={opt.confidence} />
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">{opt.description}</p>
+                  {opt.kind === "chart" && opt.chart && (
+                    <div className="mt-2">
+                      <ChartRenderer spec={opt.chart} height={140} />
+                    </div>
+                  )}
+                  {opt.kind === "kpi" && opt.kpi && (
+                    <p className="mt-2 text-2xl font-bold tracking-tight">
+                      {formatValue(opt.kpi.value, opt.kpi.format)}
+                    </p>
+                  )}
+                  <WidgetWarnings warnings={opt.warnings} />
+                  <Button size="sm" variant="outline" className="mt-3" onClick={() => acceptPending(opt)}>
+                    Use this
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      )}
 
       {/* KPI row */}
       <div className="flex items-center justify-between">

@@ -100,7 +100,8 @@ class InsightAgent(Agent):
             return self._fallback_insights(ctx)
         profile_summary = {
             "rows": ctx.profile.row_count,
-            "columns": [{"name": c.name, "type": c.semantic_type} for c in ctx.profile.columns[:15]],
+            # All columns, compactly — the first 15 alone hid most of a wide table.
+            "columns": [{"name": c.name, "type": c.semantic_type} for c in ctx.profile.columns],
         }
         quality_summary = {"score": ctx.score.overall if ctx.score else None,
                            "issues": len(ctx.findings)}

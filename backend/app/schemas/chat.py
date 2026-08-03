@@ -59,9 +59,16 @@ class ChartSpec(BaseModel):
     id: str | None = None
     type: str
     title: str
+    # Keys into each data point (e.g. "name"/"value") — not display text.
     x: str
     y: str
+    # Human axis captions naming the column and its aggregation, so a reader can
+    # tell a total from an average without guessing.
+    x_label: str | None = None
+    y_label: str | None = None
     data: list[dict]
+    # Provenance: rows_used / rows_total / notes about what was excluded.
+    meta: dict | None = None
 
 
 class DashboardResponse(BaseModel):

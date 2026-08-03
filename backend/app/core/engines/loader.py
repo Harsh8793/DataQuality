@@ -14,7 +14,7 @@ from app.exceptions.base import BadRequestException, UnsupportedFormatException
 
 logger = get_logger(__name__)
 
-_SUPPORTED = {"csv", "xlsx", "xls", "json"}
+_SUPPORTED = {"csv", "xlsx", "xls", "json", "parquet"}
 
 
 @dataclass
@@ -41,6 +41,8 @@ class DataLoader:
             return self._load_csv(content)
         if ext in {"xlsx", "xls"}:
             return self._load_excel(content, ext)
+        if ext == "parquet":
+            return self._load_parquet(content)
         return self._load_json(content)
 
     # ---- CSV ---------------------------------------------------------- #
@@ -93,6 +95,21 @@ class DataLoader:
             raise BadRequestException(f"Could not read Excel file: {exc}") from exc
         logger.info("Loaded Excel: %d rows x %d cols", len(df), df.shape[1])
         return LoadResult(df=df, file_format=ext)
+
+    # ---- Parquet ------------------------------------------------------ #
+    def _load_parquet(self, content: bytes) -> LoadResult:
+        """Load a Parquet file.
+
+        Parquet is self-describing, so there is no encoding or delimiter to
+        detect — everything downstream (profiling, quality, cleaning) works off
+        the DataFrame exactly as it does for the other formats.
+        """
+        try:
+            df = pd.read_parquet(io.BytesIO(content))
+        except Exception as exc:  # noqa: BLE001 - surface a readable message
+            raise BadRequestException(f"Could not read Parquet file: {exc}") from exc
+        logger.info("Loaded Parquet: %d rows x %d cols", len(df), df.shape[1])
+        return LoadResult(df=df, file_format="parquet")
 
     # ---- JSON --------------------------------------------------------- #
     def _load_json(self, content: bytes) -> LoadResult:

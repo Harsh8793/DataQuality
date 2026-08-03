@@ -13,6 +13,9 @@ from app.agents.base import Agent, AgentContext, AgentResult
 from app.constants.enums import Classification, IngestionTier, SemanticType
 from app.core.llm import get_llm
 from app.core.llm.prompts import GOVERNANCE_SYSTEM, GOVERNANCE_USER
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
 
 # Semantic types that are inherently PII.
 _PII_TYPES = {SemanticType.EMAIL, SemanticType.PHONE}
@@ -40,6 +43,14 @@ class GovernanceAgent(Agent):
     """Classifies a dataset's sensitivity and ingestion tier."""
 
     name = "governance"
+
+    # Columns described per LLM call. Each column costs roughly 35 output
+    # tokens, so 20 leaves ample headroom under llm_max_tokens (1500). Sizing
+    # this near the ceiling truncates the JSON mid-object, the parse fails, and
+    # the whole batch silently falls back to "<type> column".
+    COLUMN_BATCH = 20
+    # How many times a failing batch may be halved before we accept rule metadata.
+    MAX_SPLIT_DEPTH = 3
 
     def __init__(self) -> None:
         super().__init__()
@@ -127,6 +138,33 @@ class GovernanceAgent(Agent):
         ]
 
     # ---- optional LLM enrichment ------------------------------------- #
+    def _describe_batch(self, batch: list[dict], depth: int = 0):
+        """Yield ``(column_entry, rationale)`` pairs for one batch of columns.
+
+        A batch whose JSON comes back unparseable is usually one the model
+        truncated, so retry it as two halves before giving up. Without this a
+        single bad response leaves a whole block of columns with generic
+        descriptions and no indication anything went wrong.
+        """
+        raw = self._llm.complete_json(
+            GOVERNANCE_SYSTEM, GOVERNANCE_USER.format(columns=json.dumps(batch, default=str))
+        )
+        if isinstance(raw, dict):
+            rationale = str(raw.get("rationale") or "").strip()
+            for entry in raw.get("columns") or []:
+                if isinstance(entry, dict):
+                    yield entry, rationale
+            return
+
+        if depth >= self.MAX_SPLIT_DEPTH or len(batch) <= 1:
+            logger.warning("Governance could not describe %d column(s); keeping rule metadata.", len(batch))
+            return
+
+        mid = len(batch) // 2
+        logger.info("Governance batch of %d failed to parse; retrying as %d + %d.", len(batch), mid, len(batch) - mid)
+        yield from self._describe_batch(batch[:mid], depth + 1)
+        yield from self._describe_batch(batch[mid:], depth + 1)
+
     def _enrich_with_llm(self, ctx: AgentContext, result: GovernanceResult) -> GovernanceResult:
         """Enrich the deterministic result with the LLM WITHOUT losing it.
 
@@ -137,24 +175,31 @@ class GovernanceAgent(Agent):
         if not self._llm.available:
             return result
 
+        # Wide tables are described in batches rather than truncated: capping the
+        # payload used to leave every column past the cap with a generic
+        # "<type> column" description and no way to tell it apart from a real one.
         columns = [
             {"name": c.name, "type": c.semantic_type, "samples": [str(s) for s in c.sample_values[:2]]}
-            for c in ctx.profile.columns[:60]  # cap payload for wide datasets
+            for c in ctx.profile.columns
         ]
-        raw = self._llm.complete_json(
-            GOVERNANCE_SYSTEM, GOVERNANCE_USER.format(columns=json.dumps(columns, default=str))
-        )
-        if not isinstance(raw, dict):
-            return result
-
-        # Index the LLM's per-column output by the REAL column name only.
         by_lname = {c.name.lower(): c.name for c in ctx.profile.columns}
         llm_cols: dict[str, dict] = {}
-        for entry in raw.get("columns") or []:
-            if isinstance(entry, dict):
+        rationale = ""
+
+        for start in range(0, len(columns), self.COLUMN_BATCH):
+            batch = columns[start : start + self.COLUMN_BATCH]
+            for entry, batch_rationale in self._describe_batch(batch):
+                # Index the LLM's per-column output by the REAL column name only.
                 real = by_lname.get(str(entry.get("name", "")).strip().lower())
                 if real:
                     llm_cols[real] = entry
+                # The first batch sees the most representative columns; keep its
+                # rationale rather than letting later batches overwrite it.
+                rationale = rationale or batch_rationale
+
+        if not llm_cols and not rationale:
+            return result
+        raw = {"rationale": rationale}
 
         # PII, sensitivity and classification stay RULE-BASED (reliable). The LLM
         # only contributes friendlier business names + descriptions — small models

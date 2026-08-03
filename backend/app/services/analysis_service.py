@@ -19,6 +19,7 @@ from app.constants.enums import APPROVAL_THRESHOLD, ApprovalStatus
 from app.core.engines.affected import affected_mask
 from app.core.engines.duckdb_engine import DuckDBEngine
 from app.core.engines.explanations import explain_issue
+from app.core.llm import get_llm
 from app.core.engines.fixer import FIXABLE_CHECKS, UnfixableIssueError, apply_fix
 from app.core.engines.quality_checks import QualityFinding
 from app.core.engines.scorer import Scorer
@@ -233,22 +234,48 @@ class AnalysisService(BaseService, DatasetContextMixin):
 
         Freshly uploaded datasets have no persisted columns until the full
         analysis runs — profile deterministically here so the Overview tab
-        always has a column profile to show.
+        always has a column profile to show. Governance runs too, so business
+        names, descriptions and PII flags are populated on first view rather
+        than staying blank until someone runs a full analysis. Both are cached
+        in ``dataset_columns``, so this costs one LLM call per dataset at most.
         """
         dataset = self._load_owned_dataset(dataset_id, user_id)
         columns = self.columns.list_for_dataset(dataset_id)
-        if columns:
+        # A cached row set whose descriptions are all rule-generated means the
+        # LLM was unavailable (or its response failed to parse) when these were
+        # written. Don't cache that failure forever — rebuild it once the LLM
+        # can answer, otherwise Overview shows "<type> column" permanently while
+        # Governance shows real descriptions.
+        if columns and not self._needs_reenrichment(columns):
             return columns
 
+        from app.agents.governance_agent import GovernanceAgent
         from app.agents.profiling_agent import ProfilingAgent
 
         ctx = self._build_context(dataset)
         ProfilingAgent().run(ctx)
         if ctx.profile is None:
-            return []
-        self._persist_columns(dataset, ctx.profile, None, user_id)
+            return columns
+        # Failures are isolated inside the agent; metadata falls back to
+        # deterministic names so the table is never empty.
+        GovernanceAgent().run(ctx)
+        self._persist_columns(dataset, ctx.profile, ctx.meta.get("governance"), user_id)
         self.db.commit()
         return self.columns.list_for_dataset(dataset_id)
+
+    @staticmethod
+    def _needs_reenrichment(columns: list) -> bool:
+        """Whether stored descriptions are all the deterministic placeholder.
+
+        ``GovernanceAgent._rule_metadata`` writes ``"<semantic type> column"``.
+        If every row still looks like that, no real description ever landed.
+        """
+        if not get_llm().available:
+            return False  # nothing better is available right now
+        described = [c for c in columns if c.description]
+        if not described:
+            return True
+        return all(c.description == f"{c.semantic_type} column" for c in described)
 
     def get_latest(self, dataset_id: str, user_id: str) -> QualityReportResponse | None:
         """Return the latest persisted quality report for a dataset."""
@@ -456,6 +483,107 @@ class AnalysisService(BaseService, DatasetContextMixin):
         new_report = self.analyze(dataset_id, user_id)
         return {"undone_fixes": len(fixes), "report": new_report}
 
+    def undo_one_fix(self, dataset_id: int, fix_id: int, user_id: int) -> dict:
+        """Undo a single fix, keeping every other fix that was applied.
+
+        Fixes aren't individually reversible — an imputation has already
+        overwritten the original values — so the dataset is rebuilt from the
+        pre-fix baseline snapshot and the fixes the user is keeping are replayed
+        in their original order. That makes any fix removable, not just the most
+        recent one.
+        """
+        dataset = self._load_owned_dataset(dataset_id, user_id)
+        target = self.fixes.get(fix_id)
+        if target is None or target.dataset_id != dataset_id or target.is_deleted:
+            raise NotFoundException("Fix not found.")
+
+        keep = [f for f in self.fixes.list_for_dataset_chronological(dataset_id) if f.id != fix_id]
+        self._rebuild_from_baseline(dataset, keep, user_id)
+        self.history.create(
+            user_id=user_id, dataset_id=dataset.id, action="undo_fix",
+            summary=f"Undid fix: {target.detail}",
+            payload={"fix_id": fix_id, "check_key": target.check_key},
+            created_by=user_id,
+        )
+        self.db.commit()
+
+        new_report = self.analyze(dataset_id, user_id)
+        return {"undone_fixes": 1, "remaining_fixes": len(keep), "report": new_report}
+
+    def undo_all_fixes(self, dataset_id: int, user_id: int) -> dict:
+        """Discard every applied fix in one step, back to the pre-fix state."""
+        dataset = self._load_owned_dataset(dataset_id, user_id)
+        fixes = self.fixes.list_for_dataset_chronological(dataset_id)
+        if not fixes:
+            raise BadRequestException("No fixes to undo.")
+
+        self._rebuild_from_baseline(dataset, [], user_id)
+        self.history.create(
+            user_id=user_id, dataset_id=dataset.id, action="undo_fix",
+            summary=f"Undid all {len(fixes)} fix(es)",
+            payload={"undone": len(fixes)}, created_by=user_id,
+        )
+        self.db.commit()
+
+        new_report = self.analyze(dataset_id, user_id)
+        return {"undone_fixes": len(fixes), "remaining_fixes": 0, "report": new_report}
+
+    def _rebuild_from_baseline(self, dataset, keep: list, user_id: int) -> None:
+        """Restore the pre-fix snapshot, then re-apply ``keep`` in order.
+
+        The batch/snapshot chain is rebuilt as it goes, so the undo stack stays
+        consistent afterwards and a later undo still has a valid baseline.
+        """
+        baseline = self.fix_batches.earliest_for_dataset(dataset.id)
+        if baseline is None:
+            raise BadRequestException("No fixes to undo.")
+        if not Path(baseline.snapshot_path).exists():
+            raise BadRequestException("The original snapshot no longer exists, so this can't be undone.")
+
+        df = pd.read_parquet(baseline.snapshot_path)
+        # Capture what to replay before the old rows are retired.
+        replay = [
+            {"check_key": f.check_key, "column_name": f.column_name,
+             "identifier_column": f.identifier_column, "severity": f.severity,
+             "problem": f.problem}
+            for f in keep
+        ]
+        old_batches = self.fix_batches.list_for_dataset(dataset.id)
+        for batch in old_batches:
+            for fix in self.fixes.list_for_batch(batch.id):
+                self.fixes.soft_delete(fix)
+            self.fix_batches.soft_delete(batch)
+        self.db.flush()
+
+        for spec in replay:
+            batch = self._create_batch(dataset, len(df), user_id, frame=df)
+            before = df
+            try:
+                result = apply_fix(df, spec["check_key"], spec["column_name"])
+            except UnfixableIssueError:
+                # A kept fix that no longer applies is dropped rather than
+                # aborting the rebuild — the dataset it targeted has changed.
+                self.fix_batches.soft_delete(batch)
+                self._safe_unlink(batch.snapshot_path)
+                continue
+            df = result.df
+            self.fixes.create(
+                batch_id=batch.id, dataset_id=dataset.id,
+                check_key=spec["check_key"], column_name=spec["column_name"],
+                identifier_column=spec["identifier_column"], severity=spec["severity"],
+                problem=spec["problem"], op=result.op, rows_affected=result.rows_affected,
+                detail=result.detail,
+                changes=self._diff_changes(before, df, spec["column_name"], spec["identifier_column"]),
+                created_by=user_id,
+            )
+
+        self._persist_fixed_frame(dataset, df)
+        # Retire the snapshots that are no longer referenced by a live batch.
+        live = {b.snapshot_path for b in self.fix_batches.list_for_dataset(dataset.id)}
+        for batch in old_batches:
+            if batch.snapshot_path not in live:
+                self._safe_unlink(batch.snapshot_path)
+
     def list_fixes(self, dataset_id: int, user_id: int) -> dict:
         """Return all recorded fixes (newest first) and whether undo is possible."""
         self._load_owned_dataset(dataset_id, user_id)
@@ -547,14 +675,25 @@ class AnalysisService(BaseService, DatasetContextMixin):
         return [ExclusionItem.model_validate(e) for e in self.exclusions.list_for_dataset(dataset_id)]
 
     # ---- fix helpers ----------------------------------------------------- #
-    def _create_batch(self, dataset: Dataset, row_count: int, user_id: int):
-        """Create a fix batch and snapshot the current parquet for undo."""
+    def _create_batch(
+        self, dataset: Dataset, row_count: int, user_id: int, frame: pd.DataFrame | None = None
+    ):
+        """Create a fix batch and snapshot the pre-fix state for undo.
+
+        ``frame`` is used during a rebuild, where the state to snapshot only
+        exists in memory — the parquet on disk still holds the *old* fixed data
+        until the replay finishes, so copying the file would capture the wrong
+        rows.
+        """
         batch = self.fix_batches.create(
             dataset_id=dataset.id, user_id=user_id,
             snapshot_path="", row_count_before=row_count, created_by=user_id,
         )
         snapshot = Path(dataset.parquet_path).with_name(f"{dataset.id}_fixsnap_{batch.id}.parquet")
-        shutil.copyfile(dataset.parquet_path, snapshot)
+        if frame is None:
+            shutil.copyfile(dataset.parquet_path, snapshot)
+        else:
+            frame.reset_index(drop=True).to_parquet(snapshot, index=False)
         self.fix_batches.update(batch, snapshot_path=str(snapshot))
         return batch
 

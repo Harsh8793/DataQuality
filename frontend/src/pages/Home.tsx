@@ -2,7 +2,7 @@ import { Database, FileCheck2, Layers, Sparkles, Trash2, Upload } from "lucide-r
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { KpiCard } from "@/components/charts/KpiCard";
+import { KpiCard, type KpiTone } from "@/components/charts/KpiCard";
 import { ApprovalBadge } from "@/components/common/ApprovalBadge";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,23 @@ import { Badge } from "@/components/ui/badge";
 import { EmptyState, Spinner } from "@/components/ui/misc";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDatasets, useDeleteDataset } from "@/hooks/useDatasets";
+import { useLlmStatus } from "@/hooks/useSystem";
 import { formatDate } from "@/lib/utils";
-import type { DatasetSummary } from "@/types/models";
+import type { DatasetSummary, LlmStatusKind } from "@/types/models";
+
+/** Icon-chip colour for each AI layer state. */
+const llmTones: Record<LlmStatusKind, KpiTone> = {
+  active: "success",
+  degraded: "warning",
+  unconfigured: "danger",
+  disabled: "muted",
+};
 
 /** Landing dashboard: KPIs, quick actions and recent datasets. */
 export function Home() {
   const { user } = useAuth();
   const { data, isLoading } = useDatasets();
+  const { data: llm, isLoading: llmLoading, isError: llmError } = useLlmStatus();
   const del = useDeleteDataset();
   const [pending, setPending] = useState<DatasetSummary | null>(null);
 
@@ -27,6 +37,14 @@ export function Home() {
   const datasets = data?.items ?? [];
   const cleaned = datasets.filter((d) => d.is_cleaned).length;
   const totalRows = datasets.reduce((s, d) => s + d.row_count, 0);
+
+  // The AI tile reports the real state of the LLM layer: unreachable backend
+  // and a reachable-but-failing Groq are distinct, and neither reads "Active".
+  const copilot = llmLoading
+    ? { value: "Checking…", tone: "muted" as KpiTone, hint: undefined }
+    : llmError || !llm
+      ? { value: "Unreachable", tone: "danger" as KpiTone, hint: "Could not reach the API." }
+      : { value: llm.label, tone: llmTones[llm.status], hint: llm.detail };
 
   return (
     <div className="space-y-6">
@@ -46,7 +64,14 @@ export function Home() {
         <KpiCard label="Datasets" value={datasets.length} icon={Database} />
         <KpiCard label="Total Rows" value={totalRows} icon={Layers} />
         <KpiCard label="Cleaned" value={cleaned} icon={FileCheck2} />
-        <KpiCard label="AI Copilot" value={"Active"} icon={Sparkles} format="text" />
+        <KpiCard
+          label="AI Copilot"
+          value={copilot.value}
+          icon={Sparkles}
+          format="text"
+          tone={copilot.tone}
+          hint={copilot.hint}
+        />
       </div>
 
       <Card>

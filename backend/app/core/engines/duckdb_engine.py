@@ -101,6 +101,13 @@ class DuckDBEngine:
             con.close()
 
         result_df = result_df.head(self.MAX_ROWS)
+        # Datetime results must leave as strings — Timestamp isn't JSON
+        # serializable, and every consumer of QueryResult goes over the wire.
+        for column in result_df.columns:
+            if pd.api.types.is_datetime64_any_dtype(result_df[column]):
+                result_df[column] = result_df[column].dt.strftime("%Y-%m-%d %H:%M:%S").str.replace(
+                    " 00:00:00", "", regex=False
+                )
         rows = result_df.astype(object).where(pd.notna(result_df), None).to_dict(orient="records")
         return QueryResult(
             columns=[str(c) for c in result_df.columns],

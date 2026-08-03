@@ -180,13 +180,17 @@ class Profiler:
 
     def _infer_by_pattern(self, sample: pd.Series) -> str | None:
         """Return a semantic type if >=70% of sampled values match a pattern."""
+        # Order matters: a date like "2024-01-05" also satisfies the phone
+        # pattern (8 digits with separators), so DATE must be tested first or
+        # every ISO date column is mis-typed as a phone number — which then
+        # flags it as PII and hides it from every time-series chart.
         checks = (
             (SemanticType.EMAIL, is_valid_email),
             (SemanticType.URL, is_valid_url),
+            (SemanticType.DATE, is_valid_date),
             (SemanticType.ZIP, is_valid_zip),
             (SemanticType.PHONE, is_valid_phone),
             (SemanticType.CURRENCY, looks_like_currency),
-            (SemanticType.DATE, is_valid_date),
         )
         total = len(sample)
         for sem, fn in checks:

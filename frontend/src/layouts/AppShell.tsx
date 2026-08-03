@@ -1,5 +1,4 @@
 import {
-  BarChart3,
   Database,
   LayoutDashboard,
   LogOut,
@@ -18,7 +17,6 @@ const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/upload", label: "Upload", icon: Upload },
   { to: "/datasets", label: "Datasets", icon: Database },
-  { to: "/history", label: "History", icon: BarChart3 },
 ];
 
 /** Persistent application shell: sidebar + topbar + routed content area. */
