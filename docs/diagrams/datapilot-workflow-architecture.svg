@@ -1,0 +1,291 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="2048" viewBox="0 0 3000 2048" font-family="Segoe UI, Arial, sans-serif">
+<defs>
+<marker id="m0F6CBD" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#0F6CBD"/></marker>
+<marker id="m7A4FBF" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#7A4FBF"/></marker>
+<marker id="m0F7B8A" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#0F7B8A"/></marker>
+<marker id="m8A5A00" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#8A5A00"/></marker>
+<marker id="m7A7875" viewBox="0 0 12 12" refX="9.5" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1.6 L10.5 6 L1 10.4 z" fill="#7A7875"/></marker>
+</defs>
+<rect width="3000" height="100%" fill="#FFFFFF"/>
+<rect x="60" y="46" width="7" height="60" rx="3.5" fill="#0F6CBD"/>
+<text x="86" y="80" font-family="Segoe UI, Arial, sans-serif" font-size="38" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">DataPilot AI — workflow architecture</text>
+<text x="86" y="110" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Components in their architectural place; numbered arrows carry the dataflow.</text>
+<text x="2940" y="78" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#4A4845" text-anchor="end" letter-spacing="0.0">Workflow diagram</text>
+<text x="2940" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#7A7875" text-anchor="end" letter-spacing="0.0">As built · backend/app</text>
+<path d="M60 132 H2940" stroke="#E6E4E2" stroke-width="1.6"/>
+<rect x="60" y="190" width="2880" height="196" rx="14" fill="#F7FAFD" stroke="#0F6CBD" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="78" y="175" width="208.0" height="30" rx="15" fill="#0F6CBD"/>
+<text x="182.0" y="195" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">CLIENT  ·  REACT SPA</text>
+<rect x="84" y="242" width="300" height="118" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="84" y="242" width="4.5" height="118" rx="2.2" fill="#0F6CBD"/>
+<g fill="none" stroke="#0F6CBD" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="118" cy="296.75" r="4.5"/><path d="M108.0 313.5 a10.0 8.75 0 0 1 20.0 0"/></g>
+<text x="142" y="299.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Business user</text>
+<text x="142" y="322.5" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Analyst · Steward</text>
+<text x="408" y="266" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Dataset workspace — one tab per job</text>
+<rect x="408.0" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="408.0" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="422.0" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Overview</text>
+<rect x="762.8571428571429" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="762.8571428571429" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="776.8571428571429" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Quality</text>
+<rect x="1117.7142857142858" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="1117.7142857142858" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="1131.7142857142858" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Edit data</text>
+<rect x="1472.5714285714284" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="1472.5714285714284" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="1486.5714285714284" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Dashboard</text>
+<rect x="1827.4285714285713" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="1827.4285714285713" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="1841.4285714285713" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Chat</text>
+<rect x="2182.285714285714" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="2182.285714285714" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="2196.285714285714" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Governance</text>
+<rect x="2537.142857142857" y="286" width="342.85714285714283" height="56" rx="7" fill="#F2F8FD" stroke="#D9D7D4" stroke-width="1.3"/>
+<rect x="2537.142857142857" y="286" width="3.5" height="56" rx="1.8" fill="#0F6CBD"/>
+<text x="2551.142857142857" y="319.0" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Reports</text>
+<rect x="60" y="452" width="749" height="806" rx="14" fill="#F7FAFD" stroke="#0F6CBD" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="78" y="437" width="121.0" height="30" rx="15" fill="#0F6CBD"/>
+<text x="138.5" y="457" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">1 · INGEST</text>
+<rect x="845" y="452" width="749" height="806" rx="14" fill="#F7FAFD" stroke="#0F6CBD" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="863" y="437" width="225.39999999999998" height="30" rx="15" fill="#0F6CBD"/>
+<text x="975.7" y="457" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">2 · AUTOMATIC ANALYSIS</text>
+<rect x="1630" y="452" width="749" height="806" rx="14" fill="#F7FAFD" stroke="#0F6CBD" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="1648" y="437" width="208.0" height="30" rx="15" fill="#0F6CBD"/>
+<text x="1752.0" y="457" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">3 · INTERACTIVE WORK</text>
+<rect x="2419" y="452" width="521" height="806" rx="14" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="2437" y="437" width="129.7" height="30" rx="15" fill="#7A4FBF"/>
+<text x="2501.85" y="457" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">EXTERNAL AI</text>
+<rect x="82" y="506" width="705" height="74" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="82" y="506" width="4.5" height="74" rx="2.2" fill="#0F6CBD"/>
+<g fill="none" stroke="#0F6CBD" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M114.125 533.0 h-5.625 a4.5 4.5 0 0 0 -4.5 4.5 v5.5 a4.5 4.5 0 0 1 -4.5 4.5 a4.5 4.5 0 0 1 4.5 4.5 v5.5 a4.5 4.5 0 0 0 4.5 4.5 h5.625"/><path d="M117.875 533.0 h5.625 a4.5 4.5 0 0 1 4.5 4.5 v5.5 a4.5 4.5 0 0 0 4.5 4.5 a4.5 4.5 0 0 0 -4.5 4.5 v5.5 a4.5 4.5 0 0 1 -4.5 4.5 h-5.625"/></g>
+<text x="140" y="541.0" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">POST /api/v1/datasets</text>
+<text x="140" y="563.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">FastAPI · multipart upload</text>
+<rect x="82" y="614" width="705" height="84" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="82" y="614" width="4.5" height="84" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M116 643.5 l10.75 6.25 v12.5 l-10.75 6.25 l-10.75 -6.25 v-12.5 z"/><circle cx="116" cy="656.0" r="3.25"/></g>
+<text x="140" y="654.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">UploadAgent</text>
+<text x="140" y="677.5" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">validate · then hand to the loader</text>
+<rect x="82" y="732" width="705" height="96" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="82" y="732" width="4.5" height="96" rx="2.2" fill="#0F7B8A"/>
+<g fill="none" stroke="#0F7B8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="116" cy="780.0" r="5.25"/><path d="M123.25 780.0 L127.5 780.0"/><path d="M119.625 786.2786841774372 L121.75 789.959292143521"/><path d="M112.375 786.2786841774372 L110.25 789.959292143521"/><path d="M108.75 780.0 L104.5 780.0"/><path d="M112.375 773.7213158225628 L110.25 770.040707856479"/><path d="M119.625 773.7213158225628 L121.75 770.040707856479"/></g>
+<text x="140" y="778.5" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">DataLoader</text>
+<text x="140" y="801.5" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">chardet encoding · Sniffer delimiter · CSV/Excel/JSON/Parquet</text>
+<rect x="82" y="854" width="705" height="118" rx="9" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.4"/>
+<text x="102" y="882" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#0A4C86" text-anchor="start" letter-spacing="0.0">Then three writes</text>
+<text x="102" y="908" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Original file → uploads/</text>
+<text x="102" y="930" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Working copy → parquet/</text>
+<text x="102" y="952" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Facts about it → SQLite</text>
+<path d="M434.5 580 L434.5 612" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="451.5" cy="596.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="451.5" y="601.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<path d="M434.5 698 L434.5 730" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="451.5" cy="714.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="451.5" y="719.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<path d="M434.5 828 L434.5 852" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="451.5" cy="840.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="451.5" y="845.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<rect x="82" y="1006" width="705" height="104" rx="9" fill="#FFFFFF" stroke="#BFDCF2" stroke-width="1.4"/>
+<text x="102" y="1034" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#0A4C86" text-anchor="start" letter-spacing="0.0">Handoff</text>
+<text x="102" y="1058.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Nothing else is asked of the user — the working copy becomes the input to column 2 and</text>
+<text x="102" y="1077.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">analysis starts on its own.</text>
+<rect x="82" y="1130" width="705" height="124" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<text x="102" y="1158" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Rejected before any parsing</text>
+<text x="102" y="1184" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Extension outside csv · xlsx · xls · json · parquet</text>
+<text x="102" y="1206" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Larger than 50 MB</text>
+<text x="102" y="1228" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Empty body, or no data rows once parsed</text>
+<path d="M434.5 972 L434.5 1004" fill="none" stroke="#0F6CBD" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<rect x="867" y="506" width="705" height="74" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="867" y="506" width="4.5" height="74" rx="2.2" fill="#0F6CBD"/>
+<g fill="none" stroke="#0F6CBD" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M899.125 533.0 h-5.625 a4.5 4.5 0 0 0 -4.5 4.5 v5.5 a4.5 4.5 0 0 1 -4.5 4.5 a4.5 4.5 0 0 1 4.5 4.5 v5.5 a4.5 4.5 0 0 0 4.5 4.5 h5.625"/><path d="M902.875 533.0 h5.625 a4.5 4.5 0 0 1 4.5 4.5 v5.5 a4.5 4.5 0 0 0 4.5 4.5 a4.5 4.5 0 0 0 -4.5 4.5 v5.5 a4.5 4.5 0 0 1 -4.5 4.5 h-5.625"/></g>
+<text x="925" y="541.0" font-family="Consolas, monospace" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">POST /datasets/{id}/analyze</text>
+<text x="925" y="563.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">also re-runs after every change</text>
+<rect x="867" y="614" width="705" height="344" rx="10" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="1.8"/>
+<rect x="887" y="632" width="116.5" height="24" rx="12.0" fill="#7A4FBF"/>
+<text x="945.25" y="648.6" font-family="Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.9">ORCHESTRATOR</text>
+<text x="1017.5" y="651" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">SimpleCoordinator</text>
+<text x="887" y="684" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">one shared context · failures isolated</text>
+<rect x="887" y="702" width="665" height="68" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="887" y="702" width="4.5" height="68" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="919.0" cy="734.0" r="7.249999999999999"/><path d="M924.5 739.5 L933.5 748.5"/></g>
+<text x="945" y="734.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Profiling agent</text>
+<text x="945" y="756.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">column types + statistics</text>
+<rect x="887" y="782" width="665" height="68" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="887" y="782" width="4.5" height="68" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="921" cy="816.0" r="10.25"/><path d="M916.25 816.0 l3.75 4.0 l6.75 -7.5"/></g>
+<text x="945" y="814.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Quality agent</text>
+<text x="945" y="836.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">20+ checks → 6-part score</text>
+<path d="M1219.5 770 L1219.5 782" fill="none" stroke="#7A4FBF" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A4FBF)"/>
+<rect x="887" y="862" width="665" height="68" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="887" y="862" width="4.5" height="68" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M921 883.5 l10.25 4.25 v9.0 q0 7.75 -10.25 11.75 q-10.25 -4.0 -10.25 -11.75 v-9.0 z"/></g>
+<text x="945" y="894.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Governance agent</text>
+<text x="945" y="916.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">sensitivity + tier</text>
+<path d="M1219.5 850 L1219.5 862" fill="none" stroke="#7A4FBF" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A4FBF)"/>
+<rect x="867" y="982" width="344.5" height="88" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="867" y="982" width="4.5" height="88" rx="2.2" fill="#0F7B8A"/>
+<g fill="none" stroke="#0F7B8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="901" cy="1026.0" r="5.25"/><path d="M908.25 1026.0 L912.5 1026.0"/><path d="M904.625 1032.278684177437 L906.75 1035.959292143521"/><path d="M897.375 1032.278684177437 L895.25 1035.959292143521"/><path d="M893.75 1026.0 L889.5 1026.0"/><path d="M897.375 1019.7213158225628 L895.25 1016.040707856479"/><path d="M904.625 1019.7213158225628 L906.75 1016.040707856479"/></g>
+<text x="925" y="1024.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Profiler</text>
+<text x="925" y="1046.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">types · stats</text>
+<rect x="1227.5" y="982" width="344.5" height="88" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1227.5" y="982" width="4.5" height="88" rx="2.2" fill="#0F7B8A"/>
+<g fill="none" stroke="#0F7B8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="1261.5" cy="1026.0" r="5.25"/><path d="M1268.75 1026.0 L1273.0 1026.0"/><path d="M1265.125 1032.278684177437 L1267.25 1035.959292143521"/><path d="M1257.875 1032.278684177437 L1255.75 1035.959292143521"/><path d="M1254.25 1026.0 L1250.0 1026.0"/><path d="M1257.875 1019.7213158225628 L1255.75 1016.040707856479"/><path d="M1265.125 1019.7213158225628 L1267.25 1016.040707856479"/></g>
+<text x="1285.5" y="1024.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">QualityEngine + Scorer</text>
+<text x="1285.5" y="1046.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">checks · weighting</text>
+<rect x="867" y="1094" width="705" height="106" rx="9" fill="#FFFBF3" stroke="#E8C48A" stroke-width="1.5"/>
+<text x="887" y="1122" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#8A5A00" text-anchor="start" letter-spacing="0.0">Approval gate</text>
+<text x="887" y="1146.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Score 75+ cleared automatically. Below 75 the dataset is held as pending until a human</text>
+<text x="887" y="1165.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">approves or rejects it.</text>
+<path d="M1219.5 580 L1219.5 612" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="1236.5" cy="596.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="1236.5" y="601.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<path d="M1219.5 958 L1219.5 980" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="1236.5" cy="969.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="1236.5" y="974.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<path d="M1219.5 1070 L1219.5 1092" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="1236.5" cy="1081.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="1236.5" y="1086.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">8</text>
+<rect x="1652" y="506" width="705" height="108" rx="9" fill="#F2F8FD" stroke="#BFDCF2" stroke-width="1.4"/>
+<text x="1672" y="532" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#0A4C86" text-anchor="start" letter-spacing="0.0">On-demand endpoints</text>
+<text x="1672" y="556" font-family="Consolas, monospace" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· POST /quality/issues/{id}/fix</text>
+<text x="1672" y="575" font-family="Consolas, monospace" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· POST /validations/propose</text>
+<text x="1672" y="594" font-family="Consolas, monospace" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· POST /chat</text>
+<text x="1672" y="613" font-family="Consolas, monospace" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· POST /dashboard/command</text>
+<rect x="1652" y="648" width="705" height="70" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1652" y="648" width="4.5" height="70" rx="2.2" fill="#0F7B8A"/>
+<g fill="none" stroke="#0F7B8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1674.75 694.25 L1688.5 680.5"/><path d="M1688.0 679.75 a6.25 6.25 0 1 0 8.25 -8.25 l-5.0 5.0 l-3.75 -3.75 z"/></g>
+<text x="1710" y="681.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Fix path</text>
+<text x="1710" y="703.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">guarded · undoable · re-analyses</text>
+<rect x="1652" y="730" width="705" height="70" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1652" y="730" width="4.5" height="70" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="1686" cy="765.0" r="10.25"/><path d="M1681.25 765.0 l3.75 4.0 l6.75 -7.5"/></g>
+<text x="1710" y="763.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Validation path</text>
+<text x="1710" y="785.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">AI drafts the rule, you approve it</text>
+<rect x="1652" y="812" width="705" height="70" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1652" y="812" width="4.5" height="70" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1673.5 837.25 h25 v15.0 h-13.750000000000002 l-6.0 6.0 v-6.0 h-2.5 z"/></g>
+<text x="1710" y="845.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">ChatAgent</text>
+<text x="1710" y="867.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">plan → query → narrate</text>
+<rect x="1652" y="894" width="705" height="70" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1652" y="894" width="4.5" height="70" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1675.0 940.25 V929.0"/><path d="M1686 940.25 V920.0"/><path d="M1697.0 940.25 V933.5"/></g>
+<text x="1710" y="927.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">DashboardAgent</text>
+<text x="1710" y="949.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">recommends, then builds on request</text>
+<rect x="1652" y="982" width="705" height="88" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="1652" y="982" width="4.5" height="88" rx="2.2" fill="#0F7B8A"/>
+<g fill="none" stroke="#0F7B8A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="1686" cy="1026.0" r="5.25"/><path d="M1693.25 1026.0 L1697.5 1026.0"/><path d="M1689.625 1032.278684177437 L1691.75 1035.959292143521"/><path d="M1682.375 1032.278684177437 L1680.25 1035.959292143521"/><path d="M1678.75 1026.0 L1674.5 1026.0"/><path d="M1682.375 1019.7213158225628 L1680.25 1016.040707856479"/><path d="M1689.625 1019.7213158225628 L1691.75 1016.040707856479"/></g>
+<text x="1710" y="1024.0" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">DuckDB · Fixer · ChartRecommender</text>
+<text x="1710" y="1046.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">read-only SQL · fixed repair strategies · chart specs</text>
+<rect x="1652" y="1094" width="705" height="106" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<text x="1672" y="1122" font-family="Segoe UI, Arial, sans-serif" font-size="16.5" font-weight="700" fill="#0A4C86" text-anchor="start" letter-spacing="0.0">Every change loops back</text>
+<text x="1672" y="1146.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A fix, an edit or a new rule rewrites the working copy and re-triggers step 5, so the score</text>
+<text x="1672" y="1165.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">is never stale.</text>
+<path d="M2004.5 614 L2004.5 646" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="2021.5" cy="630.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="2021.5" y="635.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">9</text>
+<path d="M2004.5 958 L2004.5 980" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="2021.5" cy="969.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="2021.5" y="974.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">10</text>
+<rect x="2441" y="506" width="477" height="96" rx="9" fill="#FFFFFF" stroke="#D9D7D4" stroke-width="1.4"/>
+<rect x="2441" y="506" width="4.5" height="96" rx="2.2" fill="#7A4FBF"/>
+<g fill="none" stroke="#7A4FBF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2475 541.5 l3.375 9.125 l9.125 3.375 l-9.125 3.375 l-3.375 9.125 l-3.375 -9.125 l-9.125 -3.375 l9.125 -3.375 z"/></g>
+<text x="2499" y="553.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Groq LLM</text>
+<text x="2499" y="577.0" font-family="Segoe UI, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">langchain-groq · single client</text>
+<rect x="2441" y="626" width="477" height="250" rx="9" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.4"/>
+<text x="2461" y="654" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Called for</text>
+<text x="2461" y="682" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Governance descriptions</text>
+<text x="2461" y="709" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Issue explanations</text>
+<text x="2461" y="736" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Data story</text>
+<text x="2461" y="763" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Rule from a sentence</text>
+<text x="2461" y="790" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Chat plan + narration</text>
+<text x="2461" y="817" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Dashboard command</text>
+<rect x="2441" y="896" width="477" height="176" rx="9" fill="#FFFFFF" stroke="#7A4FBF" stroke-width="1.4"/>
+<text x="2461" y="924" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">Never called for</text>
+<text x="2461" y="952" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· The quality score</text>
+<text x="2461" y="979" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· The classification</text>
+<text x="2461" y="1006" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· What a fix changes</text>
+<text x="2461" y="1033" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">· Manual cell edits</text>
+<rect x="2441" y="1092" width="477" height="108" rx="9" fill="#FAF7FE" stroke="#7A4FBF" stroke-width="1.6"/>
+<text x="2461" y="1120" font-family="Segoe UI, Arial, sans-serif" font-size="15.5" font-weight="700" fill="#7A4FBF" text-anchor="start" letter-spacing="0.0">If it is unavailable</text>
+<text x="2461" y="1144.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Every path above falls back to fixed code. Nothing in the</text>
+<text x="2461" y="1163.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">product becomes unusable.</text>
+<path d="M1552 896 L1612 896 L1612 1220 L2399 1220 L2399 554 L2441 554" fill="none" stroke="#7A4FBF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A4FBF)" stroke-dasharray="8 6"/>
+<circle cx="2005.5" cy="1203.0" r="14" fill="#7A4FBF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="2005.5" y="1208.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">7</text>
+<path d="M2357 765 L2441 765" fill="none" stroke="#7A4FBF" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A4FBF)" stroke-dasharray="8 6"/>
+<path d="M2357 847 L2441 847" fill="none" stroke="#7A4FBF" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A4FBF)" stroke-dasharray="8 6"/>
+<rect x="60" y="1306" width="2880" height="238" rx="14" fill="#FFFBF3" stroke="#8A5A00" stroke-width="1.6" stroke-dasharray="8 6"/>
+<rect x="78" y="1291" width="94.89999999999999" height="30" rx="15" fill="#8A5A00"/>
+<text x="125.44999999999999" y="1311" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.2">STORAGE</text>
+<rect x="84.0" y="1360" width="924.0" height="150" rx="10" fill="#FFFFFF" stroke="#8A5A00" stroke-width="1.6"/>
+<g fill="none" stroke="#8A5A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M108.75 1377.5 h11.0 l7.5 7.5 v17.5 h-18.5 z"/></g>
+<text x="142.0" y="1396" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Original uploads</text>
+<rect x="104.0" y="1410" width="884.0" height="30" rx="6" fill="#FFFBF3" stroke="#E8C48A" stroke-width="1.2"/>
+<text x="116.0" y="1430" font-family="Consolas, monospace" font-size="14.5" font-weight="600" fill="#8A5A00" text-anchor="start" letter-spacing="0.0">data/uploads/</text>
+<text x="104.0" y="1464.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Exact copy of what was sent. Proof only — never read again, never changed.</text>
+<rect x="1038.0" y="1360" width="924.0" height="150" rx="10" fill="#FFFFFF" stroke="#8A5A00" stroke-width="1.6"/>
+<g fill="none" stroke="#8A5A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1072.0 1377.5 l10.75 6.25 v12.5 l-10.75 6.25 l-10.75 -6.25 v-12.5 z"/><path d="M1072.0 1377.5 v12.5 M1072.0 1390 l10.75 -6.25 M1072.0 1390 l-10.75 -6.25" opacity="0.6"/></g>
+<text x="1096.0" y="1396" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Working copy</text>
+<rect x="1058.0" y="1410" width="884.0" height="30" rx="6" fill="#FFFBF3" stroke="#E8C48A" stroke-width="1.2"/>
+<text x="1070.0" y="1430" font-family="Consolas, monospace" font-size="14.5" font-weight="600" fill="#8A5A00" text-anchor="start" letter-spacing="0.0">data/parquet/&lt;id&gt;.parquet</text>
+<text x="1058.0" y="1464.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Columnar. Every read, query and rewrite goes through this file.</text>
+<rect x="1992.0" y="1360" width="924.0" height="150" rx="10" fill="#FFFFFF" stroke="#8A5A00" stroke-width="1.6"/>
+<g fill="none" stroke="#8A5A00" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="2026.0" cy="1381.5" rx="10.0" ry="3.5000000000000004"/><path d="M2016.0 1381.5 v17.0 a10.0 3.5000000000000004 0 0 0 20.0 0 v-17.0"/></g>
+<text x="2050.0" y="1396" font-family="Segoe UI, Arial, sans-serif" font-size="17.5" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Catalogue</text>
+<rect x="2012.0" y="1410" width="884.0" height="30" rx="6" fill="#FFFBF3" stroke="#E8C48A" stroke-width="1.2"/>
+<text x="2024.0" y="1430" font-family="Consolas, monospace" font-size="14.5" font-weight="600" fill="#8A5A00" text-anchor="start" letter-spacing="0.0">SQLite</text>
+<text x="2012.0" y="1464.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Datasets, findings, fixes, edits, rules, chat, history. Facts about the data — never the rows.</text>
+<path d="M374.5 1258 L374.5 1306" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m8A5A00)"/>
+<path d="M1159.5 1258 L1159.5 1306" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m8A5A00)"/>
+<path d="M1944.5 1258 L1944.5 1306" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m8A5A00)"/>
+<text x="384.5" y="1298" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#8A5A00" text-anchor="start" letter-spacing="0.0">writes</text>
+<path d="M1560.0 1306 L1560.0 1258" fill="none" stroke="#7A7875" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A7875)" stroke-dasharray="8 6"/>
+<text x="1572.0" y="1298" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#7A7875" text-anchor="start" letter-spacing="0.0">read back</text>
+<path d="M234 386 L234 436 L434.5 436 L434.5 504" fill="none" stroke="#0F6CBD" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m0F6CBD)"/>
+<circle cx="334.25" cy="419.0" r="14" fill="#0F6CBD" stroke="#FFFFFF" stroke-width="2"/>
+<text x="334.25" y="424.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<path d="M2204.5 452 L2204.5 386" fill="none" stroke="#7A7875" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#m7A7875)" stroke-dasharray="8 6"/>
+<circle cx="2221.5" cy="419.0" r="14" fill="#7A7875" stroke="#FFFFFF" stroke-width="2"/>
+<text x="2221.5" y="424.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">11</text>
+<path d="M60 1606 H2940" stroke="#E6E4E2" stroke-width="1.6"/>
+<text x="60" y="1642" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#1B1A19" text-anchor="start" letter-spacing="0.0">Dataflow</text>
+<text x="200" y="1642" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">the numbered path above, in order</text>
+<circle cx="77.0" cy="1693" r="14" fill="#0F6CBD"/>
+<text x="77.0" y="1698.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">1</text>
+<text x="104.0" y="1698.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">A user drops a file into the workspace. Anything not in the allowed formats, over 50 MB or empty is refused before a</text>
+<text x="104.0" y="1717.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">row is read.</text>
+<circle cx="77.0" cy="1775" r="14" fill="#0F6CBD"/>
+<text x="77.0" y="1780.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">2</text>
+<text x="104.0" y="1780.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The upload endpoint hands the bytes to the UploadAgent.</text>
+<circle cx="77.0" cy="1857" r="14" fill="#0F6CBD"/>
+<text x="77.0" y="1862.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">3</text>
+<text x="104.0" y="1862.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">DataLoader detects the encoding and, for CSVs, the real separator, then parses to a table. Column names are tidied so</text>
+<text x="104.0" y="1881.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">they can be stored.</text>
+<circle cx="77.0" cy="1939" r="14" fill="#0F6CBD"/>
+<text x="77.0" y="1944.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">4</text>
+<text x="104.0" y="1944.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Three writes: the original file for provenance, the columnar working copy, and the facts about the file in SQLite.</text>
+<circle cx="1050.3333333333335" cy="1693" r="14" fill="#0F6CBD"/>
+<text x="1050.3333333333335" y="1698.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">5</text>
+<text x="1077.3333333333335" y="1698.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Analysis is triggered automatically. SimpleCoordinator runs the three agents in order over one shared context,</text>
+<text x="1077.3333333333335" y="1717.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">isolating any failure.</text>
+<circle cx="1050.3333333333335" cy="1775" r="14" fill="#0F6CBD"/>
+<text x="1050.3333333333335" y="1780.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">6</text>
+<text x="1077.3333333333335" y="1780.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">The profiling and quality agents call the deterministic engines — types, statistics, 20+ checks and the weighted</text>
+<text x="1077.3333333333335" y="1799.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">six-part score.</text>
+<circle cx="1050.3333333333335" cy="1857" r="14" fill="#0F6CBD"/>
+<text x="1050.3333333333335" y="1862.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">7</text>
+<text x="1077.3333333333335" y="1862.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Only the governance agent calls the LLM, and only to write descriptions and rationale. The classification itself is</text>
+<text x="1077.3333333333335" y="1881.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">decided by rules.</text>
+<circle cx="1050.3333333333335" cy="1939" r="14" fill="#0F6CBD"/>
+<text x="1050.3333333333335" y="1944.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">8</text>
+<text x="1077.3333333333335" y="1944.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Your saved rules are applied, ignored issues removed, the score recalculated and everything persisted. Under 75 it</text>
+<text x="1077.3333333333335" y="1963.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">waits for human approval.</text>
+<circle cx="2023.6666666666667" cy="1693" r="14" fill="#0F6CBD"/>
+<text x="2023.6666666666667" y="1698.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">9</text>
+<text x="2050.666666666667" y="1698.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">From the tabs, the user fixes an issue, drafts a rule, asks a question or requests a widget.</text>
+<circle cx="2023.6666666666667" cy="1775" r="14" fill="#0F6CBD"/>
+<text x="2023.6666666666667" y="1780.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">10</text>
+<text x="2050.666666666667" y="1780.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Those paths use DuckDB read-only, the fixed repair strategies, or the chart recommender. A fix rewrites the working</text>
+<text x="2050.666666666667" y="1799.5" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">copy and re-triggers step 5.</text>
+<circle cx="2023.6666666666667" cy="1857" r="14" fill="#0F6CBD"/>
+<text x="2023.6666666666667" y="1862.5" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.0">11</text>
+<text x="2050.666666666667" y="1862.0" font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="400" fill="#4A4845" text-anchor="start" letter-spacing="0.0">Every tab reads back what was already computed, so the pages open instantly and cost nothing.</text>

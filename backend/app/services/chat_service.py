@@ -38,9 +38,16 @@ class ChatService(BaseService, DatasetContextMixin):
         self.profiling_agent.run(ctx)  # gives the planner semantic column types
 
         # Recent turns give the agent conversation memory for follow-ups
-        # ("generate the graph", "now filter that to 2024").
+        # ("generate the graph", "now filter that to 2024"). The SQL and the
+        # columns it returned matter as much as the prose: they let the planner
+        # amend the previous query instead of guessing it back from the answer.
         history = [
-            {"role": m.role, "content": m.content, "sql": m.generated_sql or ""}
+            {
+                "role": m.role,
+                "content": m.content,
+                "sql": m.generated_sql or "",
+                "columns": (m.result_preview or {}).get("columns") or [],
+            }
             for m in self.messages.list_for_session(session.id)
         ][-8:]
         answer = self.chat_agent.ask(ctx, payload.question, history=history)

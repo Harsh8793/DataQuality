@@ -403,6 +403,24 @@ function FilterSelect({
   );
 }
 
+// Duplicate checks count the *redundant* copies (what a fix would remove) but
+// the drill-down lists every row in each duplicate group, originals included —
+// otherwise there's nothing to compare against. The two numbers legitimately
+// differ, so the modal says why rather than leaving the user to spot it.
+const DUPLICATE_CHECKS = new Set(["duplicate_rows", "duplicate_ids"]);
+
+function affectedDescription(issue: QualityIssue): string {
+  if (issue.check_key === "duplicate_columns")
+    return `Compare "${issue.column_name}" with the column it duplicates — the values should be identical in every row.`;
+  if (issue.column_level)
+    return `Column-level issue on "${issue.column_name}" — it applies to the whole column; its values are shown below.`;
+  if (DUPLICATE_CHECKS.has(issue.check_key))
+    return `${issue.count} redundant row(s). Every row in each duplicate group is listed below — originals included — so you can compare them. Fixing keeps the first of each group and drops the other ${issue.count}.`;
+  if (issue.column_name)
+    return `Column "${issue.column_name}" · ${issue.count} rows affected`;
+  return `${issue.count} rows affected`;
+}
+
 function IssueCard({
   issue,
   datasetId,
@@ -566,15 +584,7 @@ function IssueCard({
         onClose={() => setAffectedOpen(false)}
         wide
         title={issue.column_level ? `Column values — ${title}` : `Affected rows — ${title}`}
-        description={
-          issue.check_key === "duplicate_columns"
-            ? `Compare "${issue.column_name}" with the column it duplicates — the values should be identical in every row.`
-            : issue.column_level
-              ? `Column-level issue on "${issue.column_name}" — it applies to the whole column; its values are shown below.`
-              : issue.column_name
-                ? `Column "${issue.column_name}" · ${issue.count} rows affected`
-                : `${issue.count} rows affected`
-        }
+        description={affectedDescription(issue)}
       >
         <div className="mb-2 flex justify-end">
           <button

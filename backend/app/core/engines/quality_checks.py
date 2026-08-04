@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from app.constants.enums import Dimension, SemanticType, Severity
+from app.core.engines.affected import affected_mask
 from app.core.engines.profiler import DatasetProfile
 from app.validators.patterns import is_valid_date, is_valid_email, is_valid_phone, is_valid_url
 
@@ -251,7 +252,12 @@ def check_leading_trailing_spaces(df, profile):
 
 @register
 def check_case_inconsistency(df, profile):
-    """Flag categorical columns whose values differ only by letter case."""
+    """Flag categorical columns whose values differ only by letter case.
+
+    The count is the number of *rows* holding a non-canonical spelling, not the
+    number of extra spellings — the UI renders it as "N affected" next to a
+    drill-down of the offending rows, so it has to mean rows.
+    """
     findings = []
     for col in profile.columns:
         if col.semantic_type not in {SemanticType.CATEGORICAL, SemanticType.TEXT}:
@@ -261,16 +267,21 @@ def check_case_inconsistency(df, profile):
             continue
         collapsed = s.str.lower().str.strip().nunique()
         if collapsed < s.nunique():
+            count = int(affected_mask(df, "case_inconsistency", col.name).sum())
             findings.append(QualityFinding(
-                "case_inconsistency", Dimension.CONSISTENCY, Severity.LOW,
-                int(s.nunique() - collapsed), col.name,
+                "case_inconsistency", Dimension.CONSISTENCY, Severity.LOW, count, col.name,
             ))
     return findings
 
 
 @register
 def check_mixed_types(df, profile):
-    """Flag object columns that mix numbers and text values."""
+    """Flag object columns that mix numbers and text values.
+
+    The offenders are the *minority* type — in a mostly-text column the stray
+    numbers are the problem, not the other way round. That's what the fixer
+    quarantines and what the drill-down shows, so it's what gets counted.
+    """
     findings = []
     for name in df.select_dtypes(include="object").columns:
         s = df[name].dropna().astype(str)
@@ -279,8 +290,9 @@ def check_mixed_types(df, profile):
         numeric = s.str.match(r"^-?\d+(\.\d+)?$")
         frac = numeric.mean()
         if 0.1 < frac < 0.9:
+            count = int(affected_mask(df, "mixed_types", str(name)).sum())
             findings.append(QualityFinding(
-                "mixed_types", Dimension.CONSISTENCY, Severity.MEDIUM, int((~numeric).sum()), str(name),
+                "mixed_types", Dimension.CONSISTENCY, Severity.MEDIUM, count, str(name),
             ))
     return findings
 

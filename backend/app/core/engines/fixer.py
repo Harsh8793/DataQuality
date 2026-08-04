@@ -72,24 +72,33 @@ def apply_fix(df: pd.DataFrame, check_key: str, column: str | None) -> FixResult
 
     if check_key == "missing_values" or check_key == "blank_strings":
         if check_key == "blank_strings":
-            blank = s.notna() & (s.astype(str).str.strip() == "")
-            out.loc[blank, column] = None
+            # Only the blank cells are this issue's business. Pre-existing nulls
+            # belong to the missing_values issue and have their own card — filling
+            # them here would silently resolve an issue the user didn't click, and
+            # override it if they had deliberately chosen to ignore it. They're
+            # still nulled first so they don't skew the mode.
+            target = s.notna() & (s.astype(str).str.strip() == "")
+            out.loc[target, column] = None
             s = out[column]
-        nulls = int(s.isna().sum())
-        if nulls == 0:
-            return FixResult(out, "fill_missing", 0, "No missing values left to fill")
+            label = "blank"
+        else:
+            target = s.isna()
+            label = "missing"
+        n = int(target.sum())
+        if n == 0:
+            return FixResult(out, "fill_missing", 0, f"No {label} values left to fill")
         if _is_no_fill_column(column):
             # Contact/id columns can't be guessed — drop the incomplete rows.
-            out = out[s.notna()]
-            return FixResult(out, "drop_incomplete", nulls,
-                             f"Dropped {nulls} rows with missing {column} (cannot be imputed)")
+            out = out[~target]
+            return FixResult(out, "drop_incomplete", n,
+                             f"Dropped {n} rows with {label} {column} (cannot be imputed)")
         if pd.api.types.is_numeric_dtype(s):
             fill, strategy = s.median(), "median"
         else:
-            mode = s.mode()
+            mode = s.dropna().mode()
             fill, strategy = (mode.iloc[0] if not mode.empty else "Unknown"), "mode"
-        out[column] = s.fillna(fill)
-        return FixResult(out, "fill_missing", nulls, f"Filled {nulls} missing values with {strategy}")
+        out.loc[target, column] = fill
+        return FixResult(out, "fill_missing", n, f"Filled {n} {label} values with {strategy}")
 
     if check_key == "whitespace":
         text = s.astype(str)
@@ -164,7 +173,10 @@ def apply_fix(df: pd.DataFrame, check_key: str, column: str | None) -> FixResult
         return FixResult(out, "drop_duplicate_ids", n, f"Dropped {n} rows with duplicate {column}")
 
     if check_key in {"constant_column", "duplicate_columns"}:
+        # Column-level: one column removed, not len(df) rows changed. The finding
+        # counts columns too, and _diff_changes records exactly one entry — so
+        # "showing 1 of 1 changes" rather than "1 of 500".
         out = out.drop(columns=[column])
-        return FixResult(out, "drop_column", len(out), f"Dropped column {column}")
+        return FixResult(out, "drop_column", 1, f"Dropped column {column}")
 
     raise UnfixableIssueError("This issue has no automated fix.")

@@ -70,6 +70,18 @@ class ChatAgent(Agent):
         if self._wants_insights(ctx, question):
             return self._answer_with_insights(ctx, question)
 
+        # A column named that this dataset does not have is a mistake, not a hint:
+        # the planner would otherwise chart a different column and sound certain.
+        missing = self._unknown_columns(ctx, question)
+        if missing:
+            available = ", ".join(str(c) for c in list(ctx.df.columns)[:12])
+            more = "" if len(ctx.df.columns) <= 12 else f" (+{len(ctx.df.columns) - 12} more)"
+            return ChatAnswer(
+                answer=f"This dataset has no {' or '.join(missing)} column, so I'd only be "
+                       f"guessing which one you meant. Available columns: {available}{more}. "
+                       f"Try {self._example_asks(ctx)}."
+            )
+
         # Dataset-level "how many rows/records" → answer deterministically so the
         # LLM can't deflect with "please run a SQL query".
         if self._is_rowcount_question(question):
@@ -91,11 +103,21 @@ class ChatAgent(Agent):
 
         if plan.get("mode") == "sql" and plan.get("sql"):
             chart = plan.get("chart")
+            sql = self._drop_unasked_filters(ctx, question, str(plan["sql"]), history or [])
+            invented = self._invented_metric(ctx, sql)
+            if invented:
+                self.logger.info("Refused invented metric '%s' in: %s", invented, sql)
+                return ChatAnswer(
+                    answer=f"This dataset has no {invented.replace('_', ' ')} column, and I'm "
+                           "not going to make up a formula for it — the number would look "
+                           f"real and be wrong. Available columns: "
+                           f"{', '.join(str(c) for c in list(ctx.df.columns)[:12])}."
+                )
             # Deterministic backup query: if the planned SQL fails to execute
             # (bad column, uncast compare, Groq hiccup), retry with this.
             fallback_sql = self._pattern_sql(ctx, question.lower().strip().rstrip("!.?"))
             return self._answer_with_data(
-                ctx, question, str(plan["sql"]),
+                ctx, question, sql,
                 forced_chart=chart if chart in {"bar", "pie", "line", "scatter"} else None,
                 fallback_sql=fallback_sql,
             )
@@ -132,10 +154,28 @@ class ChatAgent(Agent):
 
     @staticmethod
     def _history_text(history: list[dict]) -> str:
-        """Compact the last few turns for the planner prompt."""
+        """Compact the last few turns for the planner prompt.
+
+        The SQL each turn actually ran is included, not just the narration. Without
+        it the planner has to reverse-engineer the query from prose, which invents
+        filters: after "total revenue in North America is $2.8M", a follow-up like
+        "now as a pie chart" would add WHERE region = 'north america' — a filter
+        nobody asked for.
+        """
         if not history:
             return "(none)"
-        lines = [f"{m.get('role')}: {str(m.get('content', ''))[:200]}" for m in history[-8:]]
+        lines: list[str] = []
+        for m in history[-8:]:
+            role = m.get("role")
+            lines.append(f"{role}: {str(m.get('content', ''))[:200]}")
+            if role != "assistant":
+                continue
+            sql = " ".join(str(m.get("sql") or "").split())
+            if sql:
+                lines.append(f"    [ran this SQL] {sql[:320]}")
+            cols = m.get("columns") or []
+            if cols:
+                lines.append(f"    [returned columns] {', '.join(map(str, cols[:8]))}")
         return "\n".join(lines)
 
     def _heuristic_plan(self, ctx: AgentContext, question: str, history: list[dict] | None = None) -> dict:
@@ -162,7 +202,7 @@ class ChatAgent(Agent):
             return {
                 "mode": "answer",
                 "answer": "Tell me what to plot — name a measure and a category, e.g. "
-                "\"bar graph of SALE_PRICE by PROP_CLASS\" or \"trend of SALE_PRICE over SALE_DATE\".",
+                          f"{self._example_asks(ctx)}.",
             }
         # Only query the data when the question actually looks data-related.
         if any(hint in q for hint in _DATA_HINTS):
@@ -289,6 +329,115 @@ class ChatAgent(Agent):
                 ):
                     best = (len(vs), c.name, vs)
         return (best[1], best[2]) if best else None
+
+    def _example_asks(self, ctx: AgentContext) -> str:
+        """Two example prompts built from THIS dataset's own columns.
+
+        The suggestion used to be hardcoded to SALE_PRICE / PROP_CLASS, columns
+        from an unrelated dataset. Users followed the advice literally, named
+        columns that do not exist here, and got a chart of something else.
+        """
+        numeric, categorical, temporal = None, None, None
+        if ctx.profile is not None:
+            for col in ctx.profile.columns:
+                st = col.semantic_type
+                if numeric is None and st in {"numeric", "integer", "currency"}:
+                    numeric = col.name
+                elif temporal is None and st in _TEMPORAL:
+                    temporal = col.name
+            # A bar chart needs a groupable column: "revenue by Full Name" would
+            # plot 147 one-row bars. Prefer a true category, and among those the
+            # richest one still worth charting — the fewest-values column is
+            # usually a flag like "notes", which makes a pointless example.
+            def groupable(types: set[str] | str) -> list:
+                wanted = {types} if isinstance(types, str) else types
+                return [c for c in ctx.profile.columns
+                        if c.semantic_type in wanted and 1 < c.distinct_count <= 25]
+
+            options = groupable("categorical") or groupable(_TEXTUAL)
+            if options:
+                categorical = max(options, key=lambda c: c.distinct_count).name
+        cols = [str(c) for c in ctx.df.columns]
+        numeric = numeric or (cols[0] if cols else "a measure")
+        categorical = categorical or (cols[-1] if cols else "a category")
+        parts = [f'"bar graph of {numeric} by {categorical}"']
+        if temporal:
+            parts.append(f'"trend of {numeric} over {temporal}"')
+        return " or ".join(parts)
+
+    # Only snake_case tokens count as "the user is naming a column". A bare
+    # capitalised word is not enough: "give me TOTALS by REGION" flagged TOTALS,
+    # which is English, not a column reference.
+    _IDENTIFIER = re.compile(r"\b[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)+\b")
+
+    def _unknown_columns(self, ctx: AgentContext, question: str) -> list[str]:
+        """Identifier-shaped names in the question that this dataset lacks.
+
+        Asked for "SALE_PRICE by PROP_CLASS" on a sales table, the planner
+        happily charted product by revenue instead — a confident answer to a
+        question nobody asked. Naming a column that does not exist is a mistake
+        worth surfacing, not silently substituting.
+        """
+        real = {str(c).lower() for c in ctx.df.columns}
+        real |= {n.replace("_", " ") for n in list(real)}
+        real |= {n.replace("_", "") for n in list(real)}
+        unknown = []
+        for token in self._IDENTIFIER.findall(question):
+            probe = token.lower()
+            if probe in real or probe.replace("_", " ") in real or probe.replace("_", "") in real:
+                continue
+            if token not in unknown:
+                unknown.append(token)
+        return unknown
+
+    _ALIAS = re.compile(r'\bAS\s+"?([A-Za-z_]\w*)"?', re.IGNORECASE)
+    _ARITH = re.compile(r"[/*+]|\s-\s")
+    # TRY_CAST("revenue" AS DOUBLE) puts a type where an alias would be.
+    _SQL_TYPES = {"double", "bigint", "integer", "int", "date", "timestamp", "varchar",
+                  "boolean", "decimal", "float", "real", "text", "time", "blob"}
+
+    def _invented_metric(self, ctx: AgentContext, sql: str) -> str | None:
+        """The name of a metric the planner computed but the dataset lacks.
+
+        Asked for "profit margin by region" — a column this table does not have —
+        the planner returned ``revenue / quantity AS profit_margin``. That is not
+        profit margin, it is unit price, and it was presented as fact. Inventing
+        a formula for a metric nobody defined is a guess, so it is refused rather
+        than answered.
+
+        Aggregates of one real column (``SUM(revenue) AS total_revenue``) and
+        share-of-total maths over the same column are untouched — only arithmetic
+        between two *different* columns aliased to a name the schema lacks.
+        """
+        real = {str(c).lower() for c in ctx.df.columns}
+        flat = {n.replace("_", "") for n in real}
+        bare = re.sub(r"'[^']*'", "''", sql)          # ignore string literals
+
+        # Two DIFFERENT columns either side of an operator is a derived metric.
+        # Only quoted references count: matching bare words would pick up the
+        # GROUP BY dimension and flag legitimate share-of-total maths.
+        derived = False
+        for op in self._ARITH.finditer(bare):
+            # Bound the window to this select-list item. A fixed character window
+            # swept in the GROUP BY dimension, which made legitimate
+            # share-of-total maths (SUM(x)/SUM(x)) look like two columns.
+            start = bare.rfind(",", 0, op.start()) + 1
+            ends = [i for i in (bare.find(",", op.end()),
+                                bare.upper().find(" FROM ", op.end())) if i != -1]
+            window = bare[start: min(ends) if ends else len(bare)]
+            operands = {c for c in real if re.search(rf'"{re.escape(c)}"', window, re.IGNORECASE)}
+            if len(operands) >= 2:
+                derived = True
+                break
+        if not derived:
+            return None
+
+        for alias in self._ALIAS.findall(bare):
+            low = alias.lower()
+            if low in self._SQL_TYPES or low in real or low.replace("_", "") in flat:
+                continue
+            return alias
+        return None
 
     def _mentioned_columns(self, ctx: AgentContext, q: str) -> tuple[set[str], list[str]]:
         """Return (numeric column names, columns mentioned in the question in order)."""
@@ -442,6 +591,60 @@ class ChatAgent(Agent):
     # ("FROM dataset WHERE gender") and silently skip the rewrite.
     _EQUALITY = re.compile(r"(?<![\w(])(?:\"([^\"]+)\"|([A-Za-z_]\w*))\s*=\s*'([^']*)'")
 
+    # Words that mark a message as amending the previous turn rather than asking
+    # something new. The filter guard below only runs for these.
+    _FOLLOWUP = (
+        "that", "those", "this", "it", "same", "again", "now", "instead", "only",
+        "top", "bottom", "first", "as a", "chart", "graph", "plot", "pie", "bar",
+        "line", "scatter", "what about", "how about", "break", "split",
+    )
+
+    def _drop_unasked_filters(self, ctx: AgentContext, question: str, sql: str,
+                              history: list[dict]) -> str:
+        """Remove equality filters that no turn in the conversation asked for.
+
+        The planner copies values out of its own previous *narration*. After
+        "The total revenue in North America is $2.9M", the follow-up "now show
+        that as a pie chart" comes back with ``WHERE region = 'North America'``
+        even though no turn ever filtered — which silently turns a breakdown of
+        every region into a single bar. Reproduced 3/3 runs, and telling the
+        model not to do it in the prompt did not stop it, so it is undone here.
+
+        Deliberately narrow: only on an amending message, only when the message
+        names no filterable value of its own, and only for values absent from
+        both the message and the previous query. A dropped filter becomes
+        ``1=1`` so the surrounding AND/WHERE structure stays valid.
+        """
+        prev_sql = ""
+        for m in reversed(history):
+            if m.get("role") == "assistant" and m.get("sql"):
+                prev_sql = " ".join(str(m["sql"]).lower().split())
+                break
+        if not prev_sql:
+            return sql
+
+        lowered = question.lower()
+        if not any(w in lowered for w in self._FOLLOWUP):
+            return sql
+        if self._filter_clause(ctx, lowered):      # the user named a value: respect it
+            return sql
+
+        lookup = {c.lower(): c for c in self._text_columns(ctx)}
+        dropped: list[str] = []
+
+        def rewrite(match: re.Match) -> str:
+            column = (match.group(1) or match.group(2)).strip().lower()
+            value = match.group(3).strip().lower()
+            if column in lookup and value and value not in lowered and value not in prev_sql:
+                dropped.append(f"{lookup[column]}={value!r}")
+                return "1=1"
+            return match.group(0)
+
+        cleaned = self._EQUALITY.sub(rewrite, sql)
+        if dropped:
+            self.logger.info("Dropped filter(s) never asked for: %s", ", ".join(dropped))
+        return cleaned
+
     def _normalize_text_filters(self, sql: str, text_columns: set[str]) -> str:
         """Make equality filters on text columns case- and whitespace-insensitive.
 
@@ -583,6 +786,51 @@ class ChatAgent(Agent):
             "Try naming a column or metric, e.g. 'average revenue by state'."
         )
 
+    def _result_facts(self, result: QueryResult) -> tuple[str, set[float]] | None:
+        """Aggregates the narrator may quote, plus the numbers they license.
+
+        Multi-row narration used to fail the grounding check almost every time:
+        the model saw ten preview rows and reached for a total or a share it
+        could not prove, so its sentence was thrown away and the deterministic
+        one-liner shipped instead. Doing the arithmetic here means the
+        interesting sentence is grounded by construction.
+
+        The sum covers the rows the query actually returned — with a LIMIT that
+        is not the population total, so it is labelled as such.
+        """
+        if len(result.columns) != 2 or result.row_count < 2:
+            return None
+        dimension, measure = result.columns
+        rows = [r for r in result.rows if self._is_number(r.get(measure))]
+        if len(rows) < 2:
+            return None
+        # Only a grouped result has ranks to talk about. Ungrouped SQL repeats the
+        # first column, and calling row 2 "the second-highest region" invented a
+        # comparison between regions that do not exist.
+        labels = [str(r.get(dimension)) for r in rows]
+        if len(set(labels)) != len(labels):
+            return None
+
+        ranked = sorted(rows, key=lambda r: float(r[measure]), reverse=True)
+        total = sum(float(r[measure]) for r in ranked)
+        allowed: set[float] = {total, float(len(ranked)), float(result.row_count)}
+        lines = [
+            f"- rows returned: {result.row_count}",
+            f"- sum of {measure} over those rows: {total:,.2f}",
+        ]
+        for rank, row in enumerate(ranked[:3], 1):
+            value = float(row[measure])
+            allowed.add(value)
+            share = (value / total * 100) if total else 0.0
+            allowed.add(share)
+            lines.append(f"- #{rank} {dimension}={row[dimension]}: {measure}={value:,.2f}"
+                         f" ({share:.1f}% of that sum)")
+        lowest = ranked[-1]
+        allowed.add(float(lowest[measure]))
+        lines.append(f"- lowest {dimension}={lowest[dimension]}: "
+                     f"{measure}={float(lowest[measure]):,.2f}")
+        return "\n".join(lines), allowed
+
     def _narrate(self, question: str, result: QueryResult) -> str:
         if result.row_count == 0:
             return "No matching records were found for that question in this dataset."
@@ -590,11 +838,14 @@ class ChatAgent(Agent):
         # otherwise it reports the preview length as the answer ("there are 10
         # customers" for 500 rows).
         preview = json.dumps(result.rows[:10])[:1200]
+        facts = self._result_facts(result)
         text = self._llm.complete(
             CHAT_NARRATE_SYSTEM,
             CHAT_NARRATE_USER.format(
                 question=question,
                 result=f"{result.row_count} row(s) returned. First rows: {preview}",
+                facts=f"Verified facts (already computed — quote these):\n{facts[0]}\n"
+                      if facts else "",
             ),
         )
         text = text.strip() if text else ""
@@ -610,25 +861,32 @@ class ChatAgent(Agent):
 
         # Multi-row answers were previously unguarded: the model saw ten rows and
         # confidently reported counts drawn from the preview. Any number it
-        # states must be traceable to the actual result.
-        if text and self._numbers_are_grounded(text, result):
+        # states must be traceable to the actual result — or to the aggregates
+        # computed above, which are the only derived figures it is licensed to use.
+        if text and self._numbers_are_grounded(text, result, facts[1] if facts else None):
             return text
         return self._fallback_narrate(result)
 
     @classmethod
-    def _numbers_are_grounded(cls, text: str, result: QueryResult) -> bool:
+    def _numbers_are_grounded(cls, text: str, result: QueryResult,
+                              extra: set[float] | None = None) -> bool:
         """True if every number in ``text`` exists in the result or its size.
 
         Values are checked against the whole result set, not the preview the
         model was shown, so "there are 4 customers" fails when 87 rows came
         back. Small integers are allowed through only when they match the row
         count, so a preview length can never masquerade as a total.
+
+        ``extra`` carries figures this class computed and handed to the model
+        (totals, shares). They are licensed because the arithmetic was ours —
+        anything the model derives on its own still fails.
         """
         stated = cls._stated_numbers(text)
         if not stated:
             return True
 
         allowed: set[float] = {float(result.row_count), float(len(result.columns))}
+        allowed |= extra or set()
         for row in result.rows:
             for value in row.values():
                 if cls._is_number(value):
@@ -739,9 +997,14 @@ class ChatAgent(Agent):
             n = float(v)
             return f"{n:,.0f}" if n.is_integer() else f"{n:,.2f}"
 
-        # Two-column category/measure results: call out the extremes.
+        # Two-column category/measure results: call out the extremes. Only when
+        # the first column really is a grouping — on ungrouped SQL it repeats, and
+        # "50 groups, highest North America, lowest North America" is nonsense.
         if len(result.columns) == 2 and result.row_count >= 2:
             cat, measure = result.columns
+            labels = [str(r.get(cat)) for r in result.rows]
+            if len(set(labels)) != len(labels):
+                return f"Returned {result.row_count} row(s)."
             try:
                 valid = [r for r in result.rows if r.get(measure) is not None]
                 ranked = sorted(valid, key=lambda r: float(r[measure]), reverse=True)
