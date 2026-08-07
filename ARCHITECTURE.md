@@ -449,25 +449,48 @@ rules from `custom_validations`:
 `case_inconsistency` · `mixed_types` · `datatype_mismatch` · `constant_column` ·
 `high_cardinality` · `low_cardinality` · `unicode_issues` · `empty_dataset`
 
-Score = weighted mean of six dimensions (`core/engines/scorer.py`):
+Score = **the percentage of rows that pass every check** (`core/engines/scorer.py`):
 
-| Dimension | Weight |
-|---|---|
-| Completeness | 0.25 |
-| Validity | 0.20 |
-| Uniqueness | 0.15 |
-| Consistency | 0.15 |
-| Accuracy | 0.15 |
-| Integrity | 0.10 |
+```
+score = 100 × clean_rows / total_rows
+```
 
-Tier mapping (`GovernanceAgent`): score ≥ 90 **and** cleaned → Gold; ≥ 75 → Silver;
+A row is dirty if any check flags it, and is counted **once** however many checks
+flag it — so no fix is ever credited twice, and the number reads directly as
+"this much of the data is usable as-is". There are no severity weights or
+dimension weights: severity ranks the *issue list* (what to fix first), the score
+measures *coverage* (how much data is trustworthy).
+
+Each dimension score is the same measurement restricted to that dimension's
+checks. The overall score is **not** their average — it is the same measurement
+over every check, which is why it is always ≤ each dimension score.
+
+Two consequences worth knowing:
+
+- The five column-level checks (`constant_column`, `duplicate_columns`,
+  `high_cardinality`, `low_cardinality`, `datatype_mismatch`) describe a column's
+  shape, not any particular row, so they are reported as issues but never dirty a
+  row. `affected_mask` returns *every* non-null row for them, which would
+  otherwise zero the score over a single constant column.
+- Fixing one issue only moves the score by the rows that had nothing else wrong.
+  A row with two problems stays dirty until both are fixed.
+
+An empty dataset scores 0, not 100 — "nothing failed" is not the same as "all rows
+are clean".
+
+Tier mapping (`GovernanceAgent`): score ≥ 80 **and** cleaned → Gold; ≥ 60 → Silver;
 otherwise Bronze.
+
+Re-tuned from 90/75 alongside the scoring change. Percentage-of-clean-rows is a
+much stricter measure than the old severity-weighted score — demanding 90% of rows
+be defect-*free* put every realistic dataset in Bronze and made the tier badge
+carry no information.
 
 ---
 
 ## 8. Testing
 
-**452 tests, 89% backend coverage (5,799 statements), ~45s.** The suite never calls
+**534 tests, 89% backend coverage (5,799 statements), ~33s.** The suite never calls
 Groq: an autouse fixture replaces the LLM singleton, so each tab is tested twice —
 once with no model, once with a scripted one. Many tests are regressions against
 wrong answers the product actually produced (a narrated count taken from a 10-row

@@ -99,12 +99,12 @@ APPROVAL_THRESHOLD: float = 75.0
 
 
 # Severity ordering + numeric penalty weight used by the scorer.
-SEVERITY_WEIGHT: dict[str, float] = {
-    Severity.CRITICAL: 45.0,
-    Severity.HIGH: 25.0,
-    Severity.MEDIUM: 14.0,
-    Severity.LOW: 5.0,
-    Severity.INFO: 1.0,
+# Column-level checks describe the whole column, not individual rows — so their
+# "N affected" count means columns/relationships, not rows. They are listed as
+# issues but never dirty a row for scoring purposes.
+COLUMN_LEVEL_CHECKS: set[str] = {
+    "constant_column", "duplicate_columns", "high_cardinality",
+    "low_cardinality", "datatype_mismatch",
 }
 
 SEVERITY_ORDER: dict[str, int] = {

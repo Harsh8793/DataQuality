@@ -603,16 +603,21 @@ class AnalysisService(BaseService, DatasetContextMixin):
         added = False
         for v in vals:
             try:
-                count, _idx, _cols, _rows = self.duck.evaluate_condition(ctx.df, v.condition, sample_limit=1)
+                # Every matching row, not a sample: the scorer needs the full
+                # set to mark those rows dirty (affected_mask can't resolve a
+                # custom check key on its own).
+                rows = self.duck.condition_indices(ctx.df, v.condition)
             except Exception as exc:  # noqa: BLE001 - a broken rule must not break analysis
                 self.logger.warning("Custom validation %s failed: %s", v.id, exc)
                 continue
+            count = len(rows)
             if count <= 0:
                 continue
             key = f"custom_{v.id}"
             ctx.findings.append(QualityFinding(
                 check_key=key, dimension=v.dimension, severity=v.severity,
                 count=count, column_name=None, sample=[v.condition],
+                row_index=rows,
             ))
             meta[key] = {
                 "problem": v.name,
@@ -621,7 +626,7 @@ class AnalysisService(BaseService, DatasetContextMixin):
             }
             added = True
         if added:
-            ctx.score = Scorer().score(ctx.findings, ctx.profile)
+            ctx.score = Scorer().score(ctx.findings, ctx.profile, ctx.df)
 
     def _apply_exclusions(self, dataset_id: int, ctx: AgentContext) -> None:
         """Re-score WITHOUT the excluded findings, but keep them in the list.
@@ -636,7 +641,7 @@ class AnalysisService(BaseService, DatasetContextMixin):
         kept = [f for f in ctx.findings if (f.check_key, f.column_name) not in keys]
         if len(kept) != len(ctx.findings):
             # Re-score on the kept findings only; leave ctx.findings untouched.
-            ctx.score = Scorer().score(kept, ctx.profile)
+            ctx.score = Scorer().score(kept, ctx.profile, ctx.df)
 
     def add_exclusion(self, dataset_id: int, user_id: int, check_key: str, column_name: str | None) -> dict:
         """Exclude a validation, then re-analyze so it drops out of the score."""

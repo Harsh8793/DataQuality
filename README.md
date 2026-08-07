@@ -64,14 +64,16 @@ the LLM is rate-limited or offline.
 - **Multi-agent pipeline** — Upload · Profiling · Quality · Cleaning · Governance ·
   SQL · Dashboard · Insight · Chat agents behind a lightweight orchestrator.
 - **20+ quality checks** across Completeness, Accuracy, Consistency, Uniqueness,
-  Validity, Integrity → a 0–100 score with severity levels.
+  Validity, Integrity → a 0–100 score with severity levels. The score is simply
+  **the percentage of rows that pass every check**, counting a row once however
+  many checks flag it.
 - **Chat with your data** — natural language → validated, read-only DuckDB SQL →
   result table + auto chart + narrated answer.
 - **Governance & PII** — automatic classification, PII detection, and
   medallion ingestion-tier recommendation.
 - **Reports** — PDF report, plus CSV export of the live dataset (Excel/CSV report
   types remain available on the API).
-- **455 tests, 89% backend coverage**, running fully offline.
+- **534 tests, 89% backend coverage**, running fully offline.
 - **Enterprise UI** — dark-first, responsive, React + Tailwind + shadcn-style +
   Recharts.
 
@@ -153,9 +155,9 @@ Email:    demo@datapilot.ai
 Password: demo1234
 ```
 
-A deliberately-messy sample dataset (`messy_sales.csv`, quality ≈ 71/100) is
-pre-loaded so every feature has something dramatic to show. Run **Cleaning** to
-watch it jump to ≈ 89/100.
+A deliberately-messy sample dataset (`messy_sales.csv`, quality ≈ 3/100 — only 6
+of its 232 rows are free of *every* defect) is pre-loaded so each feature has
+something dramatic to show. Run **Cleaning** to watch it jump to ≈ 36/100.
 
 ## Docker / deploy
 
@@ -179,7 +181,7 @@ cd backend
 # source .venv/bin/activate && pytest tests -q --cov=app           # macOS/Linux
 ```
 
-**455 tests, 89% backend coverage, ~30s.** The suite never calls Groq: an autouse
+**534 tests, 89% backend coverage, ~33s.** The suite never calls Groq: an autouse
 fixture replaces the LLM singleton, so every tab is tested twice — once with the
 deterministic engines alone (proving the fallbacks) and again with a scripted model
 (covering the planning branches).

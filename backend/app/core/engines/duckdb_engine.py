@@ -88,6 +88,35 @@ class DuckDBEngine:
         sample_df = sample_df.astype(object).where(pd.notna(sample_df), None)
         return count, indices, [str(c) for c in sample_df.columns], sample_df.to_dict(orient="records")
 
+    def condition_indices(self, df: pd.DataFrame, condition: str) -> list[int]:
+        """Return the positional index of *every* row matching ``condition``.
+
+        :meth:`evaluate_condition` caps its indices at ``sample_limit`` because
+        it also materialises the rows for display. Scoring needs the complete
+        set (a custom rule matching 5000 rows must dirty all 5000), so this
+        selects the index column alone — no LIMIT, no row payload.
+        """
+        cond = (condition or "").strip().rstrip(";").strip()
+        if not cond:
+            raise BadRequestException("Empty validation condition.")
+        if ";" in cond or _FORBIDDEN.search(cond):
+            raise BadRequestException("Condition contains forbidden SQL.")
+
+        con = duckdb.connect(database=":memory:")
+        try:
+            tmp = df.reset_index(drop=True).copy()
+            tmp.insert(0, "__row_index", range(len(tmp)))
+            con.register(self.TABLE, tmp)
+            try:
+                rows = con.execute(
+                    f"SELECT __row_index FROM {self.TABLE} WHERE {cond}"
+                ).fetchall()
+            except duckdb.Error as exc:
+                raise BadRequestException(f"Invalid condition: {exc}") from exc
+        finally:
+            con.close()
+        return [int(r[0]) for r in rows]
+
     def execute(self, df: pd.DataFrame, sql: str) -> QueryResult:
         """Validate and run SQL against the DataFrame, returning rows."""
         safe_sql = self.validate(sql)

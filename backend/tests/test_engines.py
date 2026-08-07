@@ -41,11 +41,11 @@ def test_cleaning_improves_score() -> None:
     df = _messy_df()
     profile = Profiler().profile(df)
     scorer, quality = Scorer(), QualityEngine()
-    before = scorer.score(quality.run(df, profile), profile).overall
+    before = scorer.score(quality.run(df, profile), profile, df).overall
 
     cleaned = Cleaner().clean(df, profile).df
     after_profile = Profiler().profile(cleaned)
-    after = scorer.score(quality.run(cleaned, after_profile), after_profile).overall
+    after = scorer.score(quality.run(cleaned, after_profile), after_profile, cleaned).overall
     assert after >= before
 
 

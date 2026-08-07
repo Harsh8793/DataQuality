@@ -23,7 +23,7 @@ class QualityAgent(Agent):
             return self._fail("Profiling must run before quality analysis.")
         ctx.emit("progress", {"agent": self.name, "status": "running"})
         findings = self._engine.run(ctx.df, ctx.profile)
-        score = self._scorer.score(findings, ctx.profile)
+        score = self._scorer.score(findings, ctx.profile, ctx.df)
         ctx.findings = findings
         ctx.score = score
         ctx.emit("progress", {

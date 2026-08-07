@@ -462,9 +462,13 @@ class TestAddValidationSection:
         )
         assert issue["problem"] == proposal["name"]
 
-        # ...and it is enforced: an extra finding drags the score down.
+        # ...and it is enforced. The score counts each bad ROW once, so a rule
+        # can only drag it down by the rows nothing else had already flagged.
+        # "revenue < 0" hits rows 21 and 23, which duplicate_rows, negative_values,
+        # outliers and duplicate_ids all flag already — so the score holds steady
+        # here. It must never go UP.
         assert report["total_issues"] == before["total_issues"] + 1
-        assert report["overall_score"] < before["overall_score"]
+        assert report["overall_score"] <= before["overall_score"]
 
         # The drill-down returns exactly the rows the badge promised.
         affected = client.get(
@@ -487,14 +491,16 @@ class TestAddValidationSection:
         assert still_there[0]["fixable"] is False
         assert ignored_report["overall_score"] == pytest.approx(before["overall_score"])
 
-        # Re-including it drops the score again.
+        # Re-including it restores the score it had while active.
         reincluded = client.post(
             f"/api/v1/datasets/{dataset_id}/quality/exclusions/remove",
             headers=auth_headers,
             json={"check_key": issue["check_key"], "column_name": issue["column_name"]},
         )
         assert reincluded.status_code == 200, reincluded.text
-        assert reincluded.json()["data"]["report"]["overall_score"] < before["overall_score"]
+        assert reincluded.json()["data"]["report"]["overall_score"] == pytest.approx(
+            report["overall_score"]
+        )
 
         # Deleting the rule removes the issue and restores the original score.
         deleted = client.delete(f"{base_url}/{validation_id}", headers=auth_headers)
@@ -524,6 +530,37 @@ class TestAddValidationSection:
             report = payload["report"]
             assert not [i for i in report["issues"] if i["check_key"] == f"custom_{new_id}"]
             assert report["overall_score"] == pytest.approx(before["overall_score"])
+        finally:
+            client.delete(f"{base_url}/{new_id}", headers=auth_headers)
+
+    def test_a_rule_flagging_a_previously_clean_row_lowers_the_score(
+        self, client, auth_headers, uploaded
+    ) -> None:
+        """The counterpart to the lifecycle test: rules ARE enforced.
+
+        Row index 6 (customer_id 7) is one of the golden frame's clean rows, so
+        dirtying it must cost exactly one row's worth of score — 100/24 points.
+        """
+        dataset_id, before = uploaded
+        base_url = f"/api/v1/datasets/{dataset_id}/quality/validations"
+        added = client.post(base_url, headers=auth_headers, json={
+            "name": "Customer 7 is quarantined",
+            "description": "Flags a row nothing else flags.",
+            "dimension": "validity",
+            "severity": "high",
+            "condition": '"customer_id" = 7',
+        })
+        assert added.status_code == 200, added.text
+        payload = added.json()["data"]
+        new_id = max(v["id"] for v in payload["validations"])
+        try:
+            report = payload["report"]
+            issue = [i for i in report["issues"] if i["check_key"] == f"custom_{new_id}"]
+            assert issue and issue[0]["count"] == 1
+            assert report["overall_score"] < before["overall_score"]
+            assert report["overall_score"] == pytest.approx(
+                before["overall_score"] - 100 / 24, abs=0.1
+            )
         finally:
             client.delete(f"{base_url}/{new_id}", headers=auth_headers)
 

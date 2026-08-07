@@ -239,7 +239,7 @@ The agent's "tools" are the deterministic engines and integrations it invokes.
 | Loader | `core/engines/loader.py` | Encoding/delimiter detection, file → DataFrame |
 | Profiler | `core/engines/profiler.py` | Semantic typing + column statistics |
 | Quality registry | `core/engines/quality_checks.py` | 20+ pluggable checks (`@register`) |
-| Scorer | `core/engines/scorer.py` | 6-dimension weighted 0–100 score |
+| Scorer | `core/engines/scorer.py` | 0–100 score = % of rows passing every check |
 | Cleaner | `core/engines/cleaner.py` | Deterministic multi-step cleaning |
 | Fixer | `core/engines/fixer.py` | Targeted per-issue fixes |
 | Affected-rows | `core/engines/affected.py` | Row masks per issue |

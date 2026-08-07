@@ -30,6 +30,10 @@ class QualityFinding:
     count: int
     column_name: str | None = None
     sample: list = field(default_factory=list)
+    # Positional offsets of the affected rows, for findings the shared
+    # ``affected_mask`` can't resolve from a check key alone (custom SQL rules).
+    # Empty for built-in checks — the scorer falls back to ``affected_mask``.
+    row_index: list[int] = field(default_factory=list)
 
 
 CheckFn = Callable[[pd.DataFrame, DatasetProfile], list[QualityFinding]]

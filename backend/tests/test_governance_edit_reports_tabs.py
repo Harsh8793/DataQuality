@@ -76,6 +76,12 @@ class TestGovernanceClassification:
             (95.0, False, IngestionTier.SILVER),
             (80.0, False, IngestionTier.SILVER),
             (40.0, False, IngestionTier.BRONZE),
+            # Boundaries: Gold needs >= 80 AND cleaned, Silver >= 60.
+            (80.0, True, IngestionTier.GOLD),
+            (79.9, True, IngestionTier.SILVER),
+            (60.0, False, IngestionTier.SILVER),
+            (59.9, False, IngestionTier.BRONZE),
+            (95.0, None, IngestionTier.SILVER),  # never cleaned -> never Gold
         ],
     )
     def test_tier_follows_score_and_cleaning(self, score: float, cleaned: bool, tier: str) -> None:

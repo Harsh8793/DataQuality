@@ -4,12 +4,17 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-# Column-level checks describe the whole column, not individual rows — so their
-# "N affected" count means columns/relationships, not rows.
-COLUMN_LEVEL_CHECKS = {
-    "constant_column", "duplicate_columns", "high_cardinality",
-    "low_cardinality", "datatype_mismatch",
-}
+# Canonical home is app.constants.enums; re-exported here for existing importers.
+from app.constants.enums import COLUMN_LEVEL_CHECKS
+
+__all__ = [
+    "COLUMN_LEVEL_CHECKS",
+    "CleaningOpResponse",
+    "CleaningResultResponse",
+    "CompareMetrics",
+    "QualityIssueResponse",
+    "QualityReportResponse",
+]
 
 
 class QualityIssueResponse(BaseModel):

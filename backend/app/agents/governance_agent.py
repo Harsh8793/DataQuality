@@ -106,12 +106,18 @@ class GovernanceAgent(Agent):
             return Classification.FINANCIAL
         return Classification.INTERNAL
 
+    # Calibrated for the percentage-of-clean-rows score, which is much stricter
+    # than the severity-weighted score these thresholds originally targeted:
+    # requiring 90% of rows to be defect-FREE put every real dataset in Bronze.
+    GOLD_MIN_SCORE = 80.0
+    SILVER_MIN_SCORE = 60.0
+
     def _recommend_tier(self, ctx: AgentContext) -> str:
         """Bronze (raw/dirty) -> Silver (cleaned) -> Gold (analytics-ready)."""
         score = ctx.score.overall if ctx.score else 0
-        if ctx.meta.get("is_cleaned") and score >= 90:
+        if ctx.meta.get("is_cleaned") and score >= self.GOLD_MIN_SCORE:
             return IngestionTier.GOLD
-        if score >= 75:
+        if score >= self.SILVER_MIN_SCORE:
             return IngestionTier.SILVER
         return IngestionTier.BRONZE
 

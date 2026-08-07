@@ -188,7 +188,7 @@ class TestInsightAgent:
         ctx = chat_ctx(frame)
         findings = QualityEngine().run(frame, ctx.profile)
         ctx.findings = findings
-        ctx.score = Scorer().score(findings, ctx.profile)
+        ctx.score = Scorer().score(findings, ctx.profile, ctx.df)
         return ctx
 
     def test_generates_deterministic_insights_without_a_model(

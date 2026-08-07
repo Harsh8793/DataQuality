@@ -46,13 +46,15 @@ class CleaningService(BaseService, DatasetContextMixin):
         df = self._read_frame(source)
 
         before_profile = self.profiler.profile(df)
-        before_score = self.scorer.score(self.quality.run(df, before_profile), before_profile)
+        before_score = self.scorer.score(self.quality.run(df, before_profile), before_profile, df)
 
         result = self.cleaner.clean(df, before_profile)
         cleaned_df = result.df
 
         after_profile = self.profiler.profile(cleaned_df)
-        after_score = self.scorer.score(self.quality.run(cleaned_df, after_profile), after_profile)
+        after_score = self.scorer.score(
+            self.quality.run(cleaned_df, after_profile), after_profile, cleaned_df
+        )
 
         cleaned_dataset = self.dataset_service.save_cleaned(source, cleaned_df, user_id)
 

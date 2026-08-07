@@ -208,13 +208,15 @@ export function QualityPanel({ datasetId }: { datasetId: number }) {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold">What is the Data Quality score?</p>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              A 0–100 rating of how trustworthy this dataset is, averaged across six
-              dimensions — completeness, accuracy, consistency, uniqueness, validity and
-              integrity. Each dimension starts at 100 and loses points for every issue
-              found, weighted by its <span className="font-medium text-foreground">severity</span>{" "}
-              (critical &gt; high &gt; medium &gt; low) and the{" "}
-              <span className="font-medium text-foreground">share of rows affected</span>. The
-              overall score is a weighted blend of the six (completeness and validity count most).
+              The percentage of rows that pass{" "}
+              <span className="font-medium text-foreground">every</span> check —{" "}
+              <span className="font-medium text-foreground">
+                {report.overall_score.toFixed(0)}
+              </span>{" "}
+              means {report.overall_score.toFixed(0)}% of your rows are usable as-is. A row
+              failing several checks is still counted once, so no fix gets credit twice. Each
+              dimension below is the same measurement over just that dimension&apos;s checks,
+              which is why the overall score is never higher than any of them.
             </p>
           </div>
 

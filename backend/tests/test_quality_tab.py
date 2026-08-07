@@ -111,7 +111,7 @@ class TestQualityChecks:
 class TestScorer:
     def test_score_is_bounded(self, messy_frame) -> None:
         findings, profile = run_checks(messy_frame)
-        score = Scorer().score(findings, profile)
+        score = Scorer().score(findings, profile, messy_frame)
         assert 0 <= score.overall <= 100
         for value in score.dimensions.values():
             assert 0 <= value <= 100
@@ -124,23 +124,53 @@ class TestScorer:
         })
         clean_findings, clean_profile = run_checks(clean)
         messy_findings, messy_profile = run_checks(messy_frame)
-        clean_score = Scorer().score(clean_findings, clean_profile).overall
-        messy_score = Scorer().score(messy_findings, messy_profile).overall
+        clean_score = Scorer().score(clean_findings, clean_profile, clean).overall
+        messy_score = Scorer().score(messy_findings, messy_profile, messy_frame).overall
         assert clean_score > messy_score
 
     def test_no_findings_scores_full_marks(self) -> None:
-        _, profile = run_checks(pd.DataFrame({"a": [1, 2, 3]}))
-        assert Scorer().score([], profile).overall == 100
+        frame = pd.DataFrame({"a": [1, 2, 3]})
+        _, profile = run_checks(frame)
+        assert Scorer().score([], profile, frame).overall == 100
 
     def test_reports_all_six_dimensions(self, messy_frame) -> None:
         findings, profile = run_checks(messy_frame)
-        assert set(Scorer().score(findings, profile).dimensions) == {d.value for d in Dimension}
+        dims = Scorer().score(findings, profile, messy_frame).dimensions
+        assert set(dims) == {d.value for d in Dimension}
 
     def test_counts_duplicate_rows_and_total_issues(self, messy_frame) -> None:
         findings, profile = run_checks(messy_frame)
-        score = Scorer().score(findings, profile)
+        score = Scorer().score(findings, profile, messy_frame)
         assert score.total_issues == len(findings)
         assert score.duplicate_rows >= 1
+
+    def test_overall_never_exceeds_any_dimension(self, messy_frame) -> None:
+        """Overall is the union over all checks, so it is the floor of the six."""
+        findings, profile = run_checks(messy_frame)
+        score = Scorer().score(findings, profile, messy_frame)
+        assert all(score.overall <= v for v in score.dimensions.values())
+
+    def test_a_row_failing_two_checks_is_counted_once(self) -> None:
+        """Two problems on the same row must cost the same as one."""
+        one = pd.DataFrame({"a": [None, 1, 2, 3], "b": ["x", "y", "z", "w"]})
+        two = pd.DataFrame({"a": [None, 1, 2, 3], "b": [" x ", "y", "z", "w"]})
+        scorer = Scorer()
+        f1, p1 = run_checks(one)
+        f2, p2 = run_checks(two)
+        assert len(f2) > len(f1)  # the whitespace finding is genuinely extra
+        assert scorer.score(f1, p1, one).overall == scorer.score(f2, p2, two).overall
+
+    def test_column_level_checks_do_not_dirty_rows(self) -> None:
+        """A constant column is an issue but must not zero the score."""
+        frame = pd.DataFrame({"id": range(30), "flag": ["same"] * 30})
+        findings, profile = run_checks(frame)
+        assert "constant_column" in keys(findings)
+        assert Scorer().score(findings, profile, frame).overall == 100
+
+    def test_empty_dataset_scores_zero(self) -> None:
+        frame = pd.DataFrame({"a": []})
+        findings, profile = run_checks(frame)
+        assert Scorer().score(findings, profile, frame).overall == 0
 
 
 # --------------------------------------------------------------------------- #
